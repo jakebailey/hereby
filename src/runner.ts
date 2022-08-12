@@ -11,7 +11,7 @@ export class Runner {
     private _queue: PQueue;
 
     constructor(options?: RunnerOptions) {
-        this._queue = new PQueue({ concurrency: options?.concurrency });
+        this._queue = new PQueue({ concurrency: options?.concurrency ?? Infinity });
     }
 
     async runTask(task: Task): Promise<void> {

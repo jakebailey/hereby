@@ -59,7 +59,7 @@
         "npm": "8.17.0"
     },
     "scripts": {
-        "test": "jest",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "build": "tsc",
         "watch": "tsc --watch",
         "prepack": "rimraf dist && npm run build"

@@ -1,7 +1,7 @@
 // @ts-check
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 const config = {
-    preset: "ts-jest/presets/default-esm", // or other ESM presets
+    preset: "ts-jest/presets/default-esm-legacy",
     globals: {
         "ts-jest": {
             useESM: true,
