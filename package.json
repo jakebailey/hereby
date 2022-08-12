@@ -13,7 +13,7 @@
     "author": "Jake Bailey",
     "license": "MIT",
     "engines": {
-        "node": ">=14"
+        "node": ">=14.14.0"
     },
     "files": [
         "README.md",
