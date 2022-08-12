@@ -18,12 +18,14 @@ export interface Herebyfile {
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
     const herebyfile = await import(herebyfilePath); // TODO: try catch and nice error
 
-    const tasks: Task[] = [];
+    // Collect using a set; the same task can be exported more than once.
+    // TODO: except for "default", should this be an error?
+    const taskSet = new Set<Task>();
     let defaultTask: Task | undefined;
 
     for (const [key, value] of Object.entries(herebyfile)) {
         if (value instanceof Task) {
-            tasks.push(value);
+            taskSet.add(value);
             if (key === "default") {
                 defaultTask = value;
             }
@@ -36,12 +38,15 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
         }
     }
 
-    if (tasks.length === 0) {
+    if (taskSet.size === 0) {
         exitWithError("No tasks found.");
     }
 
+    const tasks = Array.from(taskSet.values());
+
+    // We check this here by walking the DAG, as some dependencies may not be
+    // exported and therefore would not be seen by the above loop.
     assertUniqueNames(tasks);
-    tasks.sort((a, b) => stringCompare(a.options.name, b.options.name));
 
     return {
         path: herebyfilePath,
@@ -92,13 +97,4 @@ export async function findHerebyfile(dir: string): Promise<string> {
     }
 
     exitWithError("Unable to find Herebyfile.");
-}
-
-function stringCompare(a: string, b: string): number {
-    if (a === b) {
-        return 0;
-    }
-
-    // TODO: I'm sure there's a less silly way to do this.
-    return [a, b].sort()[0] === a ? -1 : 1;
 }

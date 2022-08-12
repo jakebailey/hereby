@@ -5,6 +5,7 @@ import prettyMilliseconds from "pretty-ms";
 
 import type { Task } from "../index.js";
 import { Runner } from "../runner.js";
+import { stringSorter } from "./utils.js";
 
 const defaultConcurrency = os.cpus().length;
 
@@ -99,7 +100,7 @@ class CLIRunner extends Runner {
             charCount = newCharCount;
         }
 
-        names.sort();
+        names.sort(stringSorter);
         if (dotDotDot) {
             names.push("...");
         }

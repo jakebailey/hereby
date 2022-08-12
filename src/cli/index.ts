@@ -3,6 +3,7 @@ import path from "path";
 import type { Task } from "../index.js";
 import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { parseArgs } from "./parseArgs.js";
+import { printTasks } from "./printTasks.js";
 import { runTasksWithCLIRunner } from "./runner.js";
 import { exitWithError } from "./utils.js";
 
@@ -14,25 +15,7 @@ process.chdir(path.dirname(herebyfilePath));
 const herebyfile = await loadHerebyfile(herebyfilePath);
 
 if (args.printTasks) {
-    // TODO: Use command-line-usage instead.
-
-    if (herebyfile.defaultTask) {
-        console.log(`Default task: ${herebyfile.defaultTask.options.name}`);
-    }
-
-    const indent = " ".repeat(4);
-    console.log("Available tasks:");
-    for (const task of herebyfile.tasks) {
-        if (task === herebyfile.defaultTask) {
-            continue;
-        }
-        console.log(`${indent}${task.options.name}`);
-        if (task.options.description) {
-            console.log(`${indent}${indent}${task.options.description}`);
-        }
-    }
-
-    // TODO: offer some sort of visual representation?
+    printTasks(herebyfile.tasks, herebyfile.defaultTask);
     process.exit(0);
 }
 
