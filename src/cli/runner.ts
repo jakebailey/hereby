@@ -4,26 +4,34 @@ import pc from "picocolors";
 import prettyMilliseconds from "pretty-ms";
 
 import type { Task } from "../index.js";
-import { Runner } from "../runner.js";
+import { Runner, RunnerOptions } from "../runner.js";
 import { stringSorter } from "./utils.js";
 
-const defaultConcurrency = os.cpus().length;
+const numCPUs = os.cpus().length;
 
 export function runTasksWithCLIRunner(...tasks: Task[]) {
-    return new CLIRunner({ concurrency: defaultConcurrency }).runTasks(...tasks);
+    return new CLIRunner({ concurrency: numCPUs }).runTasks(...tasks);
 }
 
 type Spinner = ReturnType<typeof micoSpinner>;
 
-const noSpinner = !process.stdout.isTTY;
+interface CLIRunnerOptions extends RunnerOptions {
+    useSpinner?: boolean | undefined;
+}
 
 class CLIRunner extends Runner {
+    private _useSpinner: boolean;
     private _spinner: Spinner | undefined;
     private _errored = false;
     private _finishedTasks = 0;
     private _totalTasks = 0;
     private _runningTasks = new Set<Task>();
     private _startTimes = new Map<Task, number>();
+
+    constructor(options?: CLIRunnerOptions) {
+        super(options);
+        this._useSpinner = options?.useSpinner ?? !process.stderr.isTTY;
+    }
 
     protected override onTaskAdd(task: Task): void {
         this._totalTasks++;
@@ -37,7 +45,7 @@ class CLIRunner extends Runner {
             return; // Skip logging.
         }
 
-        if (noSpinner) {
+        if (!this._useSpinner) {
             console.log(`Starting ${pc.blue(task.options.name)}`);
         }
 
@@ -77,7 +85,7 @@ class CLIRunner extends Runner {
     }
 
     private _updateSpinner() {
-        if (noSpinner) {
+        if (!this._useSpinner) {
             return;
         }
 
