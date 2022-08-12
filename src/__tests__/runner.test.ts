@@ -2,20 +2,20 @@ import { task } from "../index.js";
 import { Runner } from "../runner.js";
 
 test("basic use", async () => {
-    let aRun = false;
-    let bRun = false;
+    let aRun = 0;
+    let bRun = 0;
 
     const a = task({
         name: "a",
         run: async () => {
-            aRun = true;
+            aRun++;
         },
     });
 
     const b = task({
         name: "b",
         run: async () => {
-            bRun = true;
+            bRun++;
         },
     });
 
@@ -23,18 +23,18 @@ test("basic use", async () => {
 
     await runner.runTasks(a, b);
 
-    expect(aRun).toEqual(true);
-    expect(bRun).toEqual(true);
+    expect(aRun).toEqual(1);
+    expect(bRun).toEqual(1);
 });
 
 test("same promise", async () => {
-    let aRun = false;
-    let bRun = false;
+    let aRun = 0;
+    let bRun = 0;
 
     const a = task({
         name: "a",
         run: async () => {
-            aRun = true;
+            aRun++;
         },
     });
 
@@ -42,7 +42,7 @@ test("same promise", async () => {
         name: "b",
         dependencies: [a],
         run: async () => {
-            bRun = true;
+            bRun++;
         },
     });
 
@@ -58,27 +58,27 @@ test("same promise", async () => {
     await aPromise2;
     await bPromise;
 
-    expect(aRun).toEqual(true);
-    expect(bRun).toEqual(true);
+    expect(aRun).toEqual(1);
+    expect(bRun).toEqual(1);
 });
 
 test("concurrency 1", async () => {
-    let aRun = false;
-    let bRun = false;
+    let aRun = 0;
+    let bRun = 0;
 
     const a = task({
         name: "a",
         run: async () => {
-            aRun = true;
+            aRun++;
             // Tasks are ordered internally; if concurrency=1, b cannot have run.
-            expect(bRun).toEqual(false);
+            expect(bRun).toEqual(0);
         },
     });
 
     const b = task({
         name: "b",
         run: async () => {
-            bRun = true;
+            bRun++;
         },
     });
 
@@ -86,21 +86,21 @@ test("concurrency 1", async () => {
 
     await runner.runTasks(a, b);
 
-    expect(aRun).toEqual(true);
-    expect(bRun).toEqual(true);
+    expect(aRun).toEqual(1);
+    expect(bRun).toEqual(1);
 });
 
 test("dependencies", async () => {
-    let aRun = false;
-    let bRun = false;
-    let cRun = false;
+    let aRun = 0;
+    let bRun = 0;
+    let cRun = 0;
 
     const a = task({
         name: "a",
         run: async () => {
-            aRun = true;
-            expect(bRun).toEqual(false);
-            expect(cRun).toEqual(false);
+            aRun++;
+            expect(bRun).toEqual(0);
+            expect(cRun).toEqual(0);
         },
     });
 
@@ -108,9 +108,9 @@ test("dependencies", async () => {
         name: "b",
         dependencies: [a],
         run: async () => {
-            bRun = true;
-            expect(aRun).toEqual(true);
-            expect(cRun).toEqual(false);
+            bRun++;
+            expect(aRun).toEqual(1);
+            expect(cRun).toEqual(0);
         },
     });
 
@@ -118,9 +118,9 @@ test("dependencies", async () => {
         name: "c",
         dependencies: [b],
         run: async () => {
-            cRun = true;
-            expect(aRun).toEqual(true);
-            expect(bRun).toEqual(true);
+            cRun++;
+            expect(aRun).toEqual(1);
+            expect(bRun).toEqual(1);
         },
     });
 
@@ -133,22 +133,22 @@ test("dependencies", async () => {
 
     await runner.runTask(d);
 
-    expect(aRun).toEqual(true);
-    expect(bRun).toEqual(true);
-    expect(cRun).toEqual(true);
+    expect(aRun).toEqual(1);
+    expect(bRun).toEqual(1);
+    expect(cRun).toEqual(1);
 });
 
 test("dependencies with thrown error", async () => {
-    let aRun = false;
-    let bRun = false;
-    let cRun = false;
+    let aRun = 0;
+    let bRun = 0;
+    let cRun = 0;
 
     const a = task({
         name: "a",
         run: async () => {
-            aRun = true;
-            expect(bRun).toEqual(false);
-            expect(cRun).toEqual(false);
+            aRun++;
+            expect(bRun).toEqual(0);
+            expect(cRun).toEqual(0);
         },
     });
 
@@ -156,9 +156,9 @@ test("dependencies with thrown error", async () => {
         name: "b",
         dependencies: [a],
         run: async () => {
-            bRun = true;
-            expect(aRun).toEqual(true);
-            expect(cRun).toEqual(false);
+            bRun++;
+            expect(aRun).toEqual(1);
+            expect(cRun).toEqual(0);
             throw new Error("Oops");
         },
     });
@@ -167,9 +167,9 @@ test("dependencies with thrown error", async () => {
         name: "c",
         dependencies: [b],
         run: async () => {
-            cRun = true;
-            expect(aRun).toEqual(true);
-            expect(bRun).toEqual(true);
+            cRun++;
+            expect(aRun).toEqual(1);
+            expect(bRun).toEqual(1);
         },
     });
 
@@ -182,7 +182,7 @@ test("dependencies with thrown error", async () => {
 
     await expect(runner.runTask(d)).rejects.toThrowError();
 
-    expect(aRun).toEqual(true);
-    expect(bRun).toEqual(true);
-    expect(cRun).toEqual(false);
+    expect(aRun).toEqual(1);
+    expect(bRun).toEqual(1);
+    expect(cRun).toEqual(0);
 });
