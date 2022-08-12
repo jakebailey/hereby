@@ -1,29 +1,13 @@
-import minimist from "minimist";
-
 import type { Task } from "../index.js";
 import { loadHerebyfile } from "./loadHerebyfile.js";
+import { parseArgs } from "./parseArgs.js";
 import { CLIRunner } from "./runner.js";
 
-const {
-    _: tasksToRun,
-    help: helpFlag,
-    tasks: tasksFlag,
-    herebyfile: herebyfileFlag,
-} = minimist(process.argv.slice(2), { "--": true });
+const args = parseArgs(process.argv.slice(2));
 
-if (helpFlag) {
-    // TODO: we can do better.
-    console.log("Usage: hereby [--herebyfile path/to/herebyfile.mjs] <task name> ...");
-    process.exit(0);
-}
+const herebyfile = await loadHerebyfile(args.herebyfile);
 
-if (herebyfileFlag !== undefined && typeof herebyfileFlag !== "string") {
-    throw new Error("--herebyfile is not a string");
-}
-
-const herebyfile = await loadHerebyfile(herebyfileFlag || undefined);
-
-if (tasksFlag) {
+if (args.printTasks) {
     if (herebyfile.defaultTask) {
         console.log(`Default task: ${herebyfile.defaultTask.options.name}`);
     }
@@ -45,15 +29,15 @@ for (const task of herebyfile.tasks) {
     allTasks.set(task.options.name, task);
 }
 
-for (const name of tasksToRun) {
-    if (!allTasks.has(name)) {
-        throw new Error(`Task ${name} does not exist or is not exported in the Herebyfile.`);
-    }
-}
-
 let tasks: Task[];
-if (tasksToRun.length > 0) {
-    tasks = tasksToRun.map((name) => allTasks.get(name)!);
+if (args.run && args.run.length > 0) {
+    tasks = args.run.map((name) => {
+        const task = allTasks.get(name);
+        if (!task) {
+            throw new Error(`Task ${name} does not exist or is not exported in the Herebyfile.`);
+        }
+        return task;
+    });
 } else {
     if (!herebyfile.defaultTask) {
         throw new Error("No default task defined; please specify a task name.");
@@ -61,7 +45,8 @@ if (tasksToRun.length > 0) {
     tasks = [herebyfile.defaultTask];
 }
 
-// TODO: log path to herebyfile
+// TODO: shorten path if in $HOME
+console.log(`Using Herebyfile ${herebyfile.path}`);
 
 try {
     await new CLIRunner().runTasks(...tasks);

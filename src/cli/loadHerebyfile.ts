@@ -39,6 +39,7 @@ export async function loadHerebyfile(userProvided?: string) {
     tasks.sort((a, b) => stringCompare(a.options.name, b.options.name));
 
     return {
+        path: herebyfilePath,
         tasks,
         defaultTask,
     };
