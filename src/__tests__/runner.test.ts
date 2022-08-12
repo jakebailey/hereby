@@ -48,9 +48,9 @@ test("same promise", async () => {
 
     const runner = new Runner();
 
-    const aPromise = runner.runTask(a);
-    const aPromise2 = runner.runTask(a);
-    const bPromise = runner.runTask(b);
+    const aPromise = runner.runTasks(a);
+    const aPromise2 = runner.runTasks(a);
+    const bPromise = runner.runTasks(b);
 
     expect(aPromise).toEqual(aPromise2);
 
@@ -131,7 +131,7 @@ test("dependencies", async () => {
 
     const runner = new Runner();
 
-    await runner.runTask(d);
+    await runner.runTasks(d);
 
     expect(aRun).toEqual(1);
     expect(bRun).toEqual(1);
@@ -180,7 +180,7 @@ test("dependencies with thrown error", async () => {
 
     const runner = new Runner();
 
-    await expect(runner.runTask(d)).rejects.toThrowError();
+    await expect(runner.runTasks(d)).rejects.toThrowError();
 
     expect(aRun).toEqual(1);
     expect(bRun).toEqual(1);

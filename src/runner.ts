@@ -14,19 +14,19 @@ export class Runner {
         this._queue = new PQueue({ concurrency: options?.concurrency ?? Infinity });
     }
 
-    async runTask(task: Task): Promise<void> {
-        const cached = this._addedTasks.get(task);
-        if (cached) {
-            return cached;
-        }
-
-        const promise = this._runTask(task);
-        this._addedTasks.set(task, promise);
-        return promise;
-    }
-
     async runTasks(...tasks: Task[]): Promise<void> {
-        await Promise.all(tasks.map((t) => this.runTask(t)));
+        await Promise.all(
+            tasks.map((task) => {
+                const cached = this._addedTasks.get(task);
+                if (cached) {
+                    return cached;
+                }
+
+                const promise = this._runTask(task);
+                this._addedTasks.set(task, promise);
+                return promise;
+            }),
+        );
     }
 
     private async _runTask(task: Task): Promise<void> {
