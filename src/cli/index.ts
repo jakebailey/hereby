@@ -23,8 +23,6 @@ if (herebyfileFlag !== undefined && typeof herebyfileFlag !== "string") {
 
 const herebyfile = await loadHerebyfile(herebyfileFlag || undefined);
 
-// TODO: offer --help, etc
-
 if (tasksFlag) {
     if (herebyfile.defaultTask) {
         console.log(`Default task: ${herebyfile.defaultTask.options.name}`);
@@ -62,6 +60,8 @@ if (tasksToRun.length > 0) {
     }
     tasks = [herebyfile.defaultTask];
 }
+
+// TODO: log path to herebyfile
 
 try {
     await new CLIRunner().runTasks(...tasks);

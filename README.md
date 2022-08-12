@@ -1,2 +1,3 @@
 # hereby
-A simple Node.js task runner
+
+`hereby` is a simple task runner. 
