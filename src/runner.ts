@@ -1,4 +1,3 @@
-import os from "os";
 import PQueue from "p-queue";
 
 import type { Task } from "./index.js";
@@ -7,14 +6,12 @@ export interface RunnerOptions {
     concurrency?: number | undefined;
 }
 
-const defaultConcurrency = os.cpus().length;
-
 export class Runner {
     private _addedTasks = new WeakMap<Task, Promise<void>>();
     private _queue: PQueue;
 
     constructor(options?: RunnerOptions) {
-        this._queue = new PQueue({ concurrency: options?.concurrency ?? defaultConcurrency });
+        this._queue = new PQueue({ concurrency: options?.concurrency });
     }
 
     async runTask(task: Task): Promise<void> {

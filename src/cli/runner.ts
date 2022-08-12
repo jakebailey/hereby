@@ -1,15 +1,22 @@
 import micoSpinner from "mico-spinner";
+import os from "os";
 import pc from "picocolors";
 import prettyMilliseconds from "pretty-ms";
 
 import type { Task } from "../index.js";
 import { Runner } from "../runner.js";
 
+const defaultConcurrency = os.cpus().length;
+
+export function runTasksWithCLIRunner(...tasks: Task[]) {
+    return new CLIRunner({ concurrency: defaultConcurrency }).runTasks(...tasks);
+}
+
 type Spinner = ReturnType<typeof micoSpinner>;
 
 const noSpinner = !process.stdout.isTTY;
 
-export class CLIRunner extends Runner {
+class CLIRunner extends Runner {
     private _spinner: Spinner | undefined;
     private _errored = false;
     private _finishedTasks = 0;

@@ -17,13 +17,8 @@ export interface TaskOptions {
 
     /**
      * A function to execute when this task is run.
-     *
-     * This may be left undefined
      */
     run?: (() => Promise<void>) | undefined;
-
-    // TODO: expectedConcurrency?
-    // TODO: watch/clean functions?
 }
 
 // IMPORTANT: This property must _always_ exist on Task, with this name.
@@ -66,7 +61,7 @@ export function task(options: TaskOptions): Task {
 }
 
 /**
- * Creates a group of tasks. This is equivalent to creating a task
+ * Creates a group of tasks. This is shorthand for creating a task
  * that depends on all of the provided tasks without a run function.
  */
 export function group(name: string, ...tasks: Task[]): Task {
