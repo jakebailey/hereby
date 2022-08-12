@@ -16,7 +16,7 @@ export interface Herebyfile {
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
-    const herebyfile = await import(herebyfilePath); // TODO: try catch and nice error
+    const herebyfile = await import(herebyfilePath);
 
     // Collect using a set; the same task can be exported more than once.
     // TODO: except for "default", should this be an error?

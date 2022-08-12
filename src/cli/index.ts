@@ -9,7 +9,7 @@ import { exitWithError } from "./utils.js";
 
 const args = parseArgs(process.argv.slice(2));
 
-const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd())); // TODO: allow this to fail and then offer some help?
+const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd()));
 process.chdir(path.dirname(herebyfilePath));
 
 const herebyfile = await loadHerebyfile(herebyfilePath);

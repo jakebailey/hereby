@@ -31,6 +31,5 @@ export function printTasks(tasks: Task[], defaultTask?: Task) {
         }),
     });
 
-    // TODO: offer some sort of visual representation?
     console.log(commandLineUsage(sections));
 }
