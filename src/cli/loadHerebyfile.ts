@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import pc from "picocolors";
 
 import { Task } from "../index.js";
 import { forEachTask } from "../utils.js";
@@ -18,16 +19,17 @@ export interface Herebyfile {
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
     const herebyfile = await import(herebyfilePath);
 
-    // Collect using a set; the same task can be exported more than once.
-    // TODO: except for "default", should this be an error?
     const taskSet = new Set<Task>();
     let defaultTask: Task | undefined;
 
     for (const [key, value] of Object.entries(herebyfile)) {
         if (value instanceof Task) {
-            taskSet.add(value);
             if (key === "default") {
                 defaultTask = value;
+            } else if (taskSet.has(value)) {
+                exitWithError(`Task ${pc.blue(value.options.name)} has been exported twice.`);
+            } else {
+                taskSet.add(value);
             }
         } else if (Task.__isHerebyTask(value)) {
             // TODO: Instead of doing this, we should instead re-exec hereby within the context
@@ -36,6 +38,10 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
                 "The Herebyfile appears to have imported a different version of hereby than the CLI.\nEnsure you are running hereby within your package.",
             );
         }
+    }
+
+    if (defaultTask) {
+        taskSet.add(defaultTask);
     }
 
     if (taskSet.size === 0) {
@@ -60,7 +66,7 @@ function assertUniqueNames(tasks: Task[]) {
     forEachTask(tasks, (task) => {
         const name = task.options.name;
         if (names.has(name)) {
-            exitWithError(`Task "${name}" was declared twice.`);
+            exitWithError(`Task "${pc.blue(name)}" was declared twice.`);
         }
         names.add(name);
     });
