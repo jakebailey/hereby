@@ -5,7 +5,7 @@ import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { parseArgs } from "./parseArgs.js";
 import { printTasks } from "./printTasks.js";
 import { runTasksWithCLIRunner } from "./runner.js";
-import { exitWithError } from "./utils.js";
+import { exitWithError, simplifyPath } from "./utils.js";
 
 const args = parseArgs(process.argv.slice(2));
 
@@ -40,8 +40,7 @@ if (args.run && args.run.length > 0) {
     tasks = [herebyfile.defaultTask];
 }
 
-// TODO: shorten path if in $HOME
-console.log(`Using Herebyfile ${herebyfile.path}`);
+console.log(`Using ${simplifyPath(herebyfile.path)}`);
 
 try {
     await runTasksWithCLIRunner(...tasks);
