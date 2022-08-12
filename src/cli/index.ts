@@ -4,12 +4,16 @@ import type { Task } from "../index.js";
 import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { parseArgs } from "./parseArgs.js";
 import { printTasks } from "./printTasks.js";
+import { reexecIfNeeded } from "./reexec.js";
 import { runTasksWithCLIRunner } from "./runner.js";
 import { exitWithError, simplifyPath } from "./utils.js";
 
 const args = parseArgs(process.argv.slice(2));
 
 const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd()));
+
+await reexecIfNeeded(herebyfilePath);
+
 process.chdir(path.dirname(herebyfilePath));
 
 const herebyfile = await loadHerebyfile(herebyfilePath);

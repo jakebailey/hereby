@@ -1,6 +1,9 @@
 export interface TaskOptions {
     /**
      * The name of the task, as referenced in logs and the CLI.
+     *
+     * This name must not start with a "-" in order to prevent conflicts
+     * with flags.
      */
     name: string;
 
@@ -21,9 +24,6 @@ export interface TaskOptions {
     run?: (() => Promise<void>) | undefined;
 }
 
-// IMPORTANT: This property must _always_ exist on Task, with this name.
-const taskMarker = "__herebyTask";
-
 /**
  * A hereby Task. In order to get an instance, call `test`; this
  * type is designed to be opaque and should not be instantiated directly.
@@ -42,14 +42,6 @@ export class Task {
             throw new Error("task name must not start with '-'");
         }
         this.options = options;
-    }
-
-    /* @internal */
-    [taskMarker] = true;
-
-    /* @internal */
-    static __isHerebyTask(o: any): boolean {
-        return typeof o === "object" && !!o[taskMarker];
     }
 }
 

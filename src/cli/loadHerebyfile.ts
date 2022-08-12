@@ -65,12 +65,6 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
             } else {
                 exportedTasks.add(value);
             }
-        } else if (Task.__isHerebyTask(value)) {
-            // TODO: Instead of doing this, we should instead re-exec hereby within the context
-            // of the Herebyfile, or, somehow hijack its import to import the current version.
-            exitWithError(
-                "The Herebyfile appears to have imported a different version of hereby than the CLI.\nEnsure you are running hereby within your package.",
-            );
         }
     }
 
