@@ -25,8 +25,7 @@ export interface TaskOptions {
 }
 
 /**
- * A hereby Task. In order to get an instance, call `test`; this
- * type is designed to be opaque and should not be instantiated directly.
+ * A hereby Task. To get an instance, call `test`.
  */
 export class Task {
     /* @internal */
