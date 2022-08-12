@@ -1,11 +1,16 @@
+import path from "path";
+
 import type { Task } from "../index.js";
-import { loadHerebyfile } from "./loadHerebyfile.js";
+import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { parseArgs } from "./parseArgs.js";
 import { CLIRunner } from "./runner.js";
 
 const args = parseArgs(process.argv.slice(2));
 
-const herebyfile = await loadHerebyfile(args.herebyfile);
+const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd())); // TODO: allow this to fail and then offer some help?
+process.chdir(path.dirname(herebyfilePath));
+
+const herebyfile = await loadHerebyfile(herebyfilePath);
 
 if (args.printTasks) {
     if (herebyfile.defaultTask) {

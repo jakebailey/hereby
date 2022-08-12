@@ -15,14 +15,3 @@ export function forEachTask(tasks: Task[], fn: (task: Task) => void, seen = new 
         task.options.dependencies?.forEach(visit);
     }
 }
-
-export function assertUniqueNames(tasks: Task[]) {
-    const names = new Set<string>();
-    forEachTask(tasks, (task) => {
-        const name = task.options.name;
-        if (names.has(name)) {
-            throw new Error(`Task "${name}" was declared twice.`);
-        }
-        names.add(name);
-    });
-}

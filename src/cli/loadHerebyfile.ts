@@ -2,16 +2,19 @@ import fs from "fs/promises";
 import path from "path";
 
 import { Task } from "../index.js";
-import { assertUniqueNames } from "../utils.js";
+import { forEachTask } from "../utils.js";
 
 const filenames = ["Herebyfile", "herebyfile"];
 const extensions = ["js", "mjs"];
 const allFilenames = new Set(filenames.map((f) => extensions.map((e) => `${f}.${e}`)).flat());
 
-export async function loadHerebyfile(userProvided?: string) {
-    const herebyfilePath = userProvided ?? (await findHerebyfile(process.cwd())); // TODO: allow this to fail and then offer some help?
-    process.chdir(path.dirname(herebyfilePath));
+export interface Herebyfile {
+    path: string;
+    tasks: Task[];
+    defaultTask?: Task | undefined;
+}
 
+export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
     const herebyfile = await import(herebyfilePath); // TODO: try catch and nice error
 
     const tasks: Task[] = [];
@@ -34,8 +37,6 @@ export async function loadHerebyfile(userProvided?: string) {
     }
 
     assertUniqueNames(tasks);
-
-    // TODO: might not be needed depending on the CLI lib.
     tasks.sort((a, b) => stringCompare(a.options.name, b.options.name));
 
     return {
@@ -45,7 +46,18 @@ export async function loadHerebyfile(userProvided?: string) {
     };
 }
 
-async function findHerebyfile(dir: string): Promise<string> {
+function assertUniqueNames(tasks: Task[]) {
+    const names = new Set<string>();
+    forEachTask(tasks, (task) => {
+        const name = task.options.name;
+        if (names.has(name)) {
+            throw new Error(`Task "${name}" was declared twice.`);
+        }
+        names.add(name);
+    });
+}
+
+export async function findHerebyfile(dir: string): Promise<string> {
     while (dir) {
         try {
             const entries = await fs.readdir(dir);
