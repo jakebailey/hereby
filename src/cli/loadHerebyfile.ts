@@ -11,6 +11,39 @@ const filenames = ["Herebyfile", "herebyfile"];
 const extensions = ["js", "mjs"];
 const allFilenames = new Set(filenames.map((f) => extensions.map((e) => `${f}.${e}`)).flat());
 
+export async function findHerebyfile(dir: string): Promise<string> {
+    while (dir) {
+        try {
+            const entries = await fs.readdir(dir);
+            const matching = entries.filter((e) => allFilenames.has(e));
+            if (matching.length > 1) {
+                exitWithError(`Found ${matching.join(", ")} in ${dir}; please resolve this ambiguity.`);
+            }
+            if (matching.length === 1) {
+                const candidate = path.join(dir, matching[0]);
+                const stat = await fs.stat(candidate);
+                if (!stat.isFile()) {
+                    exitWithError(`${candidate} is not a file.`);
+                }
+                return candidate;
+            }
+            if (entries.includes("package.json")) {
+                break;
+            }
+        } catch {
+            // Continue
+        }
+
+        const parent = path.dirname(dir);
+        if (parent === dir) {
+            break;
+        }
+        dir = parent;
+    }
+
+    exitWithError("Unable to find Herebyfile.");
+}
+
 export interface Herebyfile {
     path: string;
     tasks: Task[];
@@ -71,37 +104,4 @@ function assertUniqueNames(tasks: Task[]) {
         }
         names.add(name);
     });
-}
-
-export async function findHerebyfile(dir: string): Promise<string> {
-    while (dir) {
-        try {
-            const entries = await fs.readdir(dir);
-            const matching = entries.filter((e) => allFilenames.has(e));
-            if (matching.length > 1) {
-                exitWithError(`Found ${matching.join(", ")} in ${dir}; please resolve this ambiguity.`);
-            }
-            if (matching.length === 1) {
-                const candidate = path.join(dir, matching[0]);
-                const stat = await fs.stat(candidate);
-                if (!stat.isFile()) {
-                    exitWithError(`${candidate} is not a file.`);
-                }
-                return candidate;
-            }
-            if (entries.includes("package.json")) {
-                break;
-            }
-        } catch {
-            // Continue
-        }
-
-        const parent = path.dirname(dir);
-        if (parent === dir) {
-            break;
-        }
-        dir = parent;
-    }
-
-    exitWithError("Unable to find Herebyfile.");
 }
