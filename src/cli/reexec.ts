@@ -14,7 +14,7 @@ export async function reexecIfNeeded(herebyfilePath: string) {
     // of hereby as imported by the Herebyfile, and fork to execute it instead.
     //
     // TODO: Rather than spawning a child process, perhaps we could instead
-    // import the CLI from the other version
+    // import the CLI from the other version and run it.
 
     const thisCLI = await resolveToPath("hereby/cli", new URL(import.meta.url));
     const otherCLI = await resolveToPath("hereby/cli", pathToFileURL(herebyfilePath));
@@ -26,13 +26,15 @@ export async function reexecIfNeeded(herebyfilePath: string) {
     // TODO: If this turns out to be common, remove this warning.
     console.error(`${pc.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
 
-    const child = cp.fork(otherCLI, { stdio: "inherit" });
-    return new Promise(() => {
-        // Never resolves, only exits with the same code as the child.
-        child.on("exit", (code) => {
-            process.exit(code ?? undefined);
-        });
-    });
+    // cp.fork is asynchronous and requires setting up a callback in order to
+    // capture the exit state. Since we want the current process to exit at the
+    // end of this function anyway, just use the synchronous spawnSync and exit
+    // with its code instead.
+    const args = [...process.execArgv, otherCLI, ...process.argv.slice(2)];
+    const { status } = cp.spawnSync(process.execPath, args, { stdio: "inherit" });
+    // If status is null, then the child process was killed via a signal. Ensure
+    // our exit code indicates an error.
+    process.exit(status ?? 1);
 }
 
 async function resolveToPath(specifier: string, url: URL) {
