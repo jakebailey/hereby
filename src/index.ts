@@ -51,16 +51,3 @@ export class Task {
 export function task(options: TaskOptions): Task {
     return Task.create(options);
 }
-
-/**
- * Creates a group of tasks. This is shorthand for creating a task
- * that depends on all of the provided tasks without a run function.
- */
-export function group(name: string, ...tasks: Task[]): Task {
-    // TODO: is this worth having in the API? It seems trivial to do,
-    // and this function doesn't accept a description, which would be helpful.
-    return task({
-        name,
-        dependencies: tasks,
-    });
-}
