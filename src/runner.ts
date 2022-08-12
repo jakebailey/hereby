@@ -30,7 +30,7 @@ export class Runner {
     }
 
     private async _runTask(task: Task): Promise<void> {
-        this.onTaskAdd(task);
+        this.onTaskAdd?.(task);
 
         const { dependencies, run } = task.options;
 
@@ -44,18 +44,18 @@ export class Runner {
 
         return this._queue.add(async () => {
             try {
-                this.onTaskStart(task);
+                this.onTaskStart?.(task);
                 await run();
-                this.onTaskFinish(task);
+                this.onTaskFinish?.(task);
             } catch (e) {
-                this.onTaskError(task, e);
+                this.onTaskError?.(task, e);
                 throw e;
             }
         });
     }
 
-    protected onTaskAdd(task: Task): void {}
-    protected onTaskStart(task: Task): void {}
-    protected onTaskFinish(task: Task): void {}
-    protected onTaskError(task: Task, e: unknown): void {}
+    protected onTaskAdd?(task: Task): void;
+    protected onTaskStart?(task: Task): void;
+    protected onTaskFinish?(task: Task): void;
+    protected onTaskError?(task: Task, e: unknown): void;
 }

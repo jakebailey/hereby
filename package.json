@@ -12,7 +12,8 @@
         "./cli": {
             "import": "./dist/cli/index.js",
             "types": "./dist/cli/index.d.ts"
-        }
+        },
+        "./package.json": "./package.json"
     },
     "author": "Jake Bailey",
     "license": "MIT",
@@ -52,10 +53,10 @@
         "ts-jest": "^28.0.7",
         "typescript": "^4.7.4"
     },
-    "packageManager": "npm@8.15.0",
+    "packageManager": "npm@8.17.0",
     "volta": {
         "node": "14.20.0",
-        "npm": "8.15.0"
+        "npm": "8.17.0"
     },
     "scripts": {
         "test": "jest",
