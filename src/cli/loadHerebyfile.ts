@@ -6,6 +6,7 @@ import { Task } from "../index.js";
 import { forEachTask } from "../utils.js";
 import { exitWithError } from "./utils.js";
 
+// The order of these doesn't matter; we error below when our choice would be ambiguous.
 const filenames = ["Herebyfile", "herebyfile"];
 const extensions = ["js", "mjs"];
 const allFilenames = new Set(filenames.map((f) => extensions.map((e) => `${f}.${e}`)).flat());
