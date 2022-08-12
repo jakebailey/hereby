@@ -19,17 +19,17 @@ export interface Herebyfile {
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
     const herebyfile = await import(herebyfilePath);
 
-    const taskSet = new Set<Task>();
+    const exportedTasks = new Set<Task>();
     let defaultTask: Task | undefined;
 
     for (const [key, value] of Object.entries(herebyfile)) {
         if (value instanceof Task) {
             if (key === "default") {
                 defaultTask = value;
-            } else if (taskSet.has(value)) {
+            } else if (exportedTasks.has(value)) {
                 exitWithError(`Task ${pc.blue(value.options.name)} has been exported twice.`);
             } else {
-                taskSet.add(value);
+                exportedTasks.add(value);
             }
         } else if (Task.__isHerebyTask(value)) {
             // TODO: Instead of doing this, we should instead re-exec hereby within the context
@@ -41,14 +41,14 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     }
 
     if (defaultTask) {
-        taskSet.add(defaultTask);
+        exportedTasks.add(defaultTask);
     }
 
-    if (taskSet.size === 0) {
+    if (exportedTasks.size === 0) {
         exitWithError("No tasks found.");
     }
 
-    const tasks = Array.from(taskSet.values());
+    const tasks = Array.from(exportedTasks.values());
 
     // We check this here by walking the DAG, as some dependencies may not be
     // exported and therefore would not be seen by the above loop.
