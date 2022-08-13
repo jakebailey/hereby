@@ -21,7 +21,7 @@ export interface TaskOptions {
     /**
      * A function to execute when this task is run.
      */
-    run?: (() => Promise<void>) | undefined;
+    run?: (() => void | Promise<void>) | undefined;
 }
 
 /**
