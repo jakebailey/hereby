@@ -1,5 +1,10 @@
 {
-    "extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended-requiring-type-checking"],
+    "extends": [
+        "eslint:recommended",
+        "prettier",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:ava/recommended"
+    ],
     "env": {
         "browser": false
     },
@@ -9,7 +14,7 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "plugins": ["@typescript-eslint", "simple-import-sort"],
+    "plugins": ["@typescript-eslint", "simple-import-sort", "eslint-plugin-ava"],
     "root": true,
     "rules": {
         "eqeqeq": "error",
