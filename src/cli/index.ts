@@ -7,10 +7,10 @@ import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexecIfNeeded } from "./reexec.js";
 import { runTasksWithCLIRunner } from "./runner.js";
-import { simplifyPath, UserError } from "./utils.js";
+import { ExitCodeError, simplifyPath, UserError } from "./utils.js";
 
-async function main() {
-    const args = parseArgs(process.argv.slice(2));
+async function main(argv: string[]) {
+    const args = parseArgs(argv);
 
     if (args.help) {
         console.log(getUsage());
@@ -59,14 +59,16 @@ async function main() {
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,
         // so we don't end up with an unflushed output.
-        process.exitCode = 1;
+        throw new ExitCodeError(1);
     }
 }
 
 try {
-    await main();
+    await main(process.argv.slice(2));
 } catch (e) {
-    if (e instanceof UserError) {
+    if (e instanceof ExitCodeError) {
+        process.exitCode = e.exitCode;
+    } else if (e instanceof UserError) {
         console.error(`${pc.red("Error")}: ${e.message}`);
         process.exitCode = 1;
     } else {

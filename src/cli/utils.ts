@@ -30,3 +30,11 @@ export function simplifyPath(p: string) {
  * as a message only, without stacktrace. Use this instead of process.exit.
  */
 export class UserError extends Error {}
+
+/**
+ * When thrown, ExitCodeError causes the process to exit with a specific error code,
+ * without logging anything.
+ */
+export class ExitCodeError {
+    constructor(public exitCode: number) {}
+}

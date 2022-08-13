@@ -3,6 +3,8 @@ import { resolve } from "import-meta-resolve";
 import pc from "picocolors";
 import { fileURLToPath, pathToFileURL } from "url";
 
+import { ExitCodeError } from "./utils.js";
+
 export async function reexecIfNeeded(herebyfilePath: string) {
     // If hereby is installed globally, but run against a Herebyfile in some
     // other package, that Herebyfile's import will resolve to a different
@@ -34,7 +36,7 @@ export async function reexecIfNeeded(herebyfilePath: string) {
     const { status } = cp.spawnSync(process.execPath, args, { stdio: "inherit" });
     // If status is null, then the child process was killed via a signal. Ensure
     // our exit code indicates an error.
-    process.exit(status ?? 1);
+    throw new ExitCodeError(status ?? 1);
 }
 
 async function resolveToPath(specifier: string, url: URL) {
