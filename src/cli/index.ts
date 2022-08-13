@@ -4,7 +4,7 @@ import pc from "picocolors";
 import type { Task } from "../index.js";
 import { formatTasks } from "./formatTasks.js";
 import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
-import { parseArgs, printUsage } from "./parseArgs.js";
+import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexecIfNeeded } from "./reexec.js";
 import { runTasksWithCLIRunner } from "./runner.js";
 import { simplifyPath, UserError } from "./utils.js";
@@ -13,7 +13,7 @@ async function main() {
     const args = parseArgs(process.argv.slice(2));
 
     if (args.help) {
-        printUsage();
+        console.log(getUsage());
         return;
     }
 

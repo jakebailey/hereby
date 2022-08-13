@@ -35,7 +35,7 @@ export function parseArgs(argv: string[]): CLIOptions {
     };
 }
 
-export function printUsage(): void {
+export function getUsage(): string {
     const usage = commandLineUsage([
         {
             header: "hereby",
@@ -80,5 +80,5 @@ export function printUsage(): void {
         },
     ]);
 
-    console.log(usage);
+    return usage;
 }
