@@ -1,13 +1,7 @@
 import os from "os";
 import path from "path";
-import pc from "picocolors";
 
 import type { Task } from "../index.js";
-
-export function exitWithError(message: string): never {
-    console.error(`${pc.red("Error")}: ${message}`);
-    process.exit(1);
-}
 
 export function taskSorter(a: Task, b: Task): number {
     return stringSorter(a.options.name, b.options.name);
@@ -30,3 +24,5 @@ export function simplifyPath(p: string) {
 
     return p;
 }
+
+export class UserError extends Error {}

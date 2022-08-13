@@ -4,7 +4,7 @@ import pc from "picocolors";
 
 import { Task } from "../index.js";
 import { forEachTask } from "../utils.js";
-import { exitWithError } from "./utils.js";
+import { UserError } from "./utils.js";
 
 // The order of these doesn't matter; we error below when our choice would be ambiguous.
 const filenames = ["Herebyfile", "herebyfile"];
@@ -13,25 +13,21 @@ const allFilenames = new Set(filenames.map((f) => extensions.map((e) => `${f}.${
 
 export async function findHerebyfile(dir: string): Promise<string> {
     while (dir) {
-        try {
-            const entries = await fs.readdir(dir);
-            const matching = entries.filter((e) => allFilenames.has(e));
-            if (matching.length > 1) {
-                exitWithError(`Found ${matching.join(", ")} in ${dir}; please resolve this ambiguity.`);
+        const entries = await fs.readdir(dir);
+        const matching = entries.filter((e) => allFilenames.has(e));
+        if (matching.length > 1) {
+            throw new UserError(`Found ${matching.join(", ")} in ${dir}; please resolve this ambiguity.`);
+        }
+        if (matching.length === 1) {
+            const candidate = path.join(dir, matching[0]);
+            const stat = await fs.stat(candidate);
+            if (!stat.isFile()) {
+                throw new UserError(`${candidate} is not a file.`);
             }
-            if (matching.length === 1) {
-                const candidate = path.join(dir, matching[0]);
-                const stat = await fs.stat(candidate);
-                if (!stat.isFile()) {
-                    exitWithError(`${candidate} is not a file.`);
-                }
-                return candidate;
-            }
-            if (entries.includes("package.json")) {
-                break;
-            }
-        } catch {
-            // Continue
+            return candidate;
+        }
+        if (entries.includes("package.json")) {
+            break;
         }
 
         const parent = path.dirname(dir);
@@ -41,7 +37,7 @@ export async function findHerebyfile(dir: string): Promise<string> {
         dir = parent;
     }
 
-    exitWithError("Unable to find Herebyfile.");
+    throw new UserError("Unable to find Herebyfile.");
 }
 
 export interface Herebyfile {
@@ -61,7 +57,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
             if (key === "default") {
                 defaultTask = value;
             } else if (exportedTasks.has(value)) {
-                exitWithError(`Task ${pc.blue(value.options.name)} has been exported twice.`);
+                throw new UserError(`Task ${pc.blue(value.options.name)} has been exported twice.`);
             } else {
                 exportedTasks.add(value);
             }
@@ -73,7 +69,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     }
 
     if (exportedTasks.size === 0) {
-        exitWithError("No tasks found.");
+        throw new UserError("No tasks found.");
     }
 
     const tasks = Array.from(exportedTasks.values());
@@ -94,7 +90,7 @@ function assertUniqueNames(tasks: Task[]) {
     forEachTask(tasks, (task) => {
         const name = task.options.name;
         if (names.has(name)) {
-            exitWithError(`Task "${pc.blue(name)}" was declared twice.`);
+            throw new UserError(`Task "${pc.blue(name)}" was declared twice.`);
         }
         names.add(name);
     });
