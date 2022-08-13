@@ -9,10 +9,7 @@
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
         },
-        "./cli": {
-            "import": "./dist/cli/index.js",
-            "types": "./dist/cli/index.d.ts"
-        },
+        "./cli": "./dist/cli/index.js",
         "./package.json": "./package.json"
     },
     "author": "Jake Bailey",
@@ -23,8 +20,9 @@
     "files": [
         "README.md",
         "LICENSE",
-        "./dist/**",
-        "!**/__tests__/**"
+        "./dist/**/*.js",
+        "!./**/__tests__/**",
+        "./dist/index.d.ts"
     ],
     "dependencies": {
         "command-line-args": "^5.2.1",
