@@ -73,7 +73,8 @@
             "compile": false
         },
         "environmentVariables": {
-            "FORCE_COLOR": "1"
+            "NO_COLOR": "1",
+            "FORCE_COLOR": "0"
         }
     },
     "c8": {
