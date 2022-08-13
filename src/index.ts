@@ -37,8 +37,14 @@ export class Task {
     }
 
     private constructor(options: TaskOptions) {
+        if (!options.name) {
+            throw new Error("Task name must not be empty.");
+        }
         if (options.name.startsWith("-")) {
-            throw new Error("task name must not start with '-'");
+            throw new Error('Task name must not start with "-".');
+        }
+        if (!options.dependencies?.length && !options.run) {
+            throw new Error("Task must have at run function or dependencies.");
         }
         this.options = options;
     }

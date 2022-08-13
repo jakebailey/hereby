@@ -6,6 +6,7 @@ import { forEachTask } from "../utils.js";
 test("visits each once", (t) => {
     const a = task({
         name: "a",
+        run: async () => {},
     });
 
     const b = task({

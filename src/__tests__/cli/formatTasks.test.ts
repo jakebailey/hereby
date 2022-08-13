@@ -7,6 +7,7 @@ test("printTasks", (t) => {
     const a = task({
         name: "a",
         description: "This is task a. It works pretty well.",
+        run: async () => {},
     });
 
     const b = task({
@@ -22,6 +23,7 @@ test("printTasks", (t) => {
 
     const d = task({
         name: "d",
+        run: async () => {},
     });
 
     const output = formatTasks([a, c, d], d);
