@@ -2,6 +2,7 @@ import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
 interface CLIOptions {
+    help?: boolean | undefined;
     run?: string[] | undefined;
     herebyfile?: string | undefined;
     printTasks?: boolean | undefined;
@@ -26,18 +27,15 @@ export function parseArgs(argv: string[]): CLIOptions {
         },
     );
 
-    if (options["help"]) {
-        printUsage();
-    }
-
     return {
+        help: options["help"],
         run: options["run"],
         herebyfile: options["herebyfile"],
         printTasks: options["tasks"],
     };
 }
 
-function printUsage(): never {
+export function printUsage(): void {
     const usage = commandLineUsage([
         {
             header: "hereby",
@@ -83,5 +81,4 @@ function printUsage(): never {
     ]);
 
     console.log(usage);
-    process.exit(0);
 }

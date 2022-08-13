@@ -3,7 +3,7 @@ import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
-import { parseArgs } from "./parseArgs.js";
+import { parseArgs, printUsage } from "./parseArgs.js";
 import { printTasks } from "./printTasks.js";
 import { reexecIfNeeded } from "./reexec.js";
 import { runTasksWithCLIRunner } from "./runner.js";
@@ -11,6 +11,11 @@ import { simplifyPath, UserError } from "./utils.js";
 
 async function main() {
     const args = parseArgs(process.argv.slice(2));
+
+    if (args.help) {
+        printUsage();
+        return;
+    }
 
     const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd()));
 

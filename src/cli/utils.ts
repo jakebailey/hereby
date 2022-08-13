@@ -25,4 +25,8 @@ export function simplifyPath(p: string) {
     return p;
 }
 
+/**
+ * UserError is a special error that, when caught in the CLI will be printed
+ * as a message only, without stacktrace. Use this instead of process.exit.
+ */
 export class UserError extends Error {}
