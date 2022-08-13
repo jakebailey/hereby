@@ -1,7 +1,9 @@
-import { task } from "./index.js";
-import { Runner } from "./runner.js";
+import test from "ava";
 
-test("basic use", async () => {
+import { task } from "../index.js";
+import { Runner } from "../runner.js";
+
+test("basic use", async (t) => {
     let aRun = 0;
     let bRun = 0;
 
@@ -23,11 +25,11 @@ test("basic use", async () => {
 
     await runner.runTasks(a, b);
 
-    expect(aRun).toEqual(1);
-    expect(bRun).toEqual(1);
+    t.is(aRun, 1);
+    t.is(bRun, 1);
 });
 
-test("same promise", async () => {
+test("multiple calls", async (t) => {
     let aRun = 0;
     let bRun = 0;
 
@@ -52,17 +54,15 @@ test("same promise", async () => {
     const aPromise2 = runner.runTasks(a);
     const bPromise = runner.runTasks(b);
 
-    expect(aPromise).toEqual(aPromise2);
-
     await aPromise;
     await aPromise2;
     await bPromise;
 
-    expect(aRun).toEqual(1);
-    expect(bRun).toEqual(1);
+    t.is(aRun, 1);
+    t.is(bRun, 1);
 });
 
-test("concurrency 1", async () => {
+test("concurrency 1", async (t) => {
     let aRun = 0;
     let bRun = 0;
 
@@ -71,7 +71,7 @@ test("concurrency 1", async () => {
         run: async () => {
             aRun++;
             // Tasks are ordered internally; if concurrency=1, b cannot have run.
-            expect(bRun).toEqual(0);
+            t.is(bRun, 0);
         },
     });
 
@@ -86,11 +86,11 @@ test("concurrency 1", async () => {
 
     await runner.runTasks(a, b);
 
-    expect(aRun).toEqual(1);
-    expect(bRun).toEqual(1);
+    t.is(aRun, 1);
+    t.is(bRun, 1);
 });
 
-test("dependencies", async () => {
+test("dependencies", async (t) => {
     let aRun = 0;
     let bRun = 0;
     let cRun = 0;
@@ -99,8 +99,8 @@ test("dependencies", async () => {
         name: "a",
         run: async () => {
             aRun++;
-            expect(bRun).toEqual(0);
-            expect(cRun).toEqual(0);
+            t.is(bRun, 0);
+            t.is(cRun, 0);
         },
     });
 
@@ -109,8 +109,8 @@ test("dependencies", async () => {
         dependencies: [a],
         run: async () => {
             bRun++;
-            expect(aRun).toEqual(1);
-            expect(cRun).toEqual(0);
+            t.is(aRun, 1);
+            t.is(cRun, 0);
         },
     });
 
@@ -119,8 +119,8 @@ test("dependencies", async () => {
         dependencies: [b],
         run: async () => {
             cRun++;
-            expect(aRun).toEqual(1);
-            expect(bRun).toEqual(1);
+            t.is(aRun, 1);
+            t.is(bRun, 1);
         },
     });
 
@@ -133,12 +133,12 @@ test("dependencies", async () => {
 
     await runner.runTasks(d);
 
-    expect(aRun).toEqual(1);
-    expect(bRun).toEqual(1);
-    expect(cRun).toEqual(1);
+    t.is(aRun, 1);
+    t.is(bRun, 1);
+    t.is(cRun, 1);
 });
 
-test("dependencies with thrown error", async () => {
+test("dependencies with thrown error", async (t) => {
     let aRun = 0;
     let bRun = 0;
     let cRun = 0;
@@ -147,8 +147,8 @@ test("dependencies with thrown error", async () => {
         name: "a",
         run: async () => {
             aRun++;
-            expect(bRun).toEqual(0);
-            expect(cRun).toEqual(0);
+            t.is(bRun, 0);
+            t.is(cRun, 0);
         },
     });
 
@@ -157,8 +157,8 @@ test("dependencies with thrown error", async () => {
         dependencies: [a],
         run: async () => {
             bRun++;
-            expect(aRun).toEqual(1);
-            expect(cRun).toEqual(0);
+            t.is(aRun, 1);
+            t.is(cRun, 0);
             throw new Error("Oops");
         },
     });
@@ -168,8 +168,8 @@ test("dependencies with thrown error", async () => {
         dependencies: [b],
         run: async () => {
             cRun++;
-            expect(aRun).toEqual(1);
-            expect(bRun).toEqual(1);
+            t.is(aRun, 1);
+            t.is(bRun, 1);
         },
     });
 
@@ -180,9 +180,9 @@ test("dependencies with thrown error", async () => {
 
     const runner = new Runner();
 
-    await expect(runner.runTasks(d)).rejects.toThrowError();
+    await t.throwsAsync(runner.runTasks(d));
 
-    expect(aRun).toEqual(1);
-    expect(bRun).toEqual(1);
-    expect(cRun).toEqual(0);
+    t.is(aRun, 1);
+    t.is(bRun, 1);
+    t.is(cRun, 0);
 });

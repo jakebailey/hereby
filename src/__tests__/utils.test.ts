@@ -1,7 +1,9 @@
-import { Task, task } from "./index.js";
-import { forEachTask } from "./utils.js";
+import test from "ava";
 
-test("visits each once", () => {
+import { Task, task } from "../index.js";
+import { forEachTask } from "../utils.js";
+
+test("visits each once", (t) => {
     const a = task({
         name: "a",
     });
@@ -40,10 +42,10 @@ test("visits each once", () => {
 
     const allTasks = [a, b, c, d, e, f];
 
-    for (const t of allTasks) {
-        expect(counts.get(t)).toEqual(1);
-        counts.delete(t);
+    for (const task of allTasks) {
+        t.is(counts.get(task), 1);
+        counts.delete(task);
     }
 
-    expect(counts.size).toEqual(0);
+    t.is(counts.size, 0);
 });

@@ -4,7 +4,7 @@ import pc from "picocolors";
 import type { Task } from "../index.js";
 import { stringSorter, taskSorter } from "./utils.js";
 
-export function printTasks(tasks: Task[], defaultTask?: Task) {
+export function formatTasks(tasks: Task[], defaultTask?: Task) {
     tasks = tasks.slice(0).sort(taskSorter);
 
     const sections: commandLineUsage.Section[] = [];
@@ -31,5 +31,5 @@ export function printTasks(tasks: Task[], defaultTask?: Task) {
         }),
     });
 
-    console.log(commandLineUsage(sections));
+    return commandLineUsage(sections);
 }

@@ -1,11 +1,9 @@
-process.env["FORCE_COLOR"] = "1";
+import test from "ava";
 
-import { mockConsoleLog } from "jest-mock-process";
+import { formatTasks } from "../../cli/formatTasks.js";
+import { task } from "../../index.js";
 
-import { task } from "../index.js";
-import { printTasks } from "./printTasks.js";
-
-test("printTasks", () => {
+test("printTasks", (t) => {
     const a = task({
         name: "a",
         description: "This is task a. It works pretty well.",
@@ -30,18 +28,13 @@ test("printTasks", () => {
     const saveTty = process.stdout.isTTY;
     process.stdout.columns = 80;
     process.stdout.isTTY = false;
-    const mockLog = mockConsoleLog();
 
     const lines: string[] = [];
 
-    mockLog.mockImplementation((message) => lines.push(message));
+    const output = formatTasks([a, c, d], d);
 
-    printTasks([a, c, d], d);
-
-    mockLog.mockRestore();
     process.stdout.columns = saveColumns;
     process.stdout.isTTY = saveTty;
 
-    const stdout = lines.join("\n");
-    expect(stdout).toMatchSnapshot("stdout");
+    t.snapshot(output);
 });

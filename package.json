@@ -24,7 +24,7 @@
         "README.md",
         "LICENSE",
         "./dist/**",
-        "!/dist/**/*.test.*"
+        "!**/__tests__/**"
     ],
     "dependencies": {
         "command-line-args": "^5.2.1",
@@ -36,22 +36,21 @@
         "pretty-ms": "^8.0.0"
     },
     "devDependencies": {
+        "@ava/typescript": "^3.0.1",
         "@tsconfig/node14": "^1.0.3",
         "@types/command-line-args": "^5.2.0",
         "@types/command-line-usage": "^5.0.2",
-        "@types/jest": "^28.1.6",
         "@types/node": "^14.18.23",
         "@typescript-eslint/eslint-plugin": "^5.33.0",
         "@typescript-eslint/parser": "^5.33.0",
+        "ava": "^4.3.1",
+        "c8": "^7.12.0",
         "eslint": "^8.21.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
         "execa": "^6.1.0",
-        "jest": "^28.1.3",
-        "jest-mock-process": "^2.0.0",
         "prettier": "^2.7.1",
         "rimraf": "^3.0.2",
-        "ts-jest": "^28.0.7",
         "typescript": "^4.7.4"
     },
     "packageManager": "npm@8.17.0",
@@ -60,9 +59,30 @@
         "npm": "8.17.0"
     },
     "scripts": {
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "build": "tsc",
         "watch": "tsc --watch",
+        "test": "ava",
+        "coverage": "c8 ava",
         "prepack": "rimraf dist && npm run build"
+    },
+    "ava": {
+        "typescript": {
+            "rewritePaths": {
+                "src/": "dist/"
+            },
+            "compile": false
+        },
+        "environmentVariables": {
+            "FORCE_COLOR": "1"
+        }
+    },
+    "c8": {
+        "all": true,
+        "include": "dist",
+        "reporter": [
+            "text",
+            "html",
+            "lcov"
+        ]
     }
 }

@@ -2,9 +2,9 @@ import path from "path";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
+import { formatTasks } from "./formatTasks.js";
 import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { parseArgs, printUsage } from "./parseArgs.js";
-import { printTasks } from "./printTasks.js";
 import { reexecIfNeeded } from "./reexec.js";
 import { runTasksWithCLIRunner } from "./runner.js";
 import { simplifyPath, UserError } from "./utils.js";
@@ -26,7 +26,7 @@ async function main() {
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
-        printTasks(herebyfile.tasks, herebyfile.defaultTask);
+        console.log(formatTasks(herebyfile.tasks, herebyfile.defaultTask));
         return;
     }
 
@@ -51,7 +51,7 @@ async function main() {
         tasks = [herebyfile.defaultTask];
     }
 
-    console.log(`Using ${simplifyPath(herebyfile.path)}`);
+    console.log(`Using ${simplifyPath(herebyfilePath)}`);
 
     try {
         await runTasksWithCLIRunner(...tasks);

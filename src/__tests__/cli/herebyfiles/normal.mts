@@ -1,26 +1,18 @@
-// @ts-check
+import { task } from "hereby";
 
-import { task } from "../../index.js";
-
-/**
- * @param {number} ms
- */
-function sleep(ms) {
+function sleep(ms: number) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
 }
 
-/**
- * @param {string} dir
- */
-async function runTsc(dir) {
+async function runTsc(dir: string) {
     console.log(`runTsc ${dir} ...`);
     await sleep(1200);
     console.log(`runTsc ${dir} done`);
 }
 
-async function execa(_path, _args) {}
+async function execa(_path: string, _args: string[]) {}
 
 export const a = task({
     name: "a",

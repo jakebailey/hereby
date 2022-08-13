@@ -41,7 +41,6 @@ export async function findHerebyfile(dir: string): Promise<string> {
 }
 
 export interface Herebyfile {
-    path: string;
     tasks: Task[];
     defaultTask?: Task | undefined;
 }
@@ -79,7 +78,6 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     assertUniqueNames(tasks);
 
     return {
-        path: herebyfilePath,
         tasks,
         defaultTask,
     };

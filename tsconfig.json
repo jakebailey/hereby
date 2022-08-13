@@ -7,6 +7,9 @@
         "outDir": "dist",
         "declarationDir": "dist",
         "declaration": true,
+        "stripInternal": true,
+        "sourceMap": true,
+
         "allowUnusedLabels": false,
         "allowUnreachableCode": false,
         "exactOptionalPropertyTypes": true,
@@ -14,8 +17,7 @@
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": true,
-        "importsNotUsedAsValues": "error",
-        "stripInternal": true
+        "importsNotUsedAsValues": "error"
     },
     "exclude": ["dist"]
 }
