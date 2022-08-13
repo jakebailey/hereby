@@ -1,5 +1,5 @@
-import { task } from "../index.js";
-import { Runner } from "../runner.js";
+import { task } from "./index.js";
+import { Runner } from "./runner.js";
 
 test("basic use", async () => {
     let aRun = 0;

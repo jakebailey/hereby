@@ -11,9 +11,10 @@ const config = {
         "^(\\.{1,2}/.*)\\.js$": "$1",
     },
     testEnvironment: "node",
-    roots: ["<rootDir>/src/__tests__"],
+    roots: ["<rootDir>/src"],
+    coverageProvider: "v8",
     collectCoverageFrom: ["src/**/*.ts"],
-    coveragePathIgnorePatterns: ["\\.d\\.ts"],
+    coveragePathIgnorePatterns: ["\\.test\\.ts", "\\.d\\.ts"],
 };
 
 export default config;

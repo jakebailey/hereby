@@ -24,7 +24,7 @@
         "README.md",
         "LICENSE",
         "./dist/**",
-        "!**/__tests__/**"
+        "!/dist/**/*.test.*"
     ],
     "dependencies": {
         "command-line-args": "^5.2.1",

@@ -1,4 +1,4 @@
-import { Task, task } from "../index.js";
+import { Task, task } from "./index.js";
 
 test("Task looks like task", () => {
     const foo = task({ name: "foo" });
