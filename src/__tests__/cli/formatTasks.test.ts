@@ -1,9 +1,29 @@
-import test from "ava";
+import anyTest, { TestFn } from "ava";
 
 import { formatTasks } from "../../cli/formatTasks.js";
 import { task } from "../../index.js";
 
-test("printTasks", (t) => {
+interface TestContext {
+    columns: number;
+    isTTY: boolean;
+}
+
+const test = anyTest as TestFn<TestContext>;
+
+// All tests are serial as we are modifying process.stdout.
+
+test.serial.before((t) => {
+    t.context.columns = process.stdout.columns;
+    t.context.isTTY = process.stdout.isTTY;
+});
+
+test.serial.after((t) => {
+    // TODO: Is this cleanup needed? Does ava run this file in its own process?
+    process.stdout.columns = t.context.columns;
+    process.stdout.isTTY = t.context.isTTY;
+});
+
+test.serial("printTasks", (t) => {
     const a = task({
         name: "a",
         description: "This is task a. It works pretty well.",
@@ -24,17 +44,6 @@ test("printTasks", (t) => {
         name: "d",
     });
 
-    const saveColumns = process.stdout.columns;
-    const saveTty = process.stdout.isTTY;
-    process.stdout.columns = 80;
-    process.stdout.isTTY = false;
-
-    const lines: string[] = [];
-
     const output = formatTasks([a, c, d], d);
-
-    process.stdout.columns = saveColumns;
-    process.stdout.isTTY = saveTty;
-
     t.snapshot(output);
 });
