@@ -30,7 +30,7 @@ class CLIRunner extends Runner {
 
     constructor(options?: CLIRunnerOptions) {
         super(options);
-        this._useSpinner = options?.useSpinner ?? !process.stderr.isTTY;
+        this._useSpinner = options?.useSpinner ?? process.stderr.isTTY;
     }
 
     protected override onTaskAdd(task: Task): void {
