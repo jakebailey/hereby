@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { parseArgs } from "../../cli/parseArgs.js";
+import { getUsage, parseArgs } from "../../cli/parseArgs.js";
 
 const macro = test.macro<[string[]]>({
     exec(t, input) {
@@ -19,3 +19,7 @@ test(macro, ["-T"]);
 test(macro, ["build", "test", "--light=false"]);
 test(macro, ["build", "test", "--", "--light=false"]);
 test(macro, ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false"]);
+
+test.serial("usage", (t) => {
+    t.snapshot(getUsage());
+});
