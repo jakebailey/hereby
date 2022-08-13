@@ -56,7 +56,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
             if (key === "default") {
                 defaultTask = value;
             } else if (exportedTasks.has(value)) {
-                throw new UserError(`Task ${pc.blue(value.options.name)} has been exported twice.`);
+                throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
             } else {
                 exportedTasks.add(value);
             }
@@ -68,7 +68,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     }
 
     if (exportedTasks.size === 0) {
-        throw new UserError("No tasks found.");
+        throw new UserError("No tasks found. Did you forget to export your tasks?");
     }
 
     const tasks = Array.from(exportedTasks.values());
