@@ -14,7 +14,7 @@ test("no re-exec", async (t) => {
     // source maps, so I pass "../../cli/reexec.js" directly, it uses src/...
     // rather than dist/...
     //
-    // TODO: report bug
+    // TODO: Remove once https://github.com/iambumblehead/esmock/issues/113 is fixed.
     const modulePath = new URL("../../cli/reexec.js", import.meta.url);
     const reexecModule = await esmock(fileURLToPath(modulePath), {
         child_process: {
