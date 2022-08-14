@@ -10,6 +10,11 @@ const herebyfilePath = fileURLToPath(new URL("./fixtures/normal.mjs", import.met
 test("no re-exec", async (t) => {
     let callCount = 0;
 
+    // This is a workaround for a bug in esmock; esmock appears to follow
+    // source maps, so I pass "../../cli/reexec.js" directly, it uses src/...
+    // rather than dist/...
+    //
+    // TODO: report bug
     const modulePath = new URL("../../cli/reexec.js", import.meta.url);
     const reexecModule = await esmock(fileURLToPath(modulePath), {
         child_process: {
