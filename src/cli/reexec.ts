@@ -3,7 +3,9 @@ import { resolve } from "import-meta-resolve";
 import pc from "picocolors";
 import { fileURLToPath, pathToFileURL } from "url";
 
-export async function reexec(herebyfilePath: string): Promise<boolean> {
+import type { System } from "./utils.js";
+
+export async function reexec(system: System, herebyfilePath: string): Promise<boolean> {
     // If hereby is installed globally, but run against a Herebyfile in some
     // other package, that Herebyfile's import will resolve to a different
     // installation of the hereby package. There's no guarantee that the two
@@ -24,7 +26,7 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
     }
 
     // TODO: If this turns out to be common, remove this warning.
-    console.error(`${pc.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
+    system.error(`${pc.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
 
     const args = [...process.execArgv, otherCLI, ...process.argv.slice(2)];
     foregroundChild(process.execPath, args);

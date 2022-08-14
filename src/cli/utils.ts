@@ -38,3 +38,25 @@ export class UserError extends Error {}
 export class ExitCodeError {
     constructor(public exitCode: number) {}
 }
+
+export type Process = Pick<NodeJS.Process, "stdout" | "stderr" | "cwd" | "chdir" | "argv" | "exitCode">;
+
+export interface System {
+    log(message: string): void;
+    error(message: string): void;
+    process: Process;
+    numCPUs: number;
+}
+
+export function createSystem(process: Process): System {
+    return {
+        log(message) {
+            process.stdout.write(message + "\n");
+        },
+        error(message) {
+            process.stderr.write(message + "\n");
+        },
+        process,
+        numCPUs: os.cpus().length,
+    };
+}

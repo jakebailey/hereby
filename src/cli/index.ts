@@ -7,19 +7,34 @@ import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { runTasksWithCLIRunner } from "./runner.js";
-import { ExitCodeError, simplifyPath, UserError } from "./utils.js";
+import { ExitCodeError, simplifyPath, System, UserError } from "./utils.js";
 
-async function main(argv: string[]) {
-    const args = parseArgs(argv);
+export async function main(system: System) {
+    try {
+        await mainWorker(system);
+    } catch (e) {
+        if (e instanceof ExitCodeError) {
+            process.exitCode = e.exitCode;
+        } else if (e instanceof UserError) {
+            process.stderr.write(`${pc.red("Error")}: ${e.message}\n`);
+            process.exitCode = 1;
+        } else {
+            throw e;
+        }
+    }
+}
+
+async function mainWorker(system: System) {
+    const args = parseArgs(system.process.argv.slice(2));
 
     if (args.help) {
-        console.log(getUsage());
+        system.log(getUsage());
         return;
     }
 
     const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd()));
 
-    if (await reexec(herebyfilePath)) {
+    if (await reexec(system, herebyfilePath)) {
         return;
     }
 
@@ -28,7 +43,7 @@ async function main(argv: string[]) {
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
-        console.log(formatTasks(herebyfile.tasks, herebyfile.defaultTask));
+        system.log(formatTasks(herebyfile.tasks, herebyfile.defaultTask));
         return;
     }
 
@@ -53,27 +68,14 @@ async function main(argv: string[]) {
         tasks = [herebyfile.defaultTask];
     }
 
-    console.log(`Using ${simplifyPath(herebyfilePath)}`);
+    system.log(`Using ${simplifyPath(herebyfilePath)}`);
 
     try {
-        await runTasksWithCLIRunner(...tasks);
+        await runTasksWithCLIRunner(system, ...tasks);
     } catch {
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,
         // so we don't end up with an unflushed output.
         throw new ExitCodeError(1);
-    }
-}
-
-try {
-    await main(process.argv.slice(2));
-} catch (e) {
-    if (e instanceof ExitCodeError) {
-        process.exitCode = e.exitCode;
-    } else if (e instanceof UserError) {
-        console.error(`${pc.red("Error")}: ${e.message}`);
-        process.exitCode = 1;
-    } else {
-        throw e;
     }
 }

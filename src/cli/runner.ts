@@ -1,24 +1,26 @@
-import os from "os";
 import pc from "picocolors";
 import prettyMilliseconds from "pretty-ms";
 
 import type { Task } from "../index.js";
 import { Runner, RunnerOptions } from "../runner.js";
+import type { System } from "./utils.js";
 
-const numCPUs = os.cpus().length;
-
-export function runTasksWithCLIRunner(...tasks: Task[]) {
-    return new CLIRunner({ concurrency: numCPUs }).runTasks(...tasks);
+export function runTasksWithCLIRunner(system: System, ...tasks: Task[]) {
+    return new CLIRunner({ system, concurrency: system.numCPUs }).runTasks(...tasks);
 }
 
-interface CLIRunnerOptions extends RunnerOptions {}
+interface CLIRunnerOptions extends RunnerOptions {
+    system: System;
+}
 
 class CLIRunner extends Runner {
     private _errored = false;
     private _startTimes = new Map<Task, number>();
+    private _system: System;
 
-    constructor(options?: CLIRunnerOptions) {
+    constructor(options: CLIRunnerOptions) {
         super(options);
+        this._system = options.system;
     }
 
     protected override onTaskStart(task: Task): void {
@@ -28,7 +30,7 @@ class CLIRunner extends Runner {
             return; // Skip logging.
         }
 
-        console.log(`Starting ${pc.blue(task.options.name)}`);
+        this._system.log(`Starting ${pc.blue(task.options.name)}`);
     }
 
     protected override onTaskFinish(task: Task): void {
@@ -37,7 +39,7 @@ class CLIRunner extends Runner {
         }
 
         const took = Date.now() - this._startTimes.get(task)!;
-        console.log(`Finished ${pc.green(task.options.name)} in ${prettyMilliseconds(took)}`);
+        this._system.log(`Finished ${pc.green(task.options.name)} in ${prettyMilliseconds(took)}`);
     }
 
     protected override onTaskError(task: Task, e: unknown): void {
@@ -46,7 +48,7 @@ class CLIRunner extends Runner {
         }
 
         this._errored = true;
-        console.error(`Error in ${pc.red(task.options.name)}`);
-        console.error(`${e}`);
+        this._system.error(`Error in ${pc.red(task.options.name)}`);
+        this._system.error(`${e}`);
     }
 }
