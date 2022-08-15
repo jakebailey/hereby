@@ -13,7 +13,7 @@ const allFilenames = new Set(extensions.map((e) => filenames.map((f) => `${f}.${
 export async function findHerebyfile(dir: string): Promise<string> {
     const root = path.parse(dir).root;
 
-    while (dir) {
+    for (; dir !== root; dir = path.dirname(dir)) {
         const entries = await fs.readdir(dir);
         const matching = entries.filter((e) => allFilenames.has(e));
         if (matching.length > 1) {
@@ -28,11 +28,6 @@ export async function findHerebyfile(dir: string): Promise<string> {
             return candidate;
         }
         if (entries.includes("package.json")) {
-            break;
-        }
-
-        dir = path.dirname(dir);
-        if (dir === root) {
             break;
         }
     }
