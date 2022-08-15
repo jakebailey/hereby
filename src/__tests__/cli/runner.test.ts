@@ -36,9 +36,32 @@ const c = task({
     },
 });
 
+const a2 = task({
+    name: "a2",
+    run: async () => {
+        await sleep(10);
+    },
+});
+
+const b2 = task({
+    name: "b2",
+    dependencies: [a2],
+    run: async () => {
+        await sleep(10);
+    },
+});
+
+const c2 = task({
+    name: "c2",
+    dependencies: [b2],
+    run: async () => {
+        await sleep(10);
+    },
+});
+
 const d = task({
     name: "d",
-    dependencies: [c],
+    dependencies: [c, c2],
     run: async () => {
         await sleep(10);
     },
@@ -49,7 +72,7 @@ test("runner", async (t) => {
 
     const system = new Mock<System>()
         .setup((instance) => instance.numCPUs)
-        .returns(8)
+        .returns(1)
         .setup((instance) => instance.log(It.IsAny()))
         .callback(({ args: [m] }) => {
             log.push(["log", m]);
