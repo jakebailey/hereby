@@ -17,13 +17,13 @@ export async function findHerebyfile(dir: string): Promise<string> {
         const entries = await fs.readdir(dir);
         const matching = entries.filter((e) => allFilenames.has(e));
         if (matching.length > 1) {
-            throw new UserError(`Found ${matching.join(", ")} in ${dir}; please resolve this ambiguity.`);
+            throw new UserError(`Found more than one Herebyfile: ${matching.join(", ")}`);
         }
         if (matching.length === 1) {
             const candidate = path.join(dir, matching[0]);
             const stat = await fs.stat(candidate);
             if (!stat.isFile()) {
-                throw new UserError(`${candidate} is not a file.`);
+                throw new UserError(`${matching[0]} is not a file.`);
             }
             return candidate;
         }
