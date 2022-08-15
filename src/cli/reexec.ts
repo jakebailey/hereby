@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import foregroundChild from "foreground-child";
 import { resolve } from "import-meta-resolve";
-import pc from "picocolors";
 import { fileURLToPath, pathToFileURL } from "url";
 
 import type { System } from "./utils.js";
@@ -26,7 +26,7 @@ export async function reexec(system: System, herebyfilePath: string): Promise<bo
     }
 
     // TODO: If this turns out to be common, remove this warning.
-    system.error(`${pc.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
+    system.error(`${chalk.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
 
     const args = [...system.process.execArgv, otherCLI, ...system.process.argv.slice(2)];
     foregroundChild(system.process.execPath, args);

@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import fs from "fs/promises";
 import path from "path";
-import pc from "picocolors";
 
 import { Task } from "../index.js";
 import { forEachTask } from "../utils.js";
@@ -51,7 +51,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
             if (key === "default") {
                 defaultTask = value;
             } else if (exportedTasks.has(value)) {
-                throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
+                throw new UserError(`Task "${chalk.blue(value.options.name)}" has been exported twice.`);
             } else {
                 exportedTasks.add(value);
             }
@@ -83,7 +83,7 @@ function assertUniqueNames(tasks: Task[]) {
     forEachTask(tasks, (task) => {
         const name = task.options.name;
         if (names.has(name)) {
-            throw new UserError(`Task "${pc.blue(name)}" was declared twice.`);
+            throw new UserError(`Task "${chalk.blue(name)}" was declared twice.`);
         }
         names.add(name);
     });

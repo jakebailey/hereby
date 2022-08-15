@@ -1,4 +1,4 @@
-import pc from "picocolors";
+import chalk from "chalk";
 import prettyMilliseconds from "pretty-ms";
 
 import type { Task } from "../index.js";
@@ -30,7 +30,7 @@ class CLIRunner extends Runner {
             return; // Skip logging.
         }
 
-        this._system.log(`Starting ${pc.blue(task.options.name)}`);
+        this._system.log(`Starting ${chalk.blue(task.options.name)}`);
     }
 
     protected override onTaskFinish(task: Task): void {
@@ -39,7 +39,7 @@ class CLIRunner extends Runner {
         }
 
         const took = Date.now() - this._startTimes.get(task)!;
-        this._system.log(`Finished ${pc.green(task.options.name)} in ${prettyMilliseconds(took)}`);
+        this._system.log(`Finished ${chalk.green(task.options.name)} in ${prettyMilliseconds(took)}`);
     }
 
     protected override onTaskError(task: Task, e: unknown): void {
@@ -48,7 +48,7 @@ class CLIRunner extends Runner {
         }
 
         this._errored = true;
-        this._system.error(`Error in ${pc.red(task.options.name)}`);
+        this._system.error(`Error in ${chalk.red(task.options.name)}`);
         this._system.error(`${e}`);
     }
 }

@@ -1,5 +1,5 @@
+import chalk from "chalk";
 import path from "path";
-import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import { formatTasks } from "./formatTasks.js";
@@ -16,7 +16,7 @@ export async function main(system: System) {
         if (e instanceof ExitCodeError) {
             system.process.exitCode = e.exitCode;
         } else if (e instanceof UserError) {
-            system.error(`${pc.red("Error")}: ${e.message}`);
+            system.error(`${chalk.red("Error")}: ${e.message}`);
             system.process.exitCode = 1;
         } else {
             throw e;

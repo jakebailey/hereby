@@ -37,12 +37,12 @@
         "./dist/index.d.ts"
     ],
     "dependencies": {
+        "chalk": "^5.0.1",
         "command-line-args": "^5.2.1",
         "command-line-usage": "^6.1.3",
         "foreground-child": "^2.0.0",
         "import-meta-resolve": "^2.1.0",
         "p-queue": "^7.3.0",
-        "picocolors": "^1.0.0",
         "pretty-ms": "^8.0.0"
     },
     "devDependencies": {
@@ -87,7 +87,6 @@
             "compile": false
         },
         "environmentVariables": {
-            "NO_COLOR": "1",
             "FORCE_COLOR": "0"
         }
     },
