@@ -1,6 +1,6 @@
 import test from "ava";
 import esmock from "esmock";
-import { GetPropertyExpression, It, Mock, Times } from "moq.ts";
+import { It, Mock, Times } from "moq.ts";
 import { fileURLToPath } from "url";
 
 import type * as reexec from "../../cli/reexec.js";
