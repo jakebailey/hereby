@@ -59,3 +59,14 @@ $ hereby        # Run the default exported task.
   --herebyfile path   A path to a Herebyfile. Optional.       
   -T, --tasks         Print a listing of the available tasks. 
 ```
+
+# ESM
+
+`hereby` is implemented in ES modules. But, don't fret! This does not mean
+that your project must be ESM-only, only that your `Herebyfile` must be ESM
+module so that `hereby`'s `task` function can be imported. It's recommended
+to use the filename `Herebyfile.mjs` to ensure that it is treated as ESM. This
+will work in a CommonJS project; ES modules can import CommonJS modules.
+
+If your package already sets `"type": "module"`, `Herebyfile.js` will work
+as well.
