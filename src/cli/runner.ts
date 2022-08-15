@@ -15,7 +15,7 @@ interface CLIRunnerOptions extends RunnerOptions {
 
 class CLIRunner extends Runner {
     private _errored = false;
-    private _startTimes = new Map<Task, number>();
+    private _startTimes = new WeakMap<Task, number>();
     private _system: System;
 
     constructor(options: CLIRunnerOptions) {
