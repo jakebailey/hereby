@@ -1,5 +1,4 @@
 import test from "ava";
-import { write } from "fs";
 import { It, Mock, Times } from "moq.ts";
 
 import { createSystem, ExitCodeError, Process, UserError } from "../cli/utils.js";
