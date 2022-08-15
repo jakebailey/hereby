@@ -6,12 +6,13 @@ import { Task } from "../index.js";
 import { forEachTask } from "../utils.js";
 import { UserError } from "./utils.js";
 
-// The order of these doesn't matter; we error below when our choice would be ambiguous.
 const filenames = ["Herebyfile", "herebyfile"];
-const extensions = ["js", "mjs"];
-const allFilenames = new Set(filenames.map((f) => extensions.map((e) => `${f}.${e}`)).flat());
+const extensions = ["mjs", "js"];
+const allFilenames = new Set(extensions.map((e) => filenames.map((f) => `${f}.${e}`)).flat());
 
 export async function findHerebyfile(dir: string): Promise<string> {
+    const root = path.parse(dir).root;
+
     while (dir) {
         const entries = await fs.readdir(dir);
         const matching = entries.filter((e) => allFilenames.has(e));
@@ -30,11 +31,10 @@ export async function findHerebyfile(dir: string): Promise<string> {
             break;
         }
 
-        const parent = path.dirname(dir);
-        if (parent === dir) {
+        dir = path.dirname(dir);
+        if (dir === root) {
             break;
         }
-        dir = parent;
     }
 
     throw new UserError("Unable to find Herebyfile.");
