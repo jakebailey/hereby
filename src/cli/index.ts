@@ -14,10 +14,10 @@ export async function main(system: System) {
         await mainWorker(system);
     } catch (e) {
         if (e instanceof ExitCodeError) {
-            process.exitCode = e.exitCode;
+            system.process.exitCode = e.exitCode;
         } else if (e instanceof UserError) {
-            process.stderr.write(`${pc.red("Error")}: ${e.message}\n`);
-            process.exitCode = 1;
+            system.error(`${pc.red("Error")}: ${e.message}`);
+            system.process.exitCode = 1;
         } else {
             throw e;
         }
@@ -32,13 +32,14 @@ async function mainWorker(system: System) {
         return;
     }
 
-    const herebyfilePath = args.herebyfile ?? (await findHerebyfile(process.cwd()));
+    let herebyfilePath = args.herebyfile ?? (await findHerebyfile(system.process.cwd()));
+    herebyfilePath = path.resolve(system.process.cwd(), herebyfilePath);
 
     if (await reexec(system, herebyfilePath)) {
         return;
     }
 
-    process.chdir(path.dirname(herebyfilePath));
+    system.process.chdir(path.dirname(herebyfilePath));
 
     const herebyfile = await loadHerebyfile(herebyfilePath);
 

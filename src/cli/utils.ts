@@ -39,7 +39,10 @@ export class ExitCodeError {
     constructor(public exitCode: number) {}
 }
 
-export type Process = Pick<NodeJS.Process, "stdout" | "stderr" | "cwd" | "chdir" | "argv" | "exitCode">;
+export type Process = Pick<
+    NodeJS.Process,
+    "stdout" | "stderr" | "cwd" | "chdir" | "argv" | "exitCode" | "execArgv" | "execPath"
+>;
 
 export interface System {
     log(message: string): void;

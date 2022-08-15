@@ -28,8 +28,8 @@ export async function reexec(system: System, herebyfilePath: string): Promise<bo
     // TODO: If this turns out to be common, remove this warning.
     system.error(`${pc.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
 
-    const args = [...process.execArgv, otherCLI, ...process.argv.slice(2)];
-    foregroundChild(process.execPath, args);
+    const args = [...system.process.execArgv, otherCLI, ...system.process.argv.slice(2)];
+    foregroundChild(system.process.execPath, args);
     return true;
 }
 
