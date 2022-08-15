@@ -4,7 +4,8 @@ import { It, Mock } from "moq.ts";
 
 import type * as runner from "../../cli/runner.js";
 import type { System } from "../../cli/utils.js";
-import { task } from "../../index.js";
+import { Task, task } from "../../index.js";
+import { Runner } from "../../runner.js";
 import { fixESMockPath } from "../../testUtils.js";
 
 function sleep(ms: number) {
@@ -92,5 +93,44 @@ test("runner", async (t) => {
         await runnerModule.runTasksWithCLIRunner(system.object(), d);
     });
 
+    t.snapshot(log, "log");
+});
+
+class FakeRunner extends Runner {
+    override async runTasks(...tasks: Task[]): Promise<void> {
+        for (const task of tasks) {
+            this.onTaskAdd?.(task);
+            this.onTaskStart?.(task);
+            this.onTaskFinish?.(task);
+            this.onTaskError?.(task, new Error("test error"));
+        }
+    }
+}
+
+test("runner direct", async (t) => {
+    const log: any[] = [];
+
+    const system = new Mock<System>()
+        .setup((instance) => instance.numCPUs)
+        .returns(1)
+        .setup((instance) => instance.log(It.IsAny()))
+        .callback(({ args: [m] }) => {
+            log.push(["log", m]);
+        })
+        .setup((instance) => instance.error(It.IsAny()))
+        .callback(({ args: [m] }) => {
+            log.push(["error", m]);
+        });
+
+    const runnerModule: typeof runner = await esmock(fixESMockPath("../../cli/runner.js", import.meta.url), {
+        "pretty-ms": {
+            default: () => "<pretty-ms>",
+        },
+        [fixESMockPath("../../runner.js", import.meta.url)]: {
+            Runner: FakeRunner,
+        },
+    });
+
+    await runnerModule.runTasksWithCLIRunner(system.object(), a, a2);
     t.snapshot(log, "log");
 });
