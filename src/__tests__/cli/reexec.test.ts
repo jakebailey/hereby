@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 
 import type * as reexec from "../../cli/reexec.js";
 import type { Process, System } from "../../cli/utils.js";
+import { fixESMockPath } from "../../testUtils.js";
 
 const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
 const wrongCliIndexURL = new URL("../../other/cli/index.js", import.meta.url).toString();
@@ -15,13 +16,7 @@ test("no re-exec", async (t) => {
 
     const systemMock = new Mock<System>();
 
-    // This is a workaround for a bug in esmock; esmock appears to follow
-    // source maps, so I pass "../../cli/reexec.js" directly, it uses src/...
-    // rather than dist/...
-    //
-    // TODO: Remove once https://github.com/iambumblehead/esmock/issues/113 is fixed.
-    const modulePath = new URL("../../cli/reexec.js", import.meta.url);
-    const reexecModule: typeof reexec = await esmock(fileURLToPath(modulePath), {
+    const reexecModule: typeof reexec = await esmock(fixESMockPath("../../cli/reexec.js", import.meta.url), {
         "foreground-child": {
             default: () => {
                 throw new Error("Should not be called.");
@@ -67,13 +62,7 @@ test("re-exec", async (t) => {
         .setup((instance) => instance.process)
         .returns(processMock.object());
 
-    // This is a workaround for a bug in esmock; esmock appears to follow
-    // source maps, so I pass "../../cli/reexec.js" directly, it uses src/...
-    // rather than dist/...
-    //
-    // TODO: Remove once https://github.com/iambumblehead/esmock/issues/113 is fixed.
-    const modulePath = new URL("../../cli/reexec.js", import.meta.url);
-    const reexecModule: typeof reexec = await esmock(fileURLToPath(modulePath), {
+    const reexecModule: typeof reexec = await esmock(fixESMockPath("../../cli/reexec.js", import.meta.url), {
         "foreground-child": {
             default: (program: string, args: string[]) => {
                 t.is(program, execPath);

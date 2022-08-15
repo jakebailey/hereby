@@ -34,7 +34,8 @@
         "LICENSE",
         "./dist/**/*.js",
         "!**/__tests__/**",
-        "./dist/index.d.ts"
+        "./dist/index.d.ts",
+        "!./dist/testUtils.js"
     ],
     "dependencies": {
         "chalk": "^5.0.1",
