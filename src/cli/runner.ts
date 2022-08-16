@@ -1,3 +1,4 @@
+import assert from "assert";
 import chalk from "chalk";
 import prettyMilliseconds from "pretty-ms";
 
@@ -38,7 +39,7 @@ class CLIRunner extends Runner {
             return; // Skip logging.
         }
 
-        const took = Date.now() - this._startTimes.get(task)!;
+        const took = Date.now() - checkDefined(this._startTimes.get(task));
         this._system.log(`Finished ${chalk.green(task.options.name)} in ${prettyMilliseconds(took)}`);
     }
 
@@ -51,4 +52,9 @@ class CLIRunner extends Runner {
         this._system.error(`Error in ${chalk.red(task.options.name)}`);
         this._system.error(`${e}`);
     }
+}
+
+function checkDefined<T>(value: T | undefined | null): T {
+    assert(value);
+    return value;
 }
