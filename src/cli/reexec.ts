@@ -3,7 +3,7 @@ import foregroundChild from "foreground-child";
 import { resolve } from "import-meta-resolve";
 import { fileURLToPath, pathToFileURL } from "url";
 
-import type { System } from "./utils.js";
+import { System, UserError } from "./utils.js";
 
 export async function reexec(system: System, herebyfilePath: string): Promise<boolean> {
     // If hereby is installed globally, but run against a Herebyfile in some
@@ -19,7 +19,13 @@ export async function reexec(system: System, herebyfilePath: string): Promise<bo
     // import the CLI from the other version and run it.
 
     const thisCLI = await resolveToPath("hereby/cli", new URL(import.meta.url));
-    const otherCLI = await resolveToPath("hereby/cli", pathToFileURL(herebyfilePath));
+    let otherCLI: string;
+
+    try {
+        otherCLI = await resolveToPath("hereby/cli", pathToFileURL(herebyfilePath));
+    } catch {
+        throw new UserError("Unable to find hereby; ensure hereby is installed in your package.");
+    }
 
     if (thisCLI === otherCLI) {
         return false;
