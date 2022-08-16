@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import fs from "fs/promises";
 import path from "path";
+import { pathToFileURL } from "url";
 
 import { Task } from "../index.js";
 import { forEachTask } from "../utils.js";
@@ -41,7 +42,7 @@ export interface Herebyfile {
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
-    const herebyfile = await import(herebyfilePath);
+    const herebyfile = await import(pathToFileURL(herebyfilePath).toString());
 
     const exportedTasks = new Set<Task>();
     let defaultTask: Task | undefined;
