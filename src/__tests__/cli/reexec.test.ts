@@ -11,7 +11,10 @@ const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
 const wrongCliIndexURL = new URL("../../other/cli/index.js", import.meta.url).toString();
 const herebyfilePath = fileURLToPath(new URL("./fixtures/normal.mjs", import.meta.url));
 
-test("no re-exec", async (t) => {
+// TODO: fixESMockPath doesn't work on Windows; remove once the bug is fixed.
+const testSkipIfWindows = process.platform !== "win32" ? test : test.skip;
+
+testSkipIfWindows("no re-exec", async (t) => {
     let callCount = 0;
 
     const systemMock = new Mock<System>();
@@ -41,7 +44,7 @@ test("no re-exec", async (t) => {
     t.false(returnNow);
 });
 
-test("re-exec", async (t) => {
+testSkipIfWindows("re-exec", async (t) => {
     let callCount = 0;
 
     const execPath = "node";

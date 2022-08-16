@@ -8,6 +8,9 @@ import { Task, task } from "../../index.js";
 import { Runner } from "../../runner.js";
 import { fixESMockPath } from "../../testUtils.js";
 
+// TODO: fixESMockPath doesn't work on Windows; remove once the bug is fixed.
+const testSkipIfWindows = process.platform !== "win32" ? test : test.skip;
+
 function sleep(ms: number) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -68,7 +71,7 @@ const d = task({
     },
 });
 
-test("runner", async (t) => {
+testSkipIfWindows("runner", async (t) => {
     const log: any[] = [];
 
     const system = new Mock<System>()
@@ -113,7 +116,7 @@ class FakeRunner extends Runner {
     }
 }
 
-test("runner direct", async (t) => {
+testSkipIfWindows("runner direct", async (t) => {
     const log: any[] = [];
 
     const system = new Mock<System>()
