@@ -66,6 +66,7 @@
         "execa": "^6.1.0",
         "moq.ts": "^9.0.2",
         "prettier": "^2.7.1",
+        "release-it": "^15.3.0",
         "rimraf": "^3.0.2",
         "tempy": "^3.0.0",
         "typescript": "^4.7.4"
@@ -103,5 +104,14 @@
             "html",
             "lcov"
         ]
+    },
+    "release-it": {
+        "git": {
+            "commitMessage": "Release v${version}",
+            "tagName": "v${version}"
+        },
+        "hooks": {
+            "before:init": "npm run test"
+        }
     }
 }
