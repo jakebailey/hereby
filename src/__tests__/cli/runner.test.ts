@@ -98,11 +98,17 @@ test("runner", async (t) => {
 
 class FakeRunner extends Runner {
     override async runTasks(...tasks: Task[]): Promise<void> {
-        for (const task of tasks) {
+        for (let i = 0; i < tasks.length; i++) {
+            const task = tasks[i];
+
             this.onTaskAdd?.(task);
             this.onTaskStart?.(task);
-            this.onTaskFinish?.(task);
-            this.onTaskError?.(task, new Error("test error"));
+
+            if (i % 2 === 0) {
+                this.onTaskFinish?.(task);
+            } else {
+                this.onTaskError?.(task, new Error("test error"));
+            }
         }
     }
 }
