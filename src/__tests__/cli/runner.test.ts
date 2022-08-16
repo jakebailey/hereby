@@ -137,6 +137,6 @@ test("runner direct", async (t) => {
         },
     });
 
-    await runnerModule.runTasksWithCLIRunner(system.object(), a, a2, d);
+    await runnerModule.runTasksWithCLIRunner(system.object(), a, a2, b, c, d);
     t.snapshot(log, "log");
 });
