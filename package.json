@@ -2,8 +2,9 @@
     "name": "hereby",
     "version": "1.0.0",
     "description": "A simple task runner",
+    "repository": "github:jakebailey/hereby",
     "type": "module",
-    "bin": "./dist/cli/index.js",
+    "bin": "./dist/cli.js",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -77,8 +78,8 @@
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch",
-        "test": "cross-env NODE_OPTIONS=--loader=esmock NODE_NO_WARNINGS=1 ava",
-        "coverage": "cross-env NODE_OPTIONS=--loader=esmock NODE_NO_WARNINGS=1 c8 ava",
+        "test": "ava",
+        "coverage": "c8 ava",
         "prepack": "rimraf dist && npm run build"
     },
     "ava": {
@@ -89,6 +90,8 @@
             "compile": false
         },
         "environmentVariables": {
+            "NODE_OPTIONS": "--loader=esmock",
+            "NODE_NO_WARNINGS": "1",
             "FORCE_COLOR": "0"
         }
     },
