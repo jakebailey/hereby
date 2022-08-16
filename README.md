@@ -1,5 +1,9 @@
 # hereby
 
+[![npm version](https://badge.fury.io/js/hereby.svg)](https://badge.fury.io/js/hereby)
+[![ci](https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg)](https://github.com/jakebailey/hereby/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh)](https://codecov.io/gh/jakebailey/hereby)
+
 `hereby` is a simple task runner.
 
 # Herebyfile.mjs
