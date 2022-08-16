@@ -27,5 +27,5 @@ test("printTasks", (t) => {
     });
 
     const output = formatTasks([a, c, d], d);
-    t.snapshot(output);
+    t.snapshot(output.replace(/\r/g, ""));
 });
