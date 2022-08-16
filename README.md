@@ -10,7 +10,10 @@
 
 # Herebyfile.mjs
 
-Tasks are defined in `Herebyfile.mjs`, like:
+Tasks are defined in `Herebyfile.mjs`. Exported tasks are available to run
+at the CLI, with support for `export default`.
+
+For example:
 
 ```js
 import { execa } from "execa";
