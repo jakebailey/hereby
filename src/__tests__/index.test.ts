@@ -23,3 +23,14 @@ test("missing info", (t) => {
 test("non-async run", (t) => {
     t.truthy(task({ name: "a", run: () => {} }));
 });
+
+test("bad options", (t) => {
+    t.throws(() => task({ name: 1234 as any }));
+    t.throws(() => task({ name: "name", description: null as any }));
+    t.throws(() => task({ name: "name", description: 1234 as any }));
+    t.throws(() => task({ name: "name", dependencies: null as any }));
+    t.throws(() => task({ name: "name", dependencies: 1234 as any }));
+    t.throws(() => task({ name: "name", dependencies: [1234] as any }));
+    t.throws(() => task({ name: "name", run: null as any }));
+    t.throws(() => task({ name: "name", run: 1234 as any }));
+});

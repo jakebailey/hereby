@@ -37,6 +37,34 @@ export class Task {
     }
 
     private constructor(options: TaskOptions) {
+        // Runtime typecheck; consumers of hereby may not have enabled
+        // typechecking, so this is helpful.
+
+        if (typeof options.name !== "string") {
+            throw new Error("Task name is not a string.");
+        }
+
+        if (typeof options.description !== "string" && typeof options.description !== "undefined") {
+            throw new Error("Task description is not a string or undefined.");
+        }
+
+        if (!Array.isArray(options.dependencies) && typeof options.dependencies !== "undefined") {
+            throw new Error("Task dependencies is not an array or undefined.");
+        }
+        if (options.dependencies) {
+            for (const dep of options.dependencies) {
+                if (!(dep instanceof Task)) {
+                    throw new Error("Task dependency is not a task.");
+                }
+            }
+        }
+
+        if (typeof options.run !== "function" && typeof options.run !== "undefined") {
+            throw new Error("Task run is not a function or undefined.");
+        }
+
+        // Non-type checks.
+
         if (!options.name) {
             throw new Error("Task name must not be empty.");
         }
@@ -46,6 +74,7 @@ export class Task {
         if (!options.dependencies?.length && !options.run) {
             throw new Error("Task must have at run function or dependencies.");
         }
+
         this.options = options;
     }
 }
