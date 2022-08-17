@@ -28,8 +28,12 @@ export interface TaskOptions {
  * A hereby Task. To get an instance, call `test`.
  */
 export class Task {
+    private _options: TaskOptions;
+
     /* @internal */
-    options: TaskOptions;
+    get options() {
+        return this._options;
+    }
 
     /* @internal */
     static create(options: TaskOptions): Task {
@@ -75,7 +79,7 @@ export class Task {
             throw new Error("Task must have at run function or dependencies.");
         }
 
-        this.options = options;
+        this._options = options;
     }
 }
 
