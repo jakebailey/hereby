@@ -9,7 +9,7 @@ import { UserError } from "../../cli/utils.js";
 const fixturesPath = fileURLToPath(new URL("./fixtures", import.meta.url));
 
 test("selectTasks single", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "normal.mjs"));
+    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
 
     const tasks = selectTasks(herebyfile, ["runSomeProgram"]);
     t.is(tasks.length, 1);
@@ -17,7 +17,7 @@ test("selectTasks single", async (t) => {
 });
 
 test("selectTasks multiple", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "normal.mjs"));
+    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
 
     const tasks = selectTasks(herebyfile, ["runSomeProgram", "buildCompiler"]);
     t.is(tasks.length, 2);
@@ -26,7 +26,7 @@ test("selectTasks multiple", async (t) => {
 });
 
 test("selectTasks default", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "normal.mjs"));
+    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
 
     const tasks = selectTasks(herebyfile, undefined);
     t.is(tasks.length, 1);
@@ -34,7 +34,7 @@ test("selectTasks default", async (t) => {
 });
 
 test("selectTasks missing", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "normal.mjs"));
+    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
 
     t.throws(() => selectTasks(herebyfile, ["oops"]), {
         instanceOf: UserError,

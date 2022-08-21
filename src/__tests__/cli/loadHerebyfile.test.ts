@@ -10,7 +10,7 @@ import { UserError } from "../../cli/utils.js";
 const fixturesPath = fileURLToPath(new URL("./fixtures", import.meta.url));
 
 test("normal file", async (t) => {
-    const herebyfilePath = path.join(fixturesPath, "normal.mjs");
+    const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
 
     const herebyfile = await loadHerebyfile(herebyfilePath);
     t.snapshot(herebyfile);

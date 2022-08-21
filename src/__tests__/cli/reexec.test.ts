@@ -7,7 +7,7 @@ import { UserError } from "../../cli/utils.js";
 
 const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
 const wrongCliIndexURL = new URL("../../other/cli/index.js", import.meta.url).toString();
-const herebyfilePath = fileURLToPath(new URL("./fixtures/normal.mjs", import.meta.url));
+const herebyfilePath = fileURLToPath(new URL("./fixtures/Herebyfile.mjs", import.meta.url));
 
 test("no re-exec", async (t) => {
     let callCount = 0;
