@@ -55,11 +55,11 @@ async function mainWorker(d: D) {
     try {
         const runner = new CLIRunner(d);
         await runner.runTasks(...tasks);
-    } catch {
+    } catch (e) {
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,
         // so we don't end up with an unflushed output.
-        throw new ExitCodeError(1);
+        throw new ExitCodeError(1, e);
     }
 }
 

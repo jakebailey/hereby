@@ -40,26 +40,26 @@ export class UserError extends Error {
  * without logging anything.
  */
 export class ExitCodeError {
-    constructor(public exitCode: number) {}
+    constructor(public exitCode: number, public reason?: any) {}
 }
 
 /** Contains all dependencies, for mocking. */
 export interface D {
     // Globals.
-    log(message: string): void;
-    error(message: string): void;
-    cwd(): string;
-    chdir(directory: string): void;
-    argv: string[];
-    execArgv: string[];
-    execPath: string;
-    setExitCode(code: number): void;
-    numCPUs: number;
+    readonly log: (message: string) => void;
+    readonly error: (message: string) => void;
+    readonly cwd: () => string;
+    readonly chdir: (directory: string) => void;
+    readonly argv: string[];
+    readonly execArgv: string[];
+    readonly execPath: string;
+    readonly setExitCode: (code: number) => void;
+    readonly numCPUs: number;
 
     // Third-party package imports.
-    foregroundChild(program: string, args: string[]): void;
-    resolve(specifier: string, parent: string): Promise<string>;
-    prettyMilliseconds(milliseconds: number): string;
+    readonly foregroundChild: (program: string, args: string[]) => void;
+    readonly resolve: (specifier: string, parent: string) => Promise<string>;
+    readonly prettyMilliseconds: (milliseconds: number) => string;
 }
 
 /* eslint-disable no-restricted-globals */

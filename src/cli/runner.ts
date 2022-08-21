@@ -42,8 +42,7 @@ export class CLIRunner extends Runner {
         }
 
         this._errored = true;
-        this._d.error(`Error in ${chalk.red(task.options.name)}`);
-        this._d.error(`${e}`);
+        this._d.error(`Error in ${chalk.red(task.options.name)}\n${e}`);
     }
 }
 

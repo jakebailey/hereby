@@ -2,7 +2,7 @@ import test from "ava";
 import os from "os";
 import path from "path";
 
-import { real, simplifyPath } from "../../cli/utils.js";
+import { ExitCodeError, real, simplifyPath, UserError } from "../../cli/utils.js";
 
 function normalizeSlashes(p: string) {
     return p.replace(/\\/g, "/");
@@ -32,3 +32,13 @@ test.serial("real dependencies", async (t) => {
     process.exitCode = saveExitCode;
 });
 /* eslint-enable no-restricted-globals */
+
+test("UserError", (t) => {
+    const e = new UserError("message");
+    t.is(e.message, "message");
+});
+
+test("ExitCodeError", (t) => {
+    const e = new ExitCodeError(1);
+    t.is(e.exitCode, 1);
+});

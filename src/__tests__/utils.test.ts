@@ -1,6 +1,5 @@
 import test from "ava";
 
-import { ExitCodeError, UserError } from "../cli/utils.js";
 import { Task, task } from "../index.js";
 import { forEachTask } from "../utils.js";
 
@@ -50,14 +49,4 @@ test("forEachTask visits each once", (t) => {
     }
 
     t.is(counts.size, 0);
-});
-
-test("UserError", (t) => {
-    const e = new UserError("message");
-    t.is(e.message, "message");
-});
-
-test("ExitCodeError", (t) => {
-    const e = new ExitCodeError(1);
-    t.is(e.exitCode, 1);
 });
