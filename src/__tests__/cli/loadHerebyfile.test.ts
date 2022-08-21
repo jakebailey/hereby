@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
 
-const fixturesPath = fileURLToPath(new URL("./fixtures", import.meta.url));
+const fixturesPath = fileURLToPath(new URL("./__fixtures__", import.meta.url));
 
 test("normal file", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");

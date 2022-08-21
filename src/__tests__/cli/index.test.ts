@@ -8,7 +8,7 @@ import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { D, UserError } from "../../cli/utils.js";
 
-const fixturesPath = fileURLToPath(new URL("./fixtures", import.meta.url));
+const fixturesPath = fileURLToPath(new URL("./__fixtures__", import.meta.url));
 
 test("selectTasks single", async (t) => {
     const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
