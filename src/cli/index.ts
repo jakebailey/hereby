@@ -3,7 +3,7 @@ import path from "path";
 
 import type { Task } from "../index.js";
 import { formatTasks } from "./formatTasks.js";
-import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
+import { findHerebyfile, Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { CLIRunner } from "./runner.js";
@@ -41,6 +41,8 @@ async function mainWorker(d: D) {
 
     d.chdir(path.dirname(herebyfilePath));
 
+    d.log(`Using ${simplifyPath(herebyfilePath)}`);
+
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
@@ -48,28 +50,7 @@ async function mainWorker(d: D) {
         return;
     }
 
-    const allTasks = new Map<string, Task>();
-    for (const task of herebyfile.tasks) {
-        allTasks.set(task.options.name, task);
-    }
-
-    let tasks: Task[];
-    if (args.run && args.run.length > 0) {
-        tasks = args.run.map((name) => {
-            const task = allTasks.get(name);
-            if (!task) {
-                throw new UserError(`Task ${name} does not exist or is not exported in the Herebyfile.`);
-            }
-            return task;
-        });
-    } else {
-        if (!herebyfile.defaultTask) {
-            throw new UserError("No default task defined; please specify a task name.");
-        }
-        tasks = [herebyfile.defaultTask];
-    }
-
-    d.log(`Using ${simplifyPath(herebyfilePath)}`);
+    const tasks = selectTasks(herebyfile, args.run);
 
     try {
         const runner = new CLIRunner(d);
@@ -80,4 +61,26 @@ async function mainWorker(d: D) {
         // so we don't end up with an unflushed output.
         throw new ExitCodeError(1);
     }
+}
+
+export function selectTasks(herebyfile: Herebyfile, taskNames: string[] | undefined): Task[] {
+    const allTasks = new Map<string, Task>();
+    for (const task of herebyfile.tasks) {
+        allTasks.set(task.options.name, task);
+    }
+
+    if (taskNames && taskNames.length > 0) {
+        return taskNames.map((name) => {
+            const task = allTasks.get(name);
+            if (!task) {
+                throw new UserError(`Task "${name}" does not exist or is not exported in the Herebyfile.`);
+            }
+            return task;
+        });
+    }
+
+    if (!herebyfile.defaultTask) {
+        throw new UserError("No default task defined; please specify a task name.");
+    }
+    return [herebyfile.defaultTask];
 }
