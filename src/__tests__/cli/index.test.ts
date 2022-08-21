@@ -1,12 +1,12 @@
 import test from "ava";
 import { resolve } from "import-meta-resolve";
-import { It, Mock } from "moq.ts";
 import path from "path";
 import { fileURLToPath } from "url";
 
 import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { D, UserError } from "../../cli/utils.js";
+import { mock } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("./__fixtures__", import.meta.url));
 
@@ -55,13 +55,7 @@ test("selectTasks missing default", async (t) => {
 
 test("main usage", async (t) => {
     t.plan(1);
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--help"])
         .setup((d) => d.cwd)
@@ -74,13 +68,7 @@ test("main usage", async (t) => {
 
 test("main print tasks", async (t) => {
     t.plan(3);
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--tasks"])
         .setup((d) => d.cwd)
@@ -97,13 +85,7 @@ test("main print tasks", async (t) => {
 
 test("main success", async (t) => {
     t.plan(4);
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
         .setup((d) => d.argv)
@@ -124,13 +106,7 @@ test("main success", async (t) => {
 
 test("main failure", async (t) => {
     t.plan(5);
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
         .setup((d) => d.argv)
@@ -159,13 +135,7 @@ test("main failure", async (t) => {
 
 test("main user error", async (t) => {
     t.plan(4);
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
         .setup((d) => d.argv)
@@ -193,13 +163,7 @@ test("main user error", async (t) => {
 });
 
 test("main random throw", async (t) => {
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .throws(new Error("test error"));
 
@@ -215,13 +179,7 @@ test("main reexec", async (t) => {
     const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
     const wrongCliIndexURL = new URL("../../other/cli/index.js", import.meta.url).toString();
 
-    const dMock = new Mock<D>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `${String(name)} not implemented`;
-            t.fail(message);
-            throw new Error(message);
-        })
+    const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .returns(["node", "cli.js"])
         .setup((d) => d.cwd)

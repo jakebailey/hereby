@@ -1,8 +1,8 @@
 import test from "ava";
-import { Mock } from "moq.ts";
 
 import { CLIRunner, CLIRunnerD } from "../../cli/runner.js";
 import { Task, task } from "../../index.js";
+import { mock } from "../__helpers__/index.js";
 
 function sleep(ms: number) {
     return new Promise((resolve) => {
@@ -67,7 +67,7 @@ const d = task({
 test("runner", async (t) => {
     const log: any[] = [];
 
-    const dMock = new Mock<CLIRunnerD>()
+    const dMock = mock<CLIRunnerD>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
         .setup((d) => d.log)
@@ -106,7 +106,7 @@ class TestRunner extends CLIRunner {
 test("runner direct", async (t) => {
     const log: any[] = [];
 
-    const dMock = new Mock<CLIRunnerD>()
+    const dMock = mock<CLIRunnerD>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
         .setup((d) => d.log)

@@ -1,9 +1,10 @@
 import test from "ava";
-import { It, Mock, Times } from "moq.ts";
+import { It, Times } from "moq.ts";
 import { fileURLToPath } from "url";
 
 import { reexec, ReExecD } from "../../cli/reexec.js";
 import { UserError } from "../../cli/utils.js";
+import { mock } from "../__helpers__/index.js";
 
 const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
 const wrongCliIndexURL = new URL("../../other/cli/index.js", import.meta.url).toString();
@@ -12,11 +13,7 @@ const herebyfilePath = fileURLToPath(new URL("./__fixtures__/Herebyfile.mjs", im
 test("no re-exec", async (t) => {
     let callCount = 0;
 
-    const dMock = new Mock<ReExecD>()
-        .setup((d) => d.foregroundChild)
-        .returns(() => {
-            throw new Error("Should not be called.");
-        })
+    const dMock = mock<ReExecD>(t)
         .setup((d) => d.resolve)
         .returns(async () => {
             callCount++;
@@ -42,7 +39,7 @@ test("re-exec", async (t) => {
     const execArgv = ["--loader=my-cool-loader"];
     const argv = [execPath, fileURLToPath(cliIndexURL), "build", "test", "--lint", "--lkg"];
 
-    const dMock = new Mock<ReExecD>()
+    const dMock = mock<ReExecD>(t)
         .setup((d) => d.execPath)
         .returns(execPath)
         .setup((d) => d.execArgv)
@@ -79,11 +76,7 @@ test("re-exec", async (t) => {
 test("fail to resolve other", async (t) => {
     let callCount = 0;
 
-    const dMock = new Mock<ReExecD>()
-        .setup((d) => d.foregroundChild)
-        .returns(() => {
-            throw new Error("Should not be called.");
-        })
+    const dMock = mock<ReExecD>(t)
         .setup((d) => d.resolve)
         .returns(async () => {
             callCount++;
