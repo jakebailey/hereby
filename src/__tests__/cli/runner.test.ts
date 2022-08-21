@@ -1,15 +1,8 @@
 import test from "ava";
-import esmock from "esmock";
-import { It, Mock } from "moq.ts";
+import { Mock } from "moq.ts";
 
-import type * as runner from "../../cli/runner.js";
-import type { System } from "../../cli/utils.js";
+import { CLIRunner, CLIRunnerD } from "../../cli/runner.js";
 import { Task, task } from "../../index.js";
-import { Runner } from "../../runner.js";
-import { fixESMockPath } from "../../testUtils.js";
-
-// TODO: fixESMockPath doesn't work on Windows; remove once the bug is fixed.
-const testSkipIfWindows = process.platform !== "win32" ? test : test.skip;
 
 function sleep(ms: number) {
     return new Promise((resolve) => {
@@ -71,35 +64,29 @@ const d = task({
     },
 });
 
-testSkipIfWindows("runner", async (t) => {
+test("runner", async (t) => {
     const log: any[] = [];
 
-    const system = new Mock<System>()
-        .setup((instance) => instance.numCPUs)
+    const dMock = new Mock<CLIRunnerD>()
+        .setup((d) => d.numCPUs)
         .returns(1)
-        .setup((instance) => instance.log(It.IsAny()))
-        .callback(({ args: [m] }) => {
-            log.push(["log", m]);
-        })
-        .setup((instance) => instance.error(It.IsAny()))
-        .callback(({ args: [m] }) => {
-            log.push(["error", m]);
-        });
+        .setup((d) => d.log)
+        .returns((m) => log.push(["log", m]))
+        .setup((d) => d.error)
+        .returns((m) => log.push(["error", m]))
+        .setup((d) => d.prettyMilliseconds)
+        .returns(() => "<pretty-ms>");
 
-    const runnerModule: typeof runner = await esmock(fixESMockPath("../../cli/runner.js", import.meta.url), {
-        "pretty-ms": {
-            default: () => "<pretty-ms>",
-        },
-    });
+    const runner = new CLIRunner(dMock.object());
 
     await t.throwsAsync(async () => {
-        await runnerModule.runTasksWithCLIRunner(system.object(), d);
+        await runner.runTasks(d);
     });
 
     t.snapshot(log, "log");
 });
 
-class FakeRunner extends Runner {
+class TestRunner extends CLIRunner {
     override async runTasks(...tasks: Task[]): Promise<void> {
         for (let i = 0; i < tasks.length; i++) {
             const task = tasks[i];
@@ -116,30 +103,20 @@ class FakeRunner extends Runner {
     }
 }
 
-testSkipIfWindows("runner direct", async (t) => {
+test("runner direct", async (t) => {
     const log: any[] = [];
 
-    const system = new Mock<System>()
-        .setup((instance) => instance.numCPUs)
+    const dMock = new Mock<CLIRunnerD>()
+        .setup((d) => d.numCPUs)
         .returns(1)
-        .setup((instance) => instance.log(It.IsAny()))
-        .callback(({ args: [m] }) => {
-            log.push(["log", m]);
-        })
-        .setup((instance) => instance.error(It.IsAny()))
-        .callback(({ args: [m] }) => {
-            log.push(["error", m]);
-        });
+        .setup((d) => d.log)
+        .returns((m) => log.push(["log", m]))
+        .setup((d) => d.error)
+        .returns((m) => log.push(["error", m]))
+        .setup((d) => d.prettyMilliseconds)
+        .returns(() => "<pretty-ms>");
 
-    const runnerModule: typeof runner = await esmock(fixESMockPath("../../cli/runner.js", import.meta.url), {
-        "pretty-ms": {
-            default: () => "<pretty-ms>",
-        },
-        [fixESMockPath("../../runner.js", import.meta.url)]: {
-            Runner: FakeRunner,
-        },
-    });
-
-    await runnerModule.runTasksWithCLIRunner(system.object(), a, a2, b, c, d);
+    const runner = new TestRunner(dMock.object());
+    await runner.runTasks(a, a2, b, c, d);
     t.snapshot(log, "log");
 });

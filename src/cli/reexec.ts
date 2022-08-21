@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import foregroundChild from "foreground-child";
-import { resolve } from "import-meta-resolve";
 import { fileURLToPath, pathToFileURL } from "url";
 
-import { System, UserError } from "./utils.js";
+import { D, UserError } from "./utils.js";
 
-export async function reexec(system: System, herebyfilePath: string): Promise<boolean> {
+export type ReExecD = Pick<D, "error" | "execArgv" | "argv" | "execPath" | "foregroundChild" | "resolve">;
+
+export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolean> {
     // If hereby is installed globally, but run against a Herebyfile in some
     // other package, that Herebyfile's import will resolve to a different
     // installation of the hereby package. There's no guarantee that the two
@@ -32,13 +32,13 @@ export async function reexec(system: System, herebyfilePath: string): Promise<bo
     }
 
     // TODO: If this turns out to be common, remove this warning.
-    system.error(`${chalk.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
+    d.error(`${chalk.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
 
-    const args = [...system.process.execArgv, otherCLI, ...system.process.argv.slice(2)];
-    foregroundChild(system.process.execPath, args);
+    const args = [...d.execArgv, otherCLI, ...d.argv.slice(2)];
+    d.foregroundChild(d.execPath, args);
     return true;
-}
 
-async function resolveToPath(specifier: string, url: URL) {
-    return fileURLToPath(new URL(await resolve(specifier, url.toString())));
+    async function resolveToPath(specifier: string, url: URL) {
+        return fileURLToPath(new URL(await d.resolve(specifier, url.toString())));
+    }
 }

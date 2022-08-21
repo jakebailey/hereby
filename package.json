@@ -35,8 +35,7 @@
         "LICENSE",
         "./dist/**/*.js",
         "!**/__tests__/**",
-        "./dist/index.d.ts",
-        "!./dist/testUtils.js"
+        "./dist/index.d.ts"
     ],
     "dependencies": {
         "chalk": "^5.0.1",
@@ -61,7 +60,6 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-ava": "^13.2.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
-        "esmock": "^1.9.5",
         "execa": "^6.1.0",
         "moq.ts": "^9.0.2",
         "prettier": "^2.7.1",
@@ -90,8 +88,6 @@
             "compile": false
         },
         "environmentVariables": {
-            "NODE_OPTIONS": "--loader=esmock",
-            "NODE_NO_WARNINGS": "1",
             "FORCE_COLOR": "0"
         }
     },

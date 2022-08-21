@@ -43,27 +43,48 @@ export class ExitCodeError {
     constructor(public exitCode: number) {}
 }
 
-export type Process = Pick<
-    NodeJS.Process,
-    "stdout" | "stderr" | "cwd" | "chdir" | "argv" | "exitCode" | "execArgv" | "execPath"
->;
-
-export interface System {
+/** Contains all dependencies, for mocking. */
+export interface D {
+    // Globals.
     log(message: string): void;
     error(message: string): void;
-    process: Process;
+    cwd(): string;
+    chdir(directory: string): void;
+    argv: string[];
+    execArgv: string[];
+    execPath: string;
+    setExitCode(code: number): void;
     numCPUs: number;
+
+    // Third-party package imports.
+    foregroundChild(program: string, args: string[]): void;
+    resolve(specifier: string, parent: string): Promise<string>;
+    prettyMilliseconds(milliseconds: number): string;
 }
 
-export function createSystem(process: Process): System {
+/* eslint-disable no-restricted-globals */
+export async function real(): Promise<D> {
+    const { default: foregroundChild } = await import("foreground-child");
+    const { resolve } = await import("import-meta-resolve");
+    const { default: prettyMilliseconds } = await import("pretty-ms");
+
     return {
-        log(message) {
-            process.stdout.write(message + "\n");
+        log: console.log,
+        error: console.error,
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        cwd: process.cwd,
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        chdir: process.chdir,
+        argv: process.argv,
+        execArgv: process.execArgv,
+        execPath: process.execPath,
+        setExitCode: (code) => {
+            process.exitCode = code;
         },
-        error(message) {
-            process.stderr.write(message + "\n");
-        },
-        process,
         numCPUs: os.cpus().length,
+        foregroundChild,
+        resolve,
+        prettyMilliseconds,
     };
 }
+/* eslint-enable no-restricted-globals */

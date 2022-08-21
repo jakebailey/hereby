@@ -6,45 +6,45 @@ import { formatTasks } from "./formatTasks.js";
 import { findHerebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
-import { runTasksWithCLIRunner } from "./runner.js";
-import { ExitCodeError, simplifyPath, System, UserError } from "./utils.js";
+import { CLIRunner } from "./runner.js";
+import { D, ExitCodeError, simplifyPath, UserError } from "./utils.js";
 
-export async function main(system: System) {
+export async function main(d: D) {
     try {
-        await mainWorker(system);
+        await mainWorker(d);
     } catch (e) {
         if (e instanceof ExitCodeError) {
-            system.process.exitCode = e.exitCode;
+            d.setExitCode(e.exitCode);
         } else if (e instanceof UserError) {
-            system.error(`${chalk.red("Error")}: ${e.message}`);
-            system.process.exitCode = 1;
+            d.error(`${chalk.red("Error")}: ${e.message}`);
+            d.setExitCode(1);
         } else {
             throw e;
         }
     }
 }
 
-async function mainWorker(system: System) {
-    const args = parseArgs(system.process.argv.slice(2));
+async function mainWorker(d: D) {
+    const args = parseArgs(d.argv.slice(2));
 
     if (args.help) {
-        system.log(getUsage());
+        d.log(getUsage());
         return;
     }
 
-    let herebyfilePath = args.herebyfile ?? (await findHerebyfile(system.process.cwd()));
-    herebyfilePath = path.resolve(system.process.cwd(), herebyfilePath);
+    let herebyfilePath = args.herebyfile ?? (await findHerebyfile(d.cwd()));
+    herebyfilePath = path.resolve(d.cwd(), herebyfilePath);
 
-    if (await reexec(system, herebyfilePath)) {
+    if (await reexec(d, herebyfilePath)) {
         return;
     }
 
-    system.process.chdir(path.dirname(herebyfilePath));
+    d.chdir(path.dirname(herebyfilePath));
 
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
-        system.log(formatTasks(herebyfile.tasks, herebyfile.defaultTask));
+        d.log(formatTasks(herebyfile.tasks, herebyfile.defaultTask));
         return;
     }
 
@@ -69,10 +69,11 @@ async function mainWorker(system: System) {
         tasks = [herebyfile.defaultTask];
     }
 
-    system.log(`Using ${simplifyPath(herebyfilePath)}`);
+    d.log(`Using ${simplifyPath(herebyfilePath)}`);
 
     try {
-        await runTasksWithCLIRunner(system, ...tasks);
+        const runner = new CLIRunner(d);
+        await runner.runTasks(...tasks);
     } catch {
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,

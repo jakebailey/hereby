@@ -1,27 +1,20 @@
 import assert from "assert";
 import chalk from "chalk";
-import prettyMilliseconds from "pretty-ms";
 
 import type { Task } from "../index.js";
-import { Runner, RunnerOptions } from "../runner.js";
-import type { System } from "./utils.js";
+import { Runner } from "../runner.js";
+import type { D } from "./utils.js";
 
-export function runTasksWithCLIRunner(system: System, ...tasks: Task[]) {
-    return new CLIRunner({ system, concurrency: system.numCPUs }).runTasks(...tasks);
-}
+export type CLIRunnerD = Pick<D, "log" | "error" | "numCPUs" | "prettyMilliseconds">;
 
-interface CLIRunnerOptions extends RunnerOptions {
-    system: System;
-}
-
-class CLIRunner extends Runner {
+export class CLIRunner extends Runner {
     private _errored = false;
     private _startTimes = new WeakMap<Task, number>();
-    private _system: System;
+    private _d: CLIRunnerD;
 
-    constructor(options: CLIRunnerOptions) {
-        super(options);
-        this._system = options.system;
+    constructor(d: CLIRunnerD) {
+        super({ concurrency: d.numCPUs });
+        this._d = d;
     }
 
     protected override onTaskStart(task: Task): void {
@@ -31,7 +24,7 @@ class CLIRunner extends Runner {
             return; // Skip logging.
         }
 
-        this._system.log(`Starting ${chalk.blue(task.options.name)}`);
+        this._d.log(`Starting ${chalk.blue(task.options.name)}`);
     }
 
     protected override onTaskFinish(task: Task): void {
@@ -40,7 +33,7 @@ class CLIRunner extends Runner {
         }
 
         const took = Date.now() - checkDefined(this._startTimes.get(task));
-        this._system.log(`Finished ${chalk.green(task.options.name)} in ${prettyMilliseconds(took)}`);
+        this._d.log(`Finished ${chalk.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
     }
 
     protected override onTaskError(task: Task, e: unknown): void {
@@ -49,8 +42,8 @@ class CLIRunner extends Runner {
         }
 
         this._errored = true;
-        this._system.error(`Error in ${chalk.red(task.options.name)}`);
-        this._system.error(`${e}`);
+        this._d.error(`Error in ${chalk.red(task.options.name)}`);
+        this._d.error(`${e}`);
     }
 }
 
