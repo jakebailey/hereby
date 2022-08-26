@@ -62,12 +62,12 @@ export interface D {
     readonly prettyMilliseconds: (milliseconds: number) => string;
 }
 
-/* eslint-disable no-restricted-globals */
 export async function real(): Promise<D> {
     const { default: foregroundChild } = await import("foreground-child");
     const { resolve } = await import("import-meta-resolve");
     const { default: prettyMilliseconds } = await import("pretty-ms");
 
+    /* eslint-disable no-restricted-globals */
     return {
         log: console.log,
         error: console.error,
@@ -86,5 +86,5 @@ export async function real(): Promise<D> {
         resolve,
         prettyMilliseconds,
     };
+    /* eslint-enable no-restricted-globals */
 }
-/* eslint-enable no-restricted-globals */

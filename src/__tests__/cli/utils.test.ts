@@ -21,17 +21,17 @@ test(macro, os.homedir(), os.homedir());
 test(macro, path.join(os.homedir(), "foo", "bar", "Herebyfile.js"), "~/foo/bar/Herebyfile.js");
 test(macro, path.dirname(os.homedir()), path.dirname(os.homedir()));
 
-/* eslint-disable no-restricted-globals */
 test.serial("real dependencies", async (t) => {
     const d = await real();
     t.truthy(d.numCPUs);
 
+    /* eslint-disable no-restricted-globals */
     const saveExitCode = process.exitCode;
     d.setExitCode(123);
     t.is(process.exitCode, 123);
     process.exitCode = saveExitCode;
+    /* eslint-enable no-restricted-globals */
 });
-/* eslint-enable no-restricted-globals */
 
 test("UserError", (t) => {
     const e = new UserError("message");
