@@ -44,6 +44,16 @@ test("selectTasks missing", async (t) => {
     });
 });
 
+test("selectTasks missing did you mean", async (t) => {
+    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
+
+    t.throws(() => selectTasks(herebyfile, ["buildcompiler"]), {
+        instanceOf: UserError,
+        message:
+            'Task "buildcompiler" does not exist or is not exported in the Herebyfile. Did you mean "buildCompiler?"',
+    });
+});
+
 test("selectTasks missing default", async (t) => {
     const herebyfile = await loadHerebyfile(path.join(fixturesPath, "noDefault.mjs"));
 

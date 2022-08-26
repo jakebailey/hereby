@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { closest, distance } from "fastest-levenshtein";
 import path from "path";
 
 import type { Task } from "../index.js";
@@ -73,7 +74,14 @@ export function selectTasks(herebyfile: Herebyfile, taskNames: string[] | undefi
         return taskNames.map((name) => {
             const task = allTasks.get(name);
             if (!task) {
-                throw new UserError(`Task "${name}" does not exist or is not exported in the Herebyfile.`);
+                let message = `Task "${name}" does not exist or is not exported in the Herebyfile.`;
+
+                const candidate = closest(name, Array.from(allTasks.keys()));
+                if (distance(name, candidate) < name.length * 0.4) {
+                    message += ` Did you mean "${candidate}?"`;
+                }
+
+                throw new UserError(message);
             }
             return task;
         });
