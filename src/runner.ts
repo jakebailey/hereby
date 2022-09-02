@@ -1,4 +1,4 @@
-import PQueue from "p-queue";
+import { default as throat } from "throat";
 
 import type { Task } from "./index.js";
 
@@ -8,10 +8,13 @@ export interface RunnerOptions {
 
 export class Runner {
     private _addedTasks = new WeakMap<Task, Promise<void>>();
-    private _queue: PQueue;
+    private _throat = (fn: () => Promise<void>) => fn();
 
     constructor(options?: RunnerOptions) {
-        this._queue = new PQueue({ concurrency: options?.concurrency ?? Infinity });
+        const concurrency = options?.concurrency;
+        if (concurrency !== undefined) {
+            this._throat = throat(concurrency);
+        }
     }
 
     async runTasks(...tasks: Task[]): Promise<void> {
@@ -42,7 +45,7 @@ export class Runner {
             return;
         }
 
-        return this._queue.add(async () => {
+        return this._throat(async () => {
             try {
                 this.onTaskStart?.(task);
                 await run();
