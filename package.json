@@ -44,17 +44,17 @@
         "fastest-levenshtein": "^1.0.16",
         "foreground-child": "^2.0.0",
         "import-meta-resolve": "^2.1.0",
-        "pretty-ms": "^8.0.0",
-        "throat": "^6.0.1"
+        "p-limit": "^4.0.0",
+        "pretty-ms": "^8.0.0"
     },
     "devDependencies": {
         "@ava/typescript": "^3.0.1",
         "@tsconfig/node14": "^1.0.3",
         "@types/command-line-args": "^5.2.0",
         "@types/command-line-usage": "^5.0.2",
-        "@types/node": "^14.18.26",
-        "@typescript-eslint/eslint-plugin": "^5.36.1",
-        "@typescript-eslint/parser": "^5.36.1",
+        "@types/node": "^14.18.28",
+        "@typescript-eslint/eslint-plugin": "^5.36.2",
+        "@typescript-eslint/parser": "^5.36.2",
         "ava": "^4.3.3",
         "c8": "^7.12.0",
         "eslint": "^8.23.0",
@@ -67,7 +67,7 @@
         "release-it": "^15.4.1",
         "rimraf": "^3.0.2",
         "tempy": "^3.0.0",
-        "typescript": "~4.8.2"
+        "typescript": "~4.8.3"
     },
     "packageManager": "npm@8.17.0",
     "volta": {

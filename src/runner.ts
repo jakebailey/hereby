@@ -1,4 +1,4 @@
-import { default as throat } from "throat";
+import pLimit from "p-limit";
 
 import type { Task } from "./index.js";
 
@@ -8,12 +8,12 @@ export interface RunnerOptions {
 
 export class Runner {
     private _addedTasks = new WeakMap<Task, Promise<void>>();
-    private _throat = (fn: () => Promise<void>) => fn();
+    private _limiter = (fn: () => Promise<void>) => fn();
 
     constructor(options?: RunnerOptions) {
         const concurrency = options?.concurrency;
         if (concurrency !== undefined) {
-            this._throat = throat(concurrency);
+            this._limiter = pLimit(concurrency);
         }
     }
 
@@ -45,7 +45,7 @@ export class Runner {
             return;
         }
 
-        return this._throat(async () => {
+        return this._limiter(async () => {
             try {
                 this.onTaskStart?.(task);
                 await run();
