@@ -1,23 +1,66 @@
 import assert from "assert";
 import chalk from "chalk";
+import pLimit from "p-limit";
 
 import type { Task } from "../index.js";
-import { Runner } from "../runner.js";
 import type { D } from "./utils.js";
 
-export type CLIRunnerD = Pick<D, "log" | "error" | "numCPUs" | "prettyMilliseconds">;
+export type RunnerD = Pick<D, "log" | "error" | "numCPUs" | "prettyMilliseconds">;
 
-export class CLIRunner extends Runner {
+export type Limiter = (fn: () => Promise<void>) => Promise<void>;
+
+export class Runner {
+    private _addedTasks = new WeakMap<Task, Promise<void>>();
+    private _limiter: Limiter;
+
     private _errored = false;
     private _startTimes = new WeakMap<Task, number>();
-    private _d: CLIRunnerD;
+    private _d: RunnerD;
 
-    constructor(d: CLIRunnerD) {
-        super({ concurrency: d.numCPUs });
+    constructor(d: RunnerD, limiter?: Limiter) {
+        this._limiter = limiter ?? pLimit(d.numCPUs);
         this._d = d;
     }
 
-    protected override onTaskStart(task: Task): void {
+    async runTasks(...tasks: Task[]): Promise<void> {
+        await Promise.all(
+            tasks.map((task) => {
+                const cached = this._addedTasks.get(task);
+                if (cached) {
+                    return cached;
+                }
+
+                const promise = this._runTask(task);
+                this._addedTasks.set(task, promise);
+                return promise;
+            }),
+        );
+    }
+
+    private async _runTask(task: Task): Promise<void> {
+        const { dependencies, run } = task.options;
+
+        if (dependencies) {
+            await this.runTasks(...dependencies);
+        }
+
+        if (!run) {
+            return;
+        }
+
+        return this._limiter(async () => {
+            try {
+                this.onTaskStart(task);
+                await run();
+                this.onTaskFinish(task);
+            } catch (e) {
+                this.onTaskError(task, e);
+                throw e;
+            }
+        });
+    }
+
+    protected onTaskStart(task: Task): void {
         this._startTimes.set(task, Date.now());
 
         if (this._errored) {
@@ -27,7 +70,7 @@ export class CLIRunner extends Runner {
         this._d.log(`Starting ${chalk.blue(task.options.name)}`);
     }
 
-    protected override onTaskFinish(task: Task): void {
+    protected onTaskFinish(task: Task): void {
         if (this._errored) {
             return; // Skip logging.
         }
@@ -36,7 +79,7 @@ export class CLIRunner extends Runner {
         this._d.log(`Finished ${chalk.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
     }
 
-    protected override onTaskError(task: Task, e: unknown): void {
+    protected onTaskError(task: Task, e: unknown): void {
         if (this._errored) {
             return; // Skip logging.
         }

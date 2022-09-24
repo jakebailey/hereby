@@ -7,7 +7,7 @@ import { formatTasks } from "./formatTasks.js";
 import { findHerebyfile, Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
-import { CLIRunner } from "./runner.js";
+import { Runner } from "./runner.js";
 import { D, ExitCodeError, simplifyPath, UserError } from "./utils.js";
 
 export async function main(d: D) {
@@ -54,7 +54,7 @@ async function mainWorker(d: D) {
     const tasks = selectTasks(herebyfile, args.run);
 
     try {
-        const runner = new CLIRunner(d);
+        const runner = new Runner(d);
         await runner.runTasks(...tasks);
     } catch (e) {
         // We will have already printed some message here.
