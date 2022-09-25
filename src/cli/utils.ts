@@ -1,5 +1,7 @@
+import fs from "fs/promises";
 import os from "os";
 import path from "path";
+import { fileURLToPath } from "url";
 
 import type { Task } from "../index.js";
 
@@ -55,6 +57,7 @@ export interface D {
     readonly execPath: string;
     readonly setExitCode: (code: number) => void;
     readonly numCPUs: number;
+    readonly version: string;
 
     // Third-party package imports.
     readonly foregroundChild: (program: string, args: string[]) => void;
@@ -66,6 +69,10 @@ export async function real(): Promise<D> {
     const { default: foregroundChild } = await import("foreground-child");
     const { resolve } = await import("import-meta-resolve");
     const { default: prettyMilliseconds } = await import("pretty-ms");
+
+    const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
+    const packageJson = await fs.readFile(packageJsonPath, "utf-8");
+    const { version } = JSON.parse(packageJson);
 
     /* eslint-disable no-restricted-globals */
     return {
@@ -82,6 +89,7 @@ export async function real(): Promise<D> {
             process.exitCode = code;
         },
         numCPUs: os.cpus().length,
+        version,
         foregroundChild,
         resolve,
         prettyMilliseconds,

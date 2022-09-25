@@ -40,6 +40,11 @@ async function mainWorker(d: D) {
         return;
     }
 
+    if (args.version) {
+        d.log(`hereby ${d.version}`);
+        return;
+    }
+
     d.chdir(path.dirname(herebyfilePath));
 
     d.log(`Using ${simplifyPath(herebyfilePath)}`);

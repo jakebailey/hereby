@@ -222,3 +222,23 @@ test("main reexec", async (t) => {
 
     await main(dMock.object());
 });
+
+test("main print version", async (t) => {
+    t.plan(1);
+    const version = "1.0.0";
+    const dMock = mock<D>(t)
+        .setup((d) => d.argv)
+        .returns(["node", "cli.js", "--version"])
+        .setup((d) => d.version)
+        .returns(version)
+        .setup((d) => d.cwd)
+        .returns(() => fixturesPath)
+        .setup((d) => d.log)
+        .returns((message) => t.is(message, `hereby ${version}`))
+        .setup((d) => d.resolve)
+        .returns(resolve)
+        .setup((d) => d.chdir)
+        .returns((directory) => t.is(directory, fixturesPath));
+
+    await main(dMock.object());
+});

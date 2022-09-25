@@ -6,6 +6,7 @@ interface CLIOptions {
     run?: string[] | undefined;
     herebyfile?: string | undefined;
     printTasks?: boolean | undefined;
+    version?: boolean | undefined;
 }
 
 export function parseArgs(argv: string[]): CLIOptions {
@@ -20,6 +21,7 @@ export function parseArgs(argv: string[]): CLIOptions {
             { name: "herebyfile", type: String },
             { name: "tasks", alias: "T", type: Boolean },
             { name: "help", alias: "h", type: Boolean },
+            { name: "version", type: Boolean },
         ],
         {
             argv,
@@ -32,6 +34,7 @@ export function parseArgs(argv: string[]): CLIOptions {
         run: options["run"],
         herebyfile: options["herebyfile"],
         printTasks: options["tasks"],
+        version: options["version"],
     };
 }
 
@@ -65,6 +68,11 @@ export function getUsage(): string {
                     name: "tasks",
                     description: "Print a listing of the available tasks.",
                     alias: "T",
+                    type: Boolean,
+                },
+                {
+                    name: "version",
+                    description: "Print the current hereby version.",
                     type: Boolean,
                 },
             ],
