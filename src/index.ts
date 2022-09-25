@@ -16,12 +16,15 @@ export interface TaskOptions {
      * A list of tasks that must has been run to completion before
      * this task can execute.
      */
-    dependencies?: Task[] | undefined;
+    dependencies?: readonly Task[] | undefined;
 
     /**
-     * A function to execute when this task is run.
+     * A function to execute when this task is run. If this function
+     * returns a promise, the task will not be marked as finished until
+     * that promise resolves.
      */
-    run?: (() => void | Promise<void>) | undefined;
+    // See: https://github.com/microsoft/TypeScript/issues/49755, https://github.com/microsoft/TypeScript/issues/12871
+    run?: (() => void) | (() => PromiseLike<void>) | undefined;
 }
 
 /**

@@ -34,3 +34,8 @@ test("bad options", (t) => {
     t.throws(() => task({ name: "name", run: null as any }));
     t.throws(() => task({ name: "name", run: 1234 as any }));
 });
+
+test("returning a non-void value", (t) => {
+    t.truthy(task({ name: "a", run: () => 1234 }));
+    t.truthy(task({ name: "a", run: async () => 1234 }));
+});
