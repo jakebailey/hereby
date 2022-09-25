@@ -107,7 +107,7 @@
             "tagName": "v${version}"
         },
         "hooks": {
-            "before:init": "npm run test"
+            "before:init": "npm run build && npm run test"
         }
     }
 }

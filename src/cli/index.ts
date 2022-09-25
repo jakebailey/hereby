@@ -78,7 +78,7 @@ export function selectTasks(herebyfile: Herebyfile, taskNames: string[] | undefi
 
                 const candidate = closest(name, Array.from(allTasks.keys()));
                 if (distance(name, candidate) < name.length * 0.4) {
-                    message += ` Did you mean "${candidate}?"`;
+                    message += ` Did you mean "${candidate}"?`;
                 }
 
                 throw new UserError(message);

@@ -50,7 +50,7 @@ test("selectTasks missing did you mean", async (t) => {
     t.throws(() => selectTasks(herebyfile, ["buildcompiler"]), {
         instanceOf: UserError,
         message:
-            'Task "buildcompiler" does not exist or is not exported in the Herebyfile. Did you mean "buildCompiler?"',
+            'Task "buildcompiler" does not exist or is not exported in the Herebyfile. Did you mean "buildCompiler"?',
     });
 });
 
