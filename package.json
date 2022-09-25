@@ -1,6 +1,6 @@
 {
     "name": "hereby",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "description": "A simple task runner",
     "repository": "github:jakebailey/hereby",
     "type": "module",
