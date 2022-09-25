@@ -38,4 +38,15 @@ test("bad options", (t) => {
 test("returning a non-void value", (t) => {
     t.truthy(task({ name: "a", run: () => 1234 }));
     t.truthy(task({ name: "a", run: async () => 1234 }));
+    t.truthy(
+        task({
+            name: "a",
+            run: () => {
+                if (Math.random() > 0.5) {
+                    return 1234;
+                }
+                return Promise.resolve("test");
+            },
+        }),
+    );
 });
