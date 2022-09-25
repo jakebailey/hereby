@@ -85,7 +85,8 @@ export class Runner {
         }
 
         this._errored = true;
-        this._d.error(`Error in ${chalk.red(task.options.name)}\n${e}`);
+        const took = Date.now() - checkDefined(this._startTimes.get(task));
+        this._d.error(`Error in ${chalk.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
     }
 }
 

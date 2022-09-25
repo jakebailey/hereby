@@ -133,7 +133,7 @@ test("main failure", async (t) => {
         .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
         .returns((message) => {
-            t.is(message, "Error in failure\nError: failure!");
+            t.is(message, "Error in failure in <pretty-ms>\nError: failure!");
         })
         .setup((d) => d.setExitCode)
         .returns((code) => {
