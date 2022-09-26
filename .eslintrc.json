@@ -95,5 +95,5 @@
         ]
     },
     "overrides": [{ "files": ["Herebyfile.*", "**/__fixtures__/**"], "rules": { "no-restricted-globals": 0 } }],
-    "ignorePatterns": ["**/dist/**", "**/node_modules/**"]
+    "ignorePatterns": ["**/dist/**", "**/node_modules/**", "bin/**"]
 }

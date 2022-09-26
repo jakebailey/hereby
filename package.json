@@ -4,7 +4,7 @@
     "description": "A simple task runner",
     "repository": "github:jakebailey/hereby",
     "type": "module",
-    "bin": "./dist/cli.js",
+    "bin": "./bin/hereby.js",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
