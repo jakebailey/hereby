@@ -25,6 +25,11 @@ export interface TaskOptions {
      */
     // See: https://github.com/microsoft/TypeScript/issues/49755, https://github.com/microsoft/TypeScript/issues/12871
     run?: (() => void) | (() => PromiseLike<void>) | undefined;
+
+    /**
+     * If true, this task will be hidden from `hereby --tasks`.
+     */
+    hiddenFromTaskList?: boolean | undefined;
 }
 
 /**

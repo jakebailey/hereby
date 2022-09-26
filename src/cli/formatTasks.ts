@@ -5,7 +5,10 @@ import type { Task } from "../index.js";
 import { stringSorter, taskSorter } from "./utils.js";
 
 export function formatTasks(tasks: Task[], defaultTask?: Task) {
-    tasks = tasks.slice(0).sort(taskSorter);
+    tasks = tasks
+        .slice(0)
+        .filter((task) => !task.options.hiddenFromTaskList)
+        .sort(taskSorter);
 
     const sections: commandLineUsage.Section[] = [];
     sections.push({
@@ -21,6 +24,7 @@ export function formatTasks(tasks: Task[], defaultTask?: Task) {
 
             if (task.options.dependencies && task.options.dependencies.length > 0) {
                 const deps = task.options.dependencies
+                    .filter((task) => !task.options.hiddenFromTaskList)
                     .map((task) => task.options.name)
                     .sort(stringSorter)
                     .map((v) => chalk.blue(v));
