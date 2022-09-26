@@ -22,13 +22,14 @@ export function formatTasks(tasks: Task[], defaultTask?: Task) {
                 descriptionParts.push(task.options.description);
             }
 
-            if (task.options.dependencies && task.options.dependencies.length > 0) {
-                const deps = task.options.dependencies
-                    .filter((task) => !task.options.hiddenFromTaskList)
+            const deps = task.options.dependencies?.filter((task) => !task.options.hiddenFromTaskList);
+
+            if (deps && deps.length > 0) {
+                const depNames = deps
                     .map((task) => task.options.name)
                     .sort(stringSorter)
                     .map((v) => chalk.blue(v));
-                descriptionParts.push(`Depends on: ${deps.join(", ")}`);
+                descriptionParts.push(`Depends on: ${depNames.join(", ")}`);
             }
 
             return { name, description: descriptionParts.join("\n") };

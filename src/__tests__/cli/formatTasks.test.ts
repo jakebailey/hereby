@@ -30,6 +30,7 @@ test("printTasks", (t) => {
 
     const d = task({
         name: "d",
+        dependencies: [hidden],
         run: async () => {},
     });
 
