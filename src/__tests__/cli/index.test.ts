@@ -77,7 +77,7 @@ test("main usage", async (t) => {
 });
 
 test("main print tasks", async (t) => {
-    t.plan(3);
+    t.plan(2);
     const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--tasks"])

@@ -47,12 +47,14 @@ async function mainWorker(d: D) {
 
     d.chdir(path.dirname(herebyfilePath));
 
-    d.log(`Using ${simplifyPath(herebyfilePath)}`);
+    if (!args.printTasks) {
+        d.log(`Using ${simplifyPath(herebyfilePath)}`);
+    }
 
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
-        d.log(formatTasks(herebyfile.tasks, herebyfile.defaultTask));
+        d.log(formatTasks(args.printTasks, herebyfile.tasks, herebyfile.defaultTask));
         return;
     }
 
