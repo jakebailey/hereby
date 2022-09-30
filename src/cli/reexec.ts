@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { fileURLToPath, pathToFileURL } from "url";
 
 import { D, UserError } from "./utils.js";
@@ -30,9 +29,6 @@ export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolea
     if (thisCLI === otherCLI) {
         return false;
     }
-
-    // TODO: If this turns out to be common, remove this warning.
-    d.error(`${chalk.yellow("Warning")}: re-running hereby as imported by the Herebyfile.`);
 
     const args = [...d.execArgv, otherCLI, ...d.argv.slice(2)];
     d.foregroundChild(d.execPath, args);

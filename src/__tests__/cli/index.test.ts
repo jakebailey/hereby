@@ -183,7 +183,7 @@ test("main random throw", async (t) => {
 });
 
 test("main reexec", async (t) => {
-    t.plan(2);
+    t.plan(1);
 
     let callCount = 0;
     const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
@@ -207,8 +207,6 @@ test("main reexec", async (t) => {
                     throw new Error("too many calls");
             }
         })
-        .setup((d) => d.error)
-        .returns((m) => t.truthy(m))
         .setup((d) => d.execPath)
         .returns("cool")
         .setup((d) => d.execArgv)

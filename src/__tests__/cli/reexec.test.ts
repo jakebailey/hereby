@@ -1,5 +1,4 @@
 import test from "ava";
-import { It, Times } from "moq.ts";
 import { fileURLToPath } from "url";
 
 import { reexec, ReExecD } from "../../cli/reexec.js";
@@ -46,8 +45,6 @@ test("re-exec", async (t) => {
         .returns(execArgv)
         .setup((d) => d.argv)
         .returns(argv)
-        .setup((d) => d.error(It.IsAny()))
-        .returns()
         .setup((d) => d.foregroundChild)
         .returns((program, args) => {
             t.is(program, execPath);
@@ -69,8 +66,6 @@ test("re-exec", async (t) => {
 
     const returnNow = await reexec(dMock.object(), herebyfilePath);
     t.true(returnNow);
-
-    dMock.verify((d) => d.error("Warning: re-running hereby as imported by the Herebyfile."), Times.Once());
 });
 
 test("fail to resolve other", async (t) => {
