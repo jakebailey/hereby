@@ -1,7 +1,6 @@
 {
     "extends": [
         "eslint:recommended",
-        "prettier",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:ava/recommended"
     ],
