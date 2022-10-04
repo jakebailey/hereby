@@ -44,12 +44,12 @@ jobs:
       - run: npm ci
       - run: npx eslint .
 
-  prettier:
-    name: Prettier
+  dprint:
+    name: dprint
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm ci
-      - run: npx prettier -c .
+      - run: npx dprint check

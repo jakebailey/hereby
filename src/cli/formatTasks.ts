@@ -20,8 +20,9 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
     sections.push({
         header: "Available tasks",
         content: tasks.map((task) => {
-            const name =
-                task !== defaultTask ? chalk.blue(task.options.name) : `${chalk.green(task.options.name)} (default)`;
+            const name = task !== defaultTask
+                ? chalk.blue(task.options.name)
+                : `${chalk.green(task.options.name)} (default)`;
 
             const descriptionParts: string[] = [];
             if (task.options.description) {

@@ -1,26 +1,6 @@
 {
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[markdown]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[yaml]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[typescript][javascript][json][jsonc][markdown][yaml]": {
+        "editor.defaultFormatter": "dprint.dprint",
         "editor.formatOnSave": true
     },
     "editor.codeActionsOnSave": {

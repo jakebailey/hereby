@@ -73,9 +73,9 @@ $ hereby        # Run the default exported task.
 `hereby` also supports a handful of flags:
 
 ```
-  -h, --help          Display this usage guide.
-  --herebyfile path   A path to a Herebyfile. Optional.
-  -T, --tasks         Print a listing of the available tasks.
+-h, --help          Display this usage guide.
+--herebyfile path   A path to a Herebyfile. Optional.
+-T, --tasks         Print a listing of the available tasks.
 ```
 
 # ESM
