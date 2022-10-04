@@ -93,3 +93,14 @@ test("findHerebyfile", async (t) => {
         message: "Found more than one Herebyfile: Herebyfile.js, Herebyfile.mjs",
     });
 });
+
+test("cycle", async (t) => {
+    const herebyfilePath = path.join(fixturesPath, "cycle.mjs");
+
+    await t.throwsAsync(
+        async () => {
+            await loadHerebyfile(herebyfilePath);
+        },
+        { instanceOf: UserError, message: 'Task "a" references itself.' },
+    );
+});

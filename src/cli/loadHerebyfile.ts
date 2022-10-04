@@ -4,7 +4,6 @@ import path from "path";
 import { pathToFileURL } from "url";
 
 import { Task } from "../index.js";
-import { forEachTask } from "../utils.js";
 import { UserError } from "./utils.js";
 
 const filenames = ["Herebyfile", "herebyfile"];
@@ -71,7 +70,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
 
     // We check this here by walking the DAG, as some dependencies may not be
     // exported and therefore would not be seen by the above loop.
-    assertUniqueNames(tasks);
+    checkTaskInvariants(tasks);
 
     return {
         tasks,
@@ -79,13 +78,36 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     };
 }
 
-function assertUniqueNames(tasks: Task[]) {
-    const names = new Set<string>();
-    forEachTask(tasks, (task) => {
-        const name = task.options.name;
-        if (names.has(name)) {
-            throw new UserError(`Task "${chalk.blue(name)}" was declared twice.`);
+function checkTaskInvariants(tasks: readonly Task[]) {
+    const checkedTasks = new Set<Task>();
+    const taskStack = new Set<Task>();
+    const seenNames = new Set<string>();
+
+    checkTaskInvariantsWorker(tasks);
+
+    function checkTaskInvariantsWorker(tasks: readonly Task[]) {
+        for (const task of tasks) {
+            if (checkedTasks.has(task)) {
+                continue;
+            }
+
+            if (taskStack.has(task)) {
+                throw new UserError(`Task "${chalk.blue(task.options.name)}" references itself.`);
+            }
+
+            const name = task.options.name;
+            if (seenNames.has(name)) {
+                throw new UserError(`Task "${chalk.blue(name)}" was declared twice.`);
+            }
+            seenNames.add(name);
+
+            if (task.options.dependencies) {
+                taskStack.add(task);
+                checkTaskInvariantsWorker(task.options.dependencies);
+                taskStack.delete(task);
+            }
+
+            checkedTasks.add(task);
         }
-        names.add(name);
-    });
+    }
 }
