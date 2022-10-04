@@ -4,7 +4,9 @@
     "newLineKind": "auto",
     "useTabs": false,
     "typescript": {
-        "quoteStyle": "preferDouble"
+        "quoteStyle": "preferDouble",
+        "semiColons": "always",
+        "arrowFunction.useParentheses": "force"
     },
     "json": {
     },
