@@ -16,6 +16,7 @@ test(macro, ["--help"]);
 test(macro, ["-h"]);
 test(macro, ["--tasks"]);
 test(macro, ["-T"]);
+test(macro, ["--tasks-simple"]);
 test(macro, ["build", "test", "--light=false"]);
 test(macro, ["build", "test", "--", "--light=false"]);
 test(macro, ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false"]);
