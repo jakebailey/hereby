@@ -1,3 +1,5 @@
+<div align="center">
+
 # hereby
 
 [![npm](https://img.shields.io/npm/v/hereby.svg)](https://npmjs.com/package/hereby)
@@ -6,7 +8,14 @@
 [![ci](https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg)](https://github.com/jakebailey/hereby/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh)](https://codecov.io/gh/jakebailey/hereby)
 
+</div>
+
 `hereby` is a simple task runner.
+
+```
+$ npm i -D hereby
+$ yarn add -D hereby
+```
 
 # Herebyfile.mjs
 
@@ -64,9 +73,9 @@ $ hereby        # Run the default exported task.
 `hereby` also supports a handful of flags:
 
 ```
-  -h, --help          Display this usage guide.               
-  --herebyfile path   A path to a Herebyfile. Optional.       
-  -T, --tasks         Print a listing of the available tasks. 
+  -h, --help          Display this usage guide.
+  --herebyfile path   A path to a Herebyfile. Optional.
+  -T, --tasks         Print a listing of the available tasks.
 ```
 
 # ESM
