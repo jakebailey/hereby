@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Hereby</h1>
+<h1>hereby</h1>
 
 <a href="https://npmjs.com/package/hereby">
     <img src="https://img.shields.io/npm/v/hereby.svg">
