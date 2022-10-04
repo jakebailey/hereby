@@ -1,12 +1,22 @@
 <div align="center">
 
-# hereby
+<h1>Hereby</h1>
 
-[![npm](https://img.shields.io/npm/v/hereby.svg)](https://npmjs.com/package/hereby)
-[![node](https://img.shields.io/node/v/hereby.svg)](https://nodejs.org)
-[![install size](https://packagephobia.com/badge?p=hereby)](https://packagephobia.com/result?p=hereby)
-[![ci](https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg)](https://github.com/jakebailey/hereby/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh)](https://codecov.io/gh/jakebailey/hereby)
+<a href="https://npmjs.com/package/hereby">
+    <img src="https://img.shields.io/npm/v/hereby.svg">
+</a>
+<a href="https://nodejs.org">
+    <img src="https://img.shields.io/node/v/hereby.svg">
+</a>
+<a href="https://packagephobia.com/result?p=hereby">
+    <img src="https://packagephobia.com/badge?p=hereby">
+</a>
+<a href="https://github.com/jakebailey/hereby/actions/workflows/ci.yml">
+    <img src="https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg">
+</a>
+<a href="https://codecov.io/gh/jakebailey/hereby">
+    <img src="https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh">
+</a>
 
 </div>
 
@@ -17,7 +27,7 @@ $ npm i -D hereby
 $ yarn add -D hereby
 ```
 
-# Herebyfile.mjs
+## Herebyfile.mjs
 
 Tasks are defined in `Herebyfile.mjs`. Exported tasks are available to run
 at the CLI, with support for `export default`.
@@ -58,7 +68,7 @@ export const testAndLint = task({
 export default testAndLint;
 ```
 
-# Running tasks
+## Running tasks
 
 Given the above Herebyfile:
 
@@ -68,7 +78,7 @@ $ hereby test   # Run test, which depends on build.
 $ hereby        # Run the default exported task.
 ```
 
-# Flags
+## Flags
 
 `hereby` also supports a handful of flags:
 
@@ -78,7 +88,7 @@ $ hereby        # Run the default exported task.
 -T, --tasks         Print a listing of the available tasks.
 ```
 
-# ESM
+## ESM
 
 `hereby` is implemented in ES modules. But, don't fret! This does not mean
 that your project must be ESM-only, only that your `Herebyfile` must be ESM
