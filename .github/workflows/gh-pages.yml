@@ -11,9 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: |
+      - name: Create gh-pages
+        run: |
           mkdir gh-pages
-          cp README.md gh-pages
+          cp README.md gh-pages/
           echo "hereby.js.org" >> gh-pages/CNAME
           cat > gh-pages <<EOF
           plugins:
