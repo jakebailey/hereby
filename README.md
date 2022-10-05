@@ -1,24 +1,10 @@
-<div align="center">
+# hereby
 
-<h1>hereby</h1>
-
-<a href="https://npmjs.com/package/hereby">
-    <img src="https://img.shields.io/npm/v/hereby.svg">
-</a>
-<a href="https://nodejs.org">
-    <img src="https://img.shields.io/node/v/hereby.svg">
-</a>
-<a href="https://packagephobia.com/result?p=hereby">
-    <img src="https://packagephobia.com/badge?p=hereby">
-</a>
-<a href="https://github.com/jakebailey/hereby/actions/workflows/ci.yml">
-    <img src="https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg">
-</a>
-<a href="https://codecov.io/gh/jakebailey/hereby">
-    <img src="https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh">
-</a>
-
-</div>
+[![npm](https://img.shields.io/npm/v/hereby.svg)](https://npmjs.com/package/hereby)
+[![node](https://img.shields.io/node/v/hereby.svg)](https://nodejs.org)
+[![install size](https://packagephobia.com/badge?p=hereby)](https://packagephobia.com/result?p=hereby)
+[![ci](https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg)](https://github.com/jakebailey/hereby/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh)](https://codecov.io/gh/jakebailey/hereby)
 
 `hereby` is a simple task runner.
 
