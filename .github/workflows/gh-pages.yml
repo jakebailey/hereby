@@ -16,7 +16,7 @@ jobs:
           mkdir gh-pages
           cp README.md gh-pages/
           echo "hereby.js.org" >> gh-pages/CNAME
-          cat > gh-pages <<EOF
+          cat > gh-pages/_config.yml <<EOF
           plugins:
             - jekyll-relative-links
           relative_links:
