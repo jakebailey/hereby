@@ -15,55 +15,64 @@ function fakeSimplifyPath(p: string): string {
 }
 
 test("selectTasks single", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
+    const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
+    const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = selectTasks(herebyfile, ["runSomeProgram"]);
+    const tasks = selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["runSomeProgram"]);
     t.is(tasks.length, 1);
     t.is(tasks[0].options.name, "runSomeProgram");
 });
 
 test("selectTasks multiple", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
+    const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
+    const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = selectTasks(herebyfile, ["runSomeProgram", "buildCompiler"]);
+    const tasks = selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, [
+        "runSomeProgram",
+        "buildCompiler",
+    ]);
     t.is(tasks.length, 2);
     t.is(tasks[0].options.name, "runSomeProgram");
     t.is(tasks[1].options.name, "buildCompiler");
 });
 
 test("selectTasks default", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
+    const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
+    const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = selectTasks(herebyfile, undefined);
+    const tasks = selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined);
     t.is(tasks.length, 1);
     t.is(tasks[0].options.name, "runSomeProgram");
 });
 
 test("selectTasks missing", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
+    const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
+    const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    t.throws(() => selectTasks(herebyfile, ["oops"]), {
+    t.throws(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["oops"]), {
         instanceOf: UserError,
-        message: 'Task "oops" does not exist or is not exported in the Herebyfile.',
+        message: 'Task "oops" does not exist or is not exported from ~/simplified/Herebyfile.mjs.',
     });
 });
 
 test("selectTasks missing did you mean", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
+    const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
+    const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    t.throws(() => selectTasks(herebyfile, ["buildcompiler"]), {
+    t.throws(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["buildcompiler"]), {
         instanceOf: UserError,
         message:
-            'Task "buildcompiler" does not exist or is not exported in the Herebyfile. Did you mean "buildCompiler"?',
+            'Task "buildcompiler" does not exist or is not exported from ~/simplified/Herebyfile.mjs. Did you mean "buildCompiler"?',
     });
 });
 
 test("selectTasks missing default", async (t) => {
-    const herebyfile = await loadHerebyfile(path.join(fixturesPath, "noDefault.mjs"));
+    const herebyfilePath = path.join(fixturesPath, "noDefault.mjs");
+    const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    t.throws(() => selectTasks(herebyfile, undefined), {
+    t.throws(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined), {
         instanceOf: UserError,
-        message: "No default task defined; please specify a task name.",
+        message: "No default task has been exported from ~/simplified/noDefault.mjs; please specify a task name.",
     });
 });
 

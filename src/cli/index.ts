@@ -47,10 +47,6 @@ async function mainWorker(d: D) {
 
     d.chdir(path.dirname(herebyfilePath));
 
-    if (!args.printTasks) {
-        d.log(`Using ${d.simplifyPath(herebyfilePath)}`);
-    }
-
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
@@ -58,20 +54,35 @@ async function mainWorker(d: D) {
         return;
     }
 
-    const tasks = selectTasks(herebyfile, args.run);
+    const tasks = selectTasks(d, herebyfile, herebyfilePath, args.run);
+    const taskNames = tasks.map((t) => t.options.name).sort().map((name) => chalk.blue(name)).join(", ");
+    d.log(`Using ${chalk.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
+    const start = Date.now();
+
+    let errored = false;
     try {
         const runner = new Runner(d);
         await runner.runTasks(...tasks);
     } catch (e) {
+        errored = true;
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,
         // so we don't end up with an unflushed output.
         throw new ExitCodeError(1, e);
+    } finally {
+        const took = Date.now() - start;
+        d.log(`Completed ${taskNames}${errored ? chalk.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
     }
 }
 
-export function selectTasks(herebyfile: Herebyfile, taskNames: string[] | undefined): Task[] {
+// Exported for testing.
+export function selectTasks(
+    d: Pick<D, "simplifyPath">,
+    herebyfile: Herebyfile,
+    herebyfilePath: string,
+    taskNames: string[] | undefined,
+): Task[] {
     const allTasks = new Map<string, Task>();
     for (const task of herebyfile.tasks) {
         allTasks.set(task.options.name, task);
@@ -81,7 +92,9 @@ export function selectTasks(herebyfile: Herebyfile, taskNames: string[] | undefi
         return taskNames.map((name) => {
             const task = allTasks.get(name);
             if (!task) {
-                let message = `Task "${name}" does not exist or is not exported in the Herebyfile.`;
+                let message = `Task "${name}" does not exist or is not exported from ${
+                    d.simplifyPath(herebyfilePath)
+                }.`;
 
                 const candidate = closest(name, Array.from(allTasks.keys()));
                 if (distance(name, candidate) < name.length * 0.4) {
@@ -95,7 +108,9 @@ export function selectTasks(herebyfile: Herebyfile, taskNames: string[] | undefi
     }
 
     if (!herebyfile.defaultTask) {
-        throw new UserError("No default task defined; please specify a task name.");
+        throw new UserError(
+            `No default task has been exported from ${d.simplifyPath(herebyfilePath)}; please specify a task name.`,
+        );
     }
     return [herebyfile.defaultTask];
 }
