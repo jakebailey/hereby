@@ -79,7 +79,7 @@ test("selectTasks missing default", async (t) => {
 test("main usage", async (t) => {
     t.plan(1);
 
-    const log: [fn: "log" | "error", message: any][] = [];
+    const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
         .setup((d) => d.argv)
@@ -87,7 +87,7 @@ test("main usage", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message]));
+        .returns((message) => log.push(["log", message.replace(/\r/g, "")]));
 
     await main(dMock.object());
 
@@ -97,7 +97,7 @@ test("main usage", async (t) => {
 test("main print tasks", async (t) => {
     t.plan(2);
 
-    const log: [fn: "log" | "error", message: any][] = [];
+    const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
         .setup((d) => d.argv)
@@ -105,7 +105,7 @@ test("main print tasks", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message]))
+        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
@@ -119,7 +119,7 @@ test("main print tasks", async (t) => {
 test("main success", async (t) => {
     t.plan(2);
 
-    const log: [fn: "log" | "error", message: any][] = [];
+    const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
@@ -129,7 +129,7 @@ test("main success", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message]))
+        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
@@ -147,7 +147,7 @@ test("main success", async (t) => {
 test("main failure", async (t) => {
     t.plan(4);
 
-    const log: [fn: "log" | "error", message: any][] = [];
+    const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
@@ -157,7 +157,7 @@ test("main failure", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message]))
+        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
@@ -183,7 +183,7 @@ test("main failure", async (t) => {
 test("main user error", async (t) => {
     t.plan(3);
 
-    const log: [fn: "log" | "error", message: any][] = [];
+    const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
@@ -193,7 +193,7 @@ test("main user error", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message]))
+        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
@@ -203,7 +203,7 @@ test("main user error", async (t) => {
         .setup((d) => d.prettyMilliseconds)
         .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
-        .returns((message) => log.push(["error", message]))
+        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
         .setup((d) => d.setExitCode)
         .returns((code) => {
             t.is(code, 1);
