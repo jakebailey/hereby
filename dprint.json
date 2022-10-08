@@ -11,6 +11,8 @@
     "json": {
     },
     "markdown": {
+        "textWrap": "always",
+        "lineWidth": 80
     },
     "prettier": {
         "tabWidth": 2 // for yaml
