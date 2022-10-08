@@ -8,7 +8,7 @@ import { findHerebyfile, Herebyfile, loadHerebyfile } from "./loadHerebyfile.js"
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { D, ExitCodeError, simplifyPath, UserError } from "./utils.js";
+import { D, ExitCodeError, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {
@@ -48,7 +48,7 @@ async function mainWorker(d: D) {
     d.chdir(path.dirname(herebyfilePath));
 
     if (!args.printTasks) {
-        d.log(`Using ${simplifyPath(herebyfilePath)}`);
+        d.log(`Using ${d.simplifyPath(herebyfilePath)}`);
     }
 
     const herebyfile = await loadHerebyfile(herebyfilePath);

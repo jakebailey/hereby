@@ -13,6 +13,7 @@ export function stringSorter(a: string, b: string): number {
     return a.localeCompare(b);
 }
 
+// Exported for testing.
 export function simplifyPath(p: string) {
     let homedir = os.homedir();
     if (!p.endsWith(path.sep)) {
@@ -52,6 +53,7 @@ export interface D {
     readonly error: (message: string) => void;
     readonly cwd: () => string;
     readonly chdir: (directory: string) => void;
+    readonly simplifyPath: (p: string) => string;
     readonly argv: string[];
     readonly execArgv: string[];
     readonly execPath: string;
@@ -82,6 +84,7 @@ export async function real(): Promise<D> {
         cwd: process.cwd,
         // eslint-disable-next-line @typescript-eslint/unbound-method
         chdir: process.chdir,
+        simplifyPath,
         argv: process.argv,
         execArgv: process.execArgv,
         execPath: process.execPath,

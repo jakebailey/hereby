@@ -10,6 +10,10 @@ import { mock } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("./__fixtures__", import.meta.url));
 
+function fakeSimplifyPath(p: string): string {
+    return `~/simplified/${path.basename(p)}`;
+}
+
 test("selectTasks single", async (t) => {
     const herebyfile = await loadHerebyfile(path.join(fixturesPath, "Herebyfile.mjs"));
 
@@ -65,36 +69,49 @@ test("selectTasks missing default", async (t) => {
 
 test("main usage", async (t) => {
     t.plan(1);
+
+    const log: [fn: "log" | "error", message: any][] = [];
+
     const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--help"])
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => t.truthy(message));
+        .returns((message) => log.push(["log", message]));
 
     await main(dMock.object());
+
+    t.snapshot(log);
 });
 
 test("main print tasks", async (t) => {
     t.plan(2);
+
+    const log: [fn: "log" | "error", message: any][] = [];
+
     const dMock = mock<D>(t)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--tasks"])
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => t.truthy(message))
+        .returns((message) => log.push(["log", message]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath));
 
     await main(dMock.object());
+
+    t.snapshot(log);
 });
 
 test("main success", async (t) => {
-    t.plan(4);
+    t.plan(2);
+
+    const log: [fn: "log" | "error", message: any][] = [];
+
     const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
@@ -103,19 +120,26 @@ test("main success", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => t.truthy(message))
+        .returns((message) => log.push(["log", message]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
+        .setup((d) => d.simplifyPath)
+        .returns(fakeSimplifyPath)
         .setup((d) => d.prettyMilliseconds)
         .returns(() => "<pretty-ms>");
 
     await main(dMock.object());
+
+    t.snapshot(log);
 });
 
 test("main failure", async (t) => {
-    t.plan(5);
+    t.plan(4);
+
+    const log: [fn: "log" | "error", message: any][] = [];
+
     const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
@@ -124,11 +148,13 @@ test("main failure", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => t.truthy(message))
+        .returns((message) => log.push(["log", message]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
+        .setup((d) => d.simplifyPath)
+        .returns(fakeSimplifyPath)
         .setup((d) => d.prettyMilliseconds)
         .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
@@ -141,10 +167,15 @@ test("main failure", async (t) => {
         });
 
     await main(dMock.object());
+
+    t.snapshot(log);
 });
 
 test("main user error", async (t) => {
-    t.plan(4);
+    t.plan(3);
+
+    const log: [fn: "log" | "error", message: any][] = [];
+
     const dMock = mock<D>(t)
         .setup((d) => d.numCPUs)
         .returns(1)
@@ -153,23 +184,25 @@ test("main user error", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => t.truthy(message))
+        .returns((message) => log.push(["log", message]))
         .setup((d) => d.resolve)
         .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
+        .setup((d) => d.simplifyPath)
+        .returns(fakeSimplifyPath)
         .setup((d) => d.prettyMilliseconds)
         .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
-        .returns((message) => {
-            t.is(message, 'Error: Task "oops" does not exist or is not exported in the Herebyfile.');
-        })
+        .returns((message) => log.push(["error", message]))
         .setup((d) => d.setExitCode)
         .returns((code) => {
             t.is(code, 1);
         });
 
     await main(dMock.object());
+
+    t.snapshot(log);
 });
 
 test("main random throw", async (t) => {
