@@ -60,7 +60,7 @@ export const bundle = task({
         await execa("esbuild", [
             "--bundle",
             "./out/index.js",
-            "--outfile", "./out/bundled.js",
+            "--outfile=./out/bundled.js",
         ]);
     },
 });
