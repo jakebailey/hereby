@@ -23,7 +23,6 @@ test(macro, path.dirname(os.homedir()), path.dirname(os.homedir()));
 
 test.serial("real dependencies", async (t) => {
     const d = await real();
-    t.truthy(d.numCPUs);
 
     /* eslint-disable no-restricted-globals */
     const saveExitCode = process.exitCode;

@@ -58,7 +58,6 @@ export interface D {
     readonly execArgv: string[];
     readonly execPath: string;
     readonly setExitCode: (code: number) => void;
-    readonly numCPUs: number;
     readonly version: string;
 
     // Third-party package imports.
@@ -91,7 +90,6 @@ export async function real(): Promise<D> {
         setExitCode: (code) => {
             process.exitCode = code;
         },
-        numCPUs: os.cpus().length,
         version,
         foregroundChild,
         resolve,

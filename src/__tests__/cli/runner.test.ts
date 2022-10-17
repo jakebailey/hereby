@@ -68,8 +68,6 @@ test("runner", async (t) => {
     const log: any[] = [];
 
     const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.log)
         .returns((m) => log.push(["log", m]))
         .setup((d) => d.error)
@@ -106,8 +104,6 @@ test("runner direct", async (t) => {
     const log: any[] = [];
 
     const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.log)
         .returns((m) => log.push(["log", m]))
         .setup((d) => d.error)
@@ -139,8 +135,6 @@ test("basic use", async (t) => {
     });
 
     const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
@@ -176,8 +170,6 @@ test("multiple calls", async (t) => {
     });
 
     const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
@@ -194,44 +186,6 @@ test("multiple calls", async (t) => {
     await aPromise;
     await aPromise2;
     await bPromise;
-
-    t.is(aRun, 1);
-    t.is(bRun, 1);
-});
-
-test("concurrency 1", async (t) => {
-    let aRun = 0;
-    let bRun = 0;
-
-    const a = task({
-        name: "a",
-        run: async () => {
-            aRun++;
-            // Tasks are ordered internally; if concurrency=1, b cannot have run.
-            t.is(bRun, 0);
-        },
-    });
-
-    const b = task({
-        name: "b",
-        run: async () => {
-            bRun++;
-        },
-    });
-
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
-        .setup((d) => d.log)
-        .returns(() => {})
-        .setup((d) => d.error)
-        .returns(() => {})
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
-
-    const runner = new Runner(dMock.object());
-
-    await runner.runTasks(a, b);
 
     t.is(aRun, 1);
     t.is(bRun, 1);
@@ -277,8 +231,6 @@ test("dependencies", async (t) => {
     });
 
     const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
@@ -336,8 +288,6 @@ test("dependencies with thrown error", async (t) => {
     });
 
     const dMock = mock<RunnerD>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)

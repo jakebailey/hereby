@@ -44,7 +44,6 @@
         "fastest-levenshtein": "^1.0.16",
         "foreground-child": "^2.0.0",
         "import-meta-resolve": "^2.1.0",
-        "p-limit": "^4.0.0",
         "pretty-ms": "^8.0.0"
     },
     "devDependencies": {

@@ -122,8 +122,6 @@ test("main success", async (t) => {
     const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "success"])
         .setup((d) => d.cwd)
@@ -150,8 +148,6 @@ test("main failure", async (t) => {
     const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "failure"])
         .setup((d) => d.cwd)
@@ -186,8 +182,6 @@ test("main user error", async (t) => {
     const log: [fn: "log" | "error", message: string][] = [];
 
     const dMock = mock<D>(t)
-        .setup((d) => d.numCPUs)
-        .returns(1)
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "oops"])
         .setup((d) => d.cwd)

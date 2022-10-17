@@ -1,24 +1,21 @@
 import assert from "assert";
 import chalk from "chalk";
-import pLimit from "p-limit";
 
 import type { Task } from "../index.js";
 import type { D } from "./utils.js";
 
-export type RunnerD = Pick<D, "log" | "error" | "numCPUs" | "prettyMilliseconds">;
+export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
 
 export type Limiter = (fn: () => Promise<void>) => Promise<void>;
 
 export class Runner {
     private _addedTasks = new WeakMap<Task, Promise<void>>();
-    private _limiter: Limiter;
 
     private _errored = false;
     private _startTimes = new WeakMap<Task, number>();
     private _d: RunnerD;
 
-    constructor(d: RunnerD, limiter?: Limiter) {
-        this._limiter = limiter ?? pLimit(d.numCPUs);
+    constructor(d: RunnerD) {
         this._d = d;
     }
 
@@ -48,16 +45,14 @@ export class Runner {
             return;
         }
 
-        return this._limiter(async () => {
-            try {
-                this.onTaskStart(task);
-                await run();
-                this.onTaskFinish(task);
-            } catch (e) {
-                this.onTaskError(task, e);
-                throw e;
-            }
-        });
+        try {
+            this.onTaskStart(task);
+            await run();
+            this.onTaskFinish(task);
+        } catch (e) {
+            this.onTaskError(task, e);
+            throw e;
+        }
     }
 
     protected onTaskStart(task: Task): void {
