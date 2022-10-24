@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import fs from "fs/promises";
+import { promises as fs } from "fs";
 import path from "path";
 import { pathToFileURL } from "url";
 

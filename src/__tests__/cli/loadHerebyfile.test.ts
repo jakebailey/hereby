@@ -1,7 +1,7 @@
 import test from "ava";
-import fs from "fs/promises";
+import { promises as fs } from "fs";
 import path from "path";
-import { temporaryDirectory } from "tempy";
+import tmp from "tmp";
 import { fileURLToPath } from "url";
 
 import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
@@ -50,7 +50,9 @@ test("no exports", async (t) => {
 });
 
 test("findHerebyfile", async (t) => {
-    const dir = temporaryDirectory();
+    const tmpdir = tmp.dirSync({ unsafeCleanup: true });
+    t.teardown(tmpdir.removeCallback);
+    const dir = tmpdir.name;
     const deepest = path.join(dir, "source", "package", "src", "cli");
     const src = path.join(dir, "source", "package", "src");
     const packageRoot = path.join(dir, "source", "package");
