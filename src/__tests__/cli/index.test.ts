@@ -108,6 +108,8 @@ test("main print tasks", async (t) => {
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath));
 
@@ -130,6 +132,8 @@ test("main success", async (t) => {
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -156,6 +160,8 @@ test("main failure", async (t) => {
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -190,6 +196,8 @@ test("main user error", async (t) => {
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
         .setup((d) => d.resolve)
         .returns(resolve)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -243,6 +251,8 @@ test("main reexec", async (t) => {
                     throw new Error("too many calls");
             }
         })
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.execPath)
         .returns("cool")
         .setup((d) => d.execArgv)
@@ -271,6 +281,8 @@ test("main print version", async (t) => {
         .returns((message) => t.is(message, `hereby ${version}`))
         .setup((d) => d.resolve)
         .returns(resolve)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath));
 

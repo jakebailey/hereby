@@ -13,6 +13,8 @@ test("no re-exec", async (t) => {
     let callCount = 0;
 
     const dMock = mock<ReExecD>(t)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.resolve)
         .returns(async () => {
             callCount++;
@@ -31,6 +33,15 @@ test("no re-exec", async (t) => {
     t.false(returnNow);
 });
 
+test("pnp", async (t) => {
+    const dMock = mock<ReExecD>(t)
+        .setup((d) => d.isPnP)
+        .returns(true);
+
+    const returnNow = await reexec(dMock.object(), herebyfilePath);
+    t.false(returnNow);
+});
+
 test("re-exec", async (t) => {
     let callCount = 0;
 
@@ -39,6 +50,8 @@ test("re-exec", async (t) => {
     const argv = [execPath, fileURLToPath(cliIndexURL), "build", "test", "--lint", "--lkg"];
 
     const dMock = mock<ReExecD>(t)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.execPath)
         .returns(execPath)
         .setup((d) => d.execArgv)
@@ -72,6 +85,8 @@ test("fail to resolve other", async (t) => {
     let callCount = 0;
 
     const dMock = mock<ReExecD>(t)
+        .setup((d) => d.isPnP)
+        .returns(false)
         .setup((d) => d.resolve)
         .returns(async () => {
             callCount++;

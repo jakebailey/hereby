@@ -59,6 +59,7 @@ export interface D {
     readonly execPath: string;
     readonly setExitCode: (code: number) => void;
     readonly version: string;
+    readonly isPnP: boolean;
 
     // Third-party package imports.
     readonly foregroundChild: (program: string, args: string[]) => void;
@@ -91,6 +92,7 @@ export async function real(): Promise<D> {
             process.exitCode = code;
         },
         version,
+        isPnP: !!process.versions["pnp"],
         foregroundChild,
         resolve,
         prettyMilliseconds,

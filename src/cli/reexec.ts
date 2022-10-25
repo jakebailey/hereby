@@ -2,7 +2,7 @@ import { fileURLToPath, pathToFileURL } from "url";
 
 import { D, UserError } from "./utils.js";
 
-export type ReExecD = Pick<D, "error" | "execArgv" | "argv" | "execPath" | "foregroundChild" | "resolve">;
+export type ReExecD = Pick<D, "error" | "execArgv" | "argv" | "execPath" | "foregroundChild" | "resolve" | "isPnP">;
 
 export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolean> {
     // If hereby is installed globally, but run against a Herebyfile in some
@@ -16,6 +16,16 @@ export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolea
     //
     // TODO: Rather than spawning a child process, perhaps we could instead
     // import the CLI from the other version and run it.
+
+    if (d.isPnP) {
+        // When we are running within PnP, we can't really figure out what to
+        // do. import-meta-resolve doesn't implement this, so we can't do
+        // anything until import.meta.resolve is no longer experimental.
+        //
+        // Just assume that everything is okay; we will error later if there's
+        // a mismatch.
+        return false;
+    }
 
     const thisCLI = await resolveToPath("hereby/cli", new URL(import.meta.url));
     let otherCLI: string;
