@@ -20,7 +20,10 @@ export class Runner {
     }
 
     async runTasks(...tasks: Task[]): Promise<void> {
-        await Promise.all(
+        // Using allSettled here so that we don't immediately exit; it could be
+        // the case that a task has code that needs to run before, e.g. a
+        // cleanup function in a "finally" or something.
+        const results = await Promise.allSettled(
             tasks.map((task) => {
                 const cached = this._addedTasks.get(task);
                 if (cached) {
@@ -32,6 +35,11 @@ export class Runner {
                 return promise;
             }),
         );
+        for (const result of results) {
+            if (result.status === "rejected") {
+                throw result.reason;
+            }
+        }
     }
 
     private async _runTask(task: Task): Promise<void> {
