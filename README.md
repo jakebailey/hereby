@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/hereby.svg)](https://npmjs.com/package/hereby)
 [![node](https://img.shields.io/node/v/hereby.svg)](https://nodejs.org)
 [![install size](https://packagephobia.com/badge?p=hereby)](https://packagephobia.com/result?p=hereby)
-![tokei](https://img.shields.io/endpoint?url=https://hereby.js.org/tokei.json)
+![tokei](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jakebailey/hereby/gh-pages/tokei.json)
 [![ci](https://github.com/jakebailey/hereby/actions/workflows/ci.yml/badge.svg)](https://github.com/jakebailey/hereby/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/jakebailey/hereby/branch/main/graph/badge.svg?token=YL2Z1uk5dh)](https://codecov.io/gh/jakebailey/hereby)
 
