@@ -26,6 +26,13 @@ jobs:
             - README.md
           EOF
 
+      - name: tokei
+        run: |
+          curl -L https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-x86_64-unknown-linux-gnu.tar.gz | tar -zxv
+          ./tokei -e '__*__' -o json src bin \
+            | jq '{ schemaVersion: 1, label: "total lines", message: .Total.code | tostring, color: "green" }' \
+            > gh-pages/tokei.json
+
       - name: Deploy to GitHub Pages
         if: success()
         uses: crazy-max/ghaction-github-pages@v2
