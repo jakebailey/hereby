@@ -58,23 +58,23 @@ export interface D {
     readonly execArgv: string[];
     readonly execPath: string;
     readonly setExitCode: (code: number) => void;
-    readonly version: string;
+    readonly version: () => Promise<string>;
     readonly isPnP: boolean;
 
     // Third-party package imports.
-    readonly foregroundChild: (program: string, args: string[]) => void;
+    readonly foregroundChild: (program: string, args: string[]) => Promise<void>;
     readonly resolve: (specifier: string, parent: string) => Promise<string>;
     readonly prettyMilliseconds: (milliseconds: number) => string;
 }
 
 export async function real(): Promise<D> {
-    const { default: foregroundChild } = await import("foreground-child");
-    const { resolve } = await import("import-meta-resolve");
-    const { default: prettyMilliseconds } = await import("pretty-ms");
-
-    const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
-    const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
-    const { version } = JSON.parse(packageJson);
+    const [
+        { resolve },
+        { default: prettyMilliseconds },
+    ] = await Promise.all([
+        import("import-meta-resolve"),
+        import("pretty-ms"),
+    ]);
 
     /* eslint-disable no-restricted-globals */
     return {
@@ -91,9 +91,17 @@ export async function real(): Promise<D> {
         setExitCode: (code) => {
             process.exitCode = code;
         },
-        version,
+        version: async () => {
+            const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
+            const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
+            const { version } = JSON.parse(packageJson);
+            return version;
+        },
         isPnP: !!process.versions["pnp"],
-        foregroundChild,
+        foregroundChild: async (program, args) => {
+            const { default: foregroundChild } = await import("foreground-child");
+            foregroundChild(program, args);
+        },
         resolve,
         prettyMilliseconds,
     };

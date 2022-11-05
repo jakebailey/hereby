@@ -59,7 +59,7 @@ test("re-exec", async (t) => {
         .setup((d) => d.argv)
         .returns(argv)
         .setup((d) => d.foregroundChild)
-        .returns((program, args) => {
+        .returns(async (program, args) => {
             t.is(program, execPath);
             t.deepEqual(args, [...execArgv, fileURLToPath(wrongCliIndexURL), ...argv.slice(2)]);
         })

@@ -1,4 +1,3 @@
-import { closest, distance } from "fastest-levenshtein";
 import path from "path";
 import pc from "picocolors";
 
@@ -41,7 +40,7 @@ async function mainWorker(d: D) {
     }
 
     if (args.version) {
-        d.log(`hereby ${d.version}`);
+        d.log(`hereby ${await d.version()}`);
         return;
     }
 
@@ -54,7 +53,7 @@ async function mainWorker(d: D) {
         return;
     }
 
-    const tasks = selectTasks(d, herebyfile, herebyfilePath, args.run);
+    const tasks = await selectTasks(d, herebyfile, herebyfilePath, args.run);
     const taskNames = tasks.map((t) => t.options.name).sort().map((name) => pc.blue(name)).join(", ");
     d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
@@ -77,24 +76,28 @@ async function mainWorker(d: D) {
 }
 
 // Exported for testing.
-export function selectTasks(
+export async function selectTasks(
     d: Pick<D, "simplifyPath">,
     herebyfile: Herebyfile,
     herebyfilePath: string,
     taskNames: string[] | undefined,
-): Task[] {
+): Promise<Task[]> {
     const allTasks = new Map<string, Task>();
     for (const task of herebyfile.tasks) {
         allTasks.set(task.options.name, task);
     }
 
     if (taskNames && taskNames.length > 0) {
-        return taskNames.map((name) => {
+        const tasks: Task[] = [];
+
+        for (const name of taskNames) {
             const task = allTasks.get(name);
             if (!task) {
                 let message = `Task "${name}" does not exist or is not exported from ${
                     d.simplifyPath(herebyfilePath)
                 }.`;
+
+                const { closest, distance } = await import("fastest-levenshtein");
 
                 const candidate = closest(name, Array.from(allTasks.keys()));
                 if (distance(name, candidate) < name.length * 0.4) {
@@ -103,8 +106,10 @@ export function selectTasks(
 
                 throw new UserError(message);
             }
-            return task;
-        });
+            tasks.push(task);
+        }
+
+        return tasks;
     }
 
     if (!herebyfile.defaultTask) {

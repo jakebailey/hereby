@@ -41,7 +41,7 @@ export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolea
     }
 
     const args = [...d.execArgv, otherCLI, ...d.argv.slice(2)];
-    d.foregroundChild(d.execPath, args);
+    await d.foregroundChild(d.execPath, args);
     return true;
 
     async function resolveToPath(specifier: string, url: URL) {

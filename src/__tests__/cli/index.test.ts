@@ -18,7 +18,7 @@ test("selectTasks single", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["runSomeProgram"]);
+    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["runSomeProgram"]);
     t.is(tasks.length, 1);
     t.is(tasks[0].options.name, "runSomeProgram");
 });
@@ -27,7 +27,7 @@ test("selectTasks multiple", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, [
+    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, [
         "runSomeProgram",
         "buildCompiler",
     ]);
@@ -40,7 +40,7 @@ test("selectTasks default", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined);
+    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined);
     t.is(tasks.length, 1);
     t.is(tasks[0].options.name, "runSomeProgram");
 });
@@ -260,7 +260,7 @@ test("main reexec", async (t) => {
         .setup((d) => d.argv)
         .returns([])
         .setup((d) => d.foregroundChild)
-        .returns((program) => {
+        .returns(async (program) => {
             t.is(program, "cool");
         });
 
@@ -274,7 +274,7 @@ test("main print version", async (t) => {
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--version"])
         .setup((d) => d.version)
-        .returns(version)
+        .returns(async () => version)
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
