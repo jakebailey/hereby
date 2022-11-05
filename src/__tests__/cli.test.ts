@@ -6,6 +6,7 @@ import tmp from "tmp";
 import { fileURLToPath } from "url";
 
 const cliPath = fileURLToPath(new URL("../cli.js", import.meta.url));
+const fixturesPath = fileURLToPath(new URL("./cli/__fixtures__", import.meta.url));
 
 // Coverage carries through to children; run and check that it doesn't break.
 
@@ -15,7 +16,7 @@ test("run cli --help", async (t) => {
 });
 
 test("run cli --version", async (t) => {
-    await execaNode(cliPath, ["--version"]);
+    await execaNode(cliPath, ["--version"], { cwd: fixturesPath });
     t.pass();
 });
 
