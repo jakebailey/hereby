@@ -49,7 +49,7 @@ test("selectTasks missing", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    t.throws(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["oops"]), {
+    await t.throwsAsync(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["oops"]), {
         instanceOf: UserError,
         message: 'Task "oops" does not exist or is not exported from ~/simplified/Herebyfile.mjs.',
     });
@@ -59,18 +59,21 @@ test("selectTasks missing did you mean", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    t.throws(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["buildcompiler"]), {
-        instanceOf: UserError,
-        message:
-            'Task "buildcompiler" does not exist or is not exported from ~/simplified/Herebyfile.mjs. Did you mean "buildCompiler"?',
-    });
+    await t.throwsAsync(
+        () => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, ["buildcompiler"]),
+        {
+            instanceOf: UserError,
+            message:
+                'Task "buildcompiler" does not exist or is not exported from ~/simplified/Herebyfile.mjs. Did you mean "buildCompiler"?',
+        },
+    );
 });
 
 test("selectTasks missing default", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "noDefault.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    t.throws(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined), {
+    await t.throwsAsync(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined), {
         instanceOf: UserError,
         message: "No default task has been exported from ~/simplified/noDefault.mjs; please specify a task name.",
     });
