@@ -69,14 +69,6 @@ export interface D {
 
 export async function real(): Promise<D> {
     const importResolve = memoize(async () => (await import("import-meta-resolve")).resolve);
-    const version = memoize(async () => {
-        const resolve = await importResolve();
-        const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
-        const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
-        const { version } = JSON.parse(packageJson);
-        return version;
-    });
-
     const { default: prettyMilliseconds } = await import("pretty-ms");
 
     /* eslint-disable no-restricted-globals */
@@ -94,9 +86,17 @@ export async function real(): Promise<D> {
         setExitCode: (code) => {
             process.exitCode = code;
         },
-        version,
+        version: async () => {
+            // Not bothering to memoize this function; it will only be called once.
+            const resolve = await importResolve();
+            const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
+            const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
+            const { version } = JSON.parse(packageJson);
+            return version;
+        },
         isPnP: !!process.versions["pnp"],
         foregroundChild: async (program, args) => {
+            // Not bothering to memoize this import; it will only be called once.
             const { default: foregroundChild } = await import("foreground-child");
             foregroundChild(program, args);
         },
