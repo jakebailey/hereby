@@ -68,13 +68,16 @@ export interface D {
 }
 
 export async function real(): Promise<D> {
-    const [
-        { resolve },
-        { default: prettyMilliseconds },
-    ] = await Promise.all([
-        import("import-meta-resolve"),
-        import("pretty-ms"),
-    ]);
+    const importResolve = memoize(async () => (await import("import-meta-resolve")).resolve);
+    const version = memoize(async () => {
+        const resolve = await importResolve();
+        const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
+        const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
+        const { version } = JSON.parse(packageJson);
+        return version;
+    });
+
+    const { default: prettyMilliseconds } = await import("pretty-ms");
 
     /* eslint-disable no-restricted-globals */
     return {
@@ -91,19 +94,22 @@ export async function real(): Promise<D> {
         setExitCode: (code) => {
             process.exitCode = code;
         },
-        version: async () => {
-            const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
-            const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
-            const { version } = JSON.parse(packageJson);
-            return version;
-        },
+        version,
         isPnP: !!process.versions["pnp"],
         foregroundChild: async (program, args) => {
             const { default: foregroundChild } = await import("foreground-child");
             foregroundChild(program, args);
         },
-        resolve,
+        resolve: async (specifier, parent) => {
+            const resolve = await importResolve();
+            return resolve(specifier, parent);
+        },
         prettyMilliseconds,
     };
     /* eslint-enable no-restricted-globals */
+}
+
+function memoize<T extends {}>(fn: () => T): () => T {
+    let value: T | undefined;
+    return () => (value ??= fn());
 }
