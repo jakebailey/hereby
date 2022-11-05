@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -73,7 +73,7 @@ export async function real(): Promise<D> {
     const { default: prettyMilliseconds } = await import("pretty-ms");
 
     const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
-    const packageJson = await fs.readFile(packageJsonPath, "utf-8");
+    const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
     const { version } = JSON.parse(packageJson);
 
     /* eslint-disable no-restricted-globals */

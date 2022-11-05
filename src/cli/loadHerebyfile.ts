@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import fs from "fs";
 import path from "path";
 import pc from "picocolors";
 import { pathToFileURL } from "url";
@@ -14,14 +14,14 @@ export async function findHerebyfile(dir: string): Promise<string> {
     const root = path.parse(dir).root;
 
     for (; dir !== root; dir = path.dirname(dir)) {
-        const entries = await fs.readdir(dir);
+        const entries = await fs.promises.readdir(dir);
         const matching = entries.filter((e) => allFilenames.has(e));
         if (matching.length > 1) {
             throw new UserError(`Found more than one Herebyfile: ${matching.join(", ")}`);
         }
         if (matching.length === 1) {
             const candidate = path.join(dir, matching[0]);
-            const stat = await fs.stat(candidate);
+            const stat = await fs.promises.stat(candidate);
             if (!stat.isFile()) {
                 throw new UserError(`${matching[0]} is not a file.`);
             }

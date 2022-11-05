@@ -1,5 +1,5 @@
 import test from "ava";
-import { promises as fs } from "fs";
+import fs from "fs";
 import path from "path";
 import tmp from "tmp";
 import { fileURLToPath } from "url";
@@ -59,9 +59,9 @@ test("findHerebyfile", async (t) => {
     const expectedHerebyFile = path.join(src, "Herebyfile.mjs");
     const unexpectedHerebyFile = path.join(src, "Herebyfile.js");
 
-    await fs.mkdir(deepest, { recursive: true });
-    await fs.writeFile(path.join(packageRoot, "package.json"), "{}");
-    await fs.writeFile(expectedHerebyFile, "export {}");
+    await fs.promises.mkdir(deepest, { recursive: true });
+    await fs.promises.writeFile(path.join(packageRoot, "package.json"), "{}");
+    await fs.promises.writeFile(expectedHerebyFile, "export {}");
 
     await t.throwsAsync(async () => await findHerebyfile(dir), {
         instanceOf: UserError,
@@ -81,14 +81,14 @@ test("findHerebyfile", async (t) => {
     t.is(await findHerebyfile(deepest), expectedHerebyFile);
     t.is(await findHerebyfile(src), expectedHerebyFile);
 
-    await fs.mkdir(path.join(deepest, "Herebyfile.js"));
+    await fs.promises.mkdir(path.join(deepest, "Herebyfile.js"));
 
     await t.throwsAsync(async () => await findHerebyfile(deepest), {
         instanceOf: UserError,
         message: "Herebyfile.js is not a file.",
     });
 
-    await fs.writeFile(unexpectedHerebyFile, "export {}");
+    await fs.promises.writeFile(unexpectedHerebyFile, "export {}");
 
     await t.throwsAsync(async () => await findHerebyfile(src), {
         instanceOf: UserError,
