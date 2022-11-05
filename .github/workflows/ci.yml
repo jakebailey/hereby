@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: "15 0 * * *"
 
 jobs:
   test:
@@ -26,7 +28,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm ci
+        if: ${{ github.event_name != 'schedule' }}
+
+      - run: rm package-lock.json && npm i
+        if: ${{ github.event_name == 'schedule' }}
+
       - run: npm run build
       - run: npm run coverage
       - uses: codecov/codecov-action@v3
@@ -37,6 +45,7 @@ jobs:
   eslint:
     name: ESLint
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' }}
 
     steps:
       - uses: actions/checkout@v3
@@ -47,6 +56,7 @@ jobs:
   dprint:
     name: dprint
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' }}
 
     steps:
       - uses: actions/checkout@v3
