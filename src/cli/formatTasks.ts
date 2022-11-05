@@ -1,5 +1,5 @@
-import chalk from "chalk";
 import commandLineUsage from "command-line-usage";
+import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import { stringSorter, taskSorter } from "./utils.js";
@@ -21,8 +21,8 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
         header: "Available tasks",
         content: tasks.map((task) => {
             const name = task !== defaultTask
-                ? chalk.blue(task.options.name)
-                : `${chalk.green(task.options.name)} (default)`;
+                ? pc.blue(task.options.name)
+                : `${pc.green(task.options.name)} (default)`;
 
             const descriptionParts: string[] = [];
             if (task.options.description) {
@@ -35,7 +35,7 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
                 const depNames = deps
                     .map((task) => task.options.name)
                     .sort(stringSorter)
-                    .map((v) => chalk.blue(v));
+                    .map((v) => pc.blue(v));
                 descriptionParts.push(`Depends on: ${depNames.join(", ")}`);
             }
 

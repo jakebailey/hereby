@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import { closest, distance } from "fastest-levenshtein";
 import path from "path";
+import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import { formatTasks } from "./formatTasks.js";
@@ -17,7 +17,7 @@ export async function main(d: D) {
         if (e instanceof ExitCodeError) {
             d.setExitCode(e.exitCode);
         } else if (e instanceof UserError) {
-            d.error(`${chalk.red("Error")}: ${e.message}`);
+            d.error(`${pc.red("Error")}: ${e.message}`);
             d.setExitCode(1);
         } else {
             throw e;
@@ -55,8 +55,8 @@ async function mainWorker(d: D) {
     }
 
     const tasks = selectTasks(d, herebyfile, herebyfilePath, args.run);
-    const taskNames = tasks.map((t) => t.options.name).sort().map((name) => chalk.blue(name)).join(", ");
-    d.log(`Using ${chalk.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
+    const taskNames = tasks.map((t) => t.options.name).sort().map((name) => pc.blue(name)).join(", ");
+    d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
     const start = Date.now();
 
@@ -72,7 +72,7 @@ async function mainWorker(d: D) {
         throw new ExitCodeError(1, e);
     } finally {
         const took = Date.now() - start;
-        d.log(`Completed ${taskNames}${errored ? chalk.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
+        d.log(`Completed ${taskNames}${errored ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
     }
 }
 

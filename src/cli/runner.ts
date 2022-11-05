@@ -1,5 +1,5 @@
 import assert from "assert";
-import chalk from "chalk";
+import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import type { D } from "./utils.js";
@@ -70,7 +70,7 @@ export class Runner {
             return; // Skip logging.
         }
 
-        this._d.log(`Starting ${chalk.blue(task.options.name)}`);
+        this._d.log(`Starting ${pc.blue(task.options.name)}`);
     }
 
     protected onTaskFinish(task: Task): void {
@@ -79,7 +79,7 @@ export class Runner {
         }
 
         const took = Date.now() - checkDefined(this._startTimes.get(task));
-        this._d.log(`Finished ${chalk.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
+        this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
     }
 
     protected onTaskError(task: Task, e: unknown): void {
@@ -89,7 +89,7 @@ export class Runner {
 
         this._errored = true;
         const took = Date.now() - checkDefined(this._startTimes.get(task));
-        this._d.error(`Error in ${chalk.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
+        this._d.error(`Error in ${pc.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
     }
 }
 

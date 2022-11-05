@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import { promises as fs } from "fs";
 import path from "path";
+import pc from "picocolors";
 import { pathToFileURL } from "url";
 
 import { Task } from "../index.js";
@@ -51,7 +51,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
             if (key === "default") {
                 defaultTask = value;
             } else if (exportedTasks.has(value)) {
-                throw new UserError(`Task "${chalk.blue(value.options.name)}" has been exported twice.`);
+                throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
             } else {
                 exportedTasks.add(value);
             }
@@ -92,12 +92,12 @@ function checkTaskInvariants(tasks: readonly Task[]) {
             }
 
             if (taskStack.has(task)) {
-                throw new UserError(`Task "${chalk.blue(task.options.name)}" references itself.`);
+                throw new UserError(`Task "${pc.blue(task.options.name)}" references itself.`);
             }
 
             const name = task.options.name;
             if (seenNames.has(name)) {
-                throw new UserError(`Task "${chalk.blue(name)}" was declared twice.`);
+                throw new UserError(`Task "${pc.blue(name)}" was declared twice.`);
             }
             seenNames.add(name);
 
