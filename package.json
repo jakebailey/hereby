@@ -52,14 +52,14 @@
         "@types/command-line-args": "^5.2.0",
         "@types/command-line-usage": "^5.0.2",
         "@types/foreground-child": "^2.0.0",
-        "@types/node": "^14.18.32",
+        "@types/node": "^14.18.33",
         "@types/tmp": "^0.2.3",
-        "@typescript-eslint/eslint-plugin": "^5.40.1",
-        "@typescript-eslint/parser": "^5.40.1",
+        "@typescript-eslint/eslint-plugin": "^5.42.0",
+        "@typescript-eslint/parser": "^5.42.0",
         "ava": "^5.0.1",
         "c8": "^7.12.0",
         "dprint": "^0.32.2",
-        "eslint": "^8.26.0",
+        "eslint": "^8.27.0",
         "eslint-plugin-ava": "^13.2.0",
         "eslint-plugin-simple-import-sort": "^8.0.0",
         "execa": "^6.1.0",
@@ -68,6 +68,11 @@
         "rimraf": "^3.0.2",
         "tmp": "^0.2.1",
         "typescript": "~4.8.4"
+    },
+    "overrides": {
+        "ava": {
+            "emittery": "1.0.0"
+        }
     },
     "packageManager": "npm@8.17.0",
     "volta": {
