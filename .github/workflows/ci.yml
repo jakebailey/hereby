@@ -32,7 +32,10 @@ jobs:
       - run: npm ci
         if: ${{ github.event_name != 'schedule' }}
 
-      - run: rm package-lock.json && npm i
+      - run: |
+          npm install -g npm@latest
+          rm package-lock.json
+          npm i
         if: ${{ github.event_name == 'schedule' }}
 
       - run: npm run build
