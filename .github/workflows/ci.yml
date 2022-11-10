@@ -33,7 +33,7 @@ jobs:
         if: ${{ github.event_name != 'schedule' }}
 
       - run: |
-          npm install -g npm@latest
+          npm install -g $(jq -r '.packageManager' < package.json)
           rm package-lock.json
           npm i
         if: ${{ github.event_name == 'schedule' }}
