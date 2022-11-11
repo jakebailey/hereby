@@ -32,7 +32,8 @@ jobs:
       - run: npm ci
         if: ${{ github.event_name != 'schedule' }}
 
-      - run: |
+      - shell: bash
+        run: |
           npm install -g $(jq -r '.packageManager' < package.json)
           rm package-lock.json
           npm i
