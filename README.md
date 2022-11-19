@@ -108,7 +108,7 @@ well.
 `hereby` does not support running tasks in series; specifying multiple tasks at
 the CLI or as dependencies of another task will run them in parallel. This
 matches the behavior of tools like `make`, which like `hereby` intend to encode
-a dedpendency graph of tasks, not act as a script.
+a dependency graph of tasks, not act as a script.
 
 In general, if you're trying to emulate a serial task, you will likely be better
 served by writing out explicit dependencies for your tasks.
