@@ -229,47 +229,6 @@ test("main random throw", async (t) => {
     });
 });
 
-test("main reexec", async (t) => {
-    t.plan(1);
-
-    let callCount = 0;
-    const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
-    const wrongCliIndexURL = new URL("../../other/cli/index.js", import.meta.url).toString();
-
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.resolve)
-        .returns(async () => {
-            callCount++;
-            switch (callCount) {
-                case 1:
-                    return cliIndexURL;
-                case 2:
-                    return wrongCliIndexURL;
-                default:
-                    t.fail();
-                    throw new Error("too many calls");
-            }
-        })
-        .setup((d) => d.isPnP)
-        .returns(false)
-        .setup((d) => d.execPath)
-        .returns("cool")
-        .setup((d) => d.execArgv)
-        .returns([])
-        .setup((d) => d.argv)
-        .returns([])
-        .setup((d) => d.foregroundChild)
-        .returns(async (program) => {
-            t.is(program, "cool");
-        });
-
-    await main(dMock.object());
-});
-
 test("main print version", async (t) => {
     t.plan(1);
     const version = "1.0.0";

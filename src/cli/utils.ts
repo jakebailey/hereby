@@ -55,14 +55,11 @@ export interface D {
     readonly chdir: (directory: string) => void;
     readonly simplifyPath: (p: string) => string;
     readonly argv: string[];
-    readonly execArgv: string[];
-    readonly execPath: string;
     readonly setExitCode: (code: number) => void;
     readonly version: () => Promise<string>;
     readonly isPnP: boolean;
 
     // Third-party package imports.
-    readonly foregroundChild: (program: string, args: string[]) => Promise<void>;
     readonly resolve: (specifier: string, parent: string) => Promise<string>;
     readonly prettyMilliseconds: (milliseconds: number) => string;
 }
@@ -81,8 +78,6 @@ export async function real(): Promise<D> {
         chdir: process.chdir,
         simplifyPath,
         argv: process.argv,
-        execArgv: process.execArgv,
-        execPath: process.execPath,
         setExitCode: (code) => {
             process.exitCode = code;
         },
@@ -95,11 +90,6 @@ export async function real(): Promise<D> {
             return version;
         },
         isPnP: !!process.versions["pnp"],
-        foregroundChild: async (program, args) => {
-            // Not bothering to memoize this import; it will only be called once.
-            const { default: foregroundChild } = await import("foreground-child");
-            foregroundChild(program, args);
-        },
         resolve: async (specifier, parent) => {
             const resolve = await importResolve();
             return resolve(specifier, parent);
