@@ -13,7 +13,7 @@ export interface TaskOptions {
     description?: string | undefined;
 
     /**
-     * A list of tasks that must has been run to completion before
+     * A list of tasks that must have been run to completion before
      * this task can execute.
      */
     dependencies?: readonly Task[] | undefined;
