@@ -1,12 +1,13 @@
+import { fileURLToPath } from "node:url";
+
 import test from "ava";
-import { fileURLToPath } from "url";
 
 import { reexec, ReExecD } from "../../cli/reexec.js";
 import { UserError } from "../../cli/utils.js";
 import { mock } from "../__helpers__/index.js";
 
 const cliIndexURL = new URL("../../cli/index.js", import.meta.url).toString();
-const herebyfilePath = fileURLToPath(new URL("./__fixtures__/Herebyfile.mjs", import.meta.url));
+const herebyfilePath = fileURLToPath(new URL("__fixtures__/Herebyfile.mjs", import.meta.url));
 
 test("no re-exec", async (t) => {
     let callCount = 0;

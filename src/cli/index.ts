@@ -1,4 +1,5 @@
-import path from "path";
+import path from "node:path";
+
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
@@ -99,7 +100,7 @@ export async function selectTasks(
 
                 const { closest, distance } = await import("fastest-levenshtein");
 
-                const candidate = closest(name, Array.from(allTasks.keys()));
+                const candidate = closest(name, [...allTasks.keys()]);
                 if (distance(name, candidate) < name.length * 0.4) {
                     message += ` Did you mean "${candidate}"?`;
                 }

@@ -1,6 +1,7 @@
+import os from "node:os";
+import path from "node:path";
+
 import test from "ava";
-import os from "os";
-import path from "path";
 
 import { ExitCodeError, real, simplifyPath, UserError } from "../../cli/utils.js";
 

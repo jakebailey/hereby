@@ -1,14 +1,15 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+
 import pc from "picocolors";
-import { pathToFileURL } from "url";
 
 import { Task } from "../index.js";
 import { UserError } from "./utils.js";
 
 const filenames = ["Herebyfile", "herebyfile"];
 const extensions = ["mjs", "js"];
-const allFilenames = new Set(extensions.map((e) => filenames.map((f) => `${f}.${e}`)).flat());
+const allFilenames = new Set(extensions.flatMap((e) => filenames.map((f) => `${f}.${e}`)));
 
 export async function findHerebyfile(dir: string): Promise<string> {
     const root = path.parse(dir).root;
@@ -66,7 +67,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
         throw new UserError("No tasks found. Did you forget to export your tasks?");
     }
 
-    const tasks = Array.from(exportedTasks.values());
+    const tasks = [...exportedTasks.values()];
 
     // We check this here by walking the DAG, as some dependencies may not be
     // exported and therefore would not be seen by the above loop.

@@ -60,6 +60,7 @@
         "eslint": "^8.32.0",
         "eslint-plugin-ava": "^14.0.0",
         "eslint-plugin-simple-import-sort": "^9.0.0",
+        "eslint-plugin-unicorn": "^45.0.2",
         "execa": "^6.1.0",
         "moq.ts": "^9.0.2",
         "rimraf": "^4.1.1",

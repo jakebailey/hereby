@@ -1,4 +1,5 @@
-import assert from "assert";
+import assert from "node:assert";
+
 import pc from "picocolors";
 
 import type { Task } from "../index.js";

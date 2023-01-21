@@ -7,8 +7,7 @@ import { stringSorter, taskSorter } from "./utils.js";
 export type TaskFormat = "normal" | "simple";
 
 export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Task) {
-    tasks = tasks
-        .slice(0)
+    tasks = [...tasks]
         .filter((task) => !task.options.hiddenFromTaskList)
         .sort(taskSorter);
 
@@ -20,9 +19,9 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
     sections.push({
         header: "Available tasks",
         content: tasks.map((task) => {
-            const name = task !== defaultTask
-                ? pc.blue(task.options.name)
-                : `${pc.green(task.options.name)} (default)`;
+            const name = task === defaultTask
+                ? `${pc.green(task.options.name)} (default)`
+                : pc.blue(task.options.name);
 
             const descriptionParts: string[] = [];
             if (task.options.description) {

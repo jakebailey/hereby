@@ -1,7 +1,7 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { Task } from "../index.js";
 
@@ -85,7 +85,7 @@ export async function real(): Promise<D> {
             // Not bothering to memoize this function; it will only be called once.
             const resolve = await importResolve();
             const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
-            const packageJson = await fs.promises.readFile(packageJsonPath, "utf-8");
+            const packageJson = await fs.promises.readFile(packageJsonPath, "utf8");
             const { version } = JSON.parse(packageJson);
             return version;
         },

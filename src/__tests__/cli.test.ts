@@ -1,12 +1,13 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import test from "ava";
 import { execaNode } from "execa";
-import fs from "fs";
-import path from "path";
 import tmp from "tmp";
-import { fileURLToPath } from "url";
 
 const cliPath = fileURLToPath(new URL("../cli.js", import.meta.url));
-const fixturesPath = fileURLToPath(new URL("./cli/__fixtures__", import.meta.url));
+const fixturesPath = fileURLToPath(new URL("cli/__fixtures__", import.meta.url));
 
 // Coverage carries through to children; run and check that it doesn't break.
 

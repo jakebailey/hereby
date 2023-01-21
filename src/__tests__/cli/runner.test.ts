@@ -86,9 +86,7 @@ test("runner", async (t) => {
 
 class TestRunner extends Runner {
     override async runTasks(...tasks: Task[]): Promise<void> {
-        for (let i = 0; i < tasks.length; i++) {
-            const task = tasks[i];
-
+        for (const [i, task] of tasks.entries()) {
             this.onTaskStart(task);
 
             if (i % 2 === 0) {

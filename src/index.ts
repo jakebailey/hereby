@@ -53,26 +53,26 @@ export class Task {
         // typechecking, so this is helpful.
 
         if (typeof options.name !== "string") {
-            throw new Error("Task name is not a string.");
+            throw new TypeError("Task name is not a string.");
         }
 
-        if (typeof options.description !== "string" && typeof options.description !== "undefined") {
-            throw new Error("Task description is not a string or undefined.");
+        if (typeof options.description !== "string" && options.description !== undefined) {
+            throw new TypeError("Task description is not a string or undefined.");
         }
 
-        if (!Array.isArray(options.dependencies) && typeof options.dependencies !== "undefined") {
-            throw new Error("Task dependencies is not an array or undefined.");
+        if (!Array.isArray(options.dependencies) && options.dependencies !== undefined) {
+            throw new TypeError("Task dependencies is not an array or undefined.");
         }
         if (options.dependencies) {
             for (const dep of options.dependencies) {
                 if (!(dep instanceof Task)) {
-                    throw new Error("Task dependency is not a task.");
+                    throw new TypeError("Task dependency is not a task.");
                 }
             }
         }
 
-        if (typeof options.run !== "function" && typeof options.run !== "undefined") {
-            throw new Error("Task run is not a function or undefined.");
+        if (typeof options.run !== "function" && options.run !== undefined) {
+            throw new TypeError("Task run is not a function or undefined.");
         }
 
         // Non-type checks.

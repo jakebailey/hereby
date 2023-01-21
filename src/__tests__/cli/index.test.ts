@@ -1,14 +1,15 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import test from "ava";
 import { resolve } from "import-meta-resolve";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { D, UserError } from "../../cli/utils.js";
 import { mock } from "../__helpers__/index.js";
 
-const fixturesPath = fileURLToPath(new URL("./__fixtures__", import.meta.url));
+const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
 
 function fakeSimplifyPath(p: string): string {
     return `~/simplified/${path.basename(p)}`;

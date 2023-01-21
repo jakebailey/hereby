@@ -25,6 +25,7 @@ test("non-async run", (t) => {
 });
 
 test("bad options", (t) => {
+    /* eslint-disable unicorn/no-null */
     t.throws(() => task({ name: 1234 as any }));
     t.throws(() => task({ name: "name", description: null as any }));
     t.throws(() => task({ name: "name", description: 1234 as any }));
@@ -33,6 +34,7 @@ test("bad options", (t) => {
     t.throws(() => task({ name: "name", dependencies: [1234] as any }));
     t.throws(() => task({ name: "name", run: null as any }));
     t.throws(() => task({ name: "name", run: 1234 as any }));
+    /* eslint-enable unicorn/no-null */
 });
 
 test("returning a non-void value", (t) => {
