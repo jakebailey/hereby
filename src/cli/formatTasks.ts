@@ -20,9 +20,9 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
                 ? `${pc.green(task.options.name)} (default)`
                 : pc.blue(task.options.name);
 
-            const descriptionParts: string[] = [];
+            let descriptionParts: string[] | undefined;
             if (task.options.description) {
-                descriptionParts.push(task.options.description);
+                (descriptionParts ??= []).push(task.options.description);
             }
 
             const deps = task.options.dependencies?.filter(isTaskVisible);
@@ -32,10 +32,10 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
                     .map((task) => task.options.name)
                     .sort(compareStrings)
                     .map((v) => pc.blue(v));
-                descriptionParts.push(`Depends on: ${depNames.join(", ")}`);
+                (descriptionParts ??= []).push(`Depends on: ${depNames.join(", ")}`);
             }
 
-            return { name, description: descriptionParts.join("\n") };
+            return { name, description: descriptionParts?.join("\n") };
         }),
     });
 }
