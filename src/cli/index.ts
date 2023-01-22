@@ -88,7 +88,7 @@ export async function selectTasks(
         allTasks.set(task.options.name, task);
     }
 
-    if (taskNames && taskNames.length > 0) {
+    if (taskNames.length > 0) {
         const tasks: Task[] = [];
 
         for (const name of taskNames) {
