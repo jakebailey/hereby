@@ -42,6 +42,8 @@ export interface Herebyfile {
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
+    // Note: calling pathToFileURL is required on Windows to disambiguate URLs
+    // from drive letters.
     const herebyfile = await import(pathToFileURL(herebyfilePath).toString());
 
     const exportedTasks = new Set<Task>();
