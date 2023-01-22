@@ -35,7 +35,7 @@ test("printTasks", (t) => {
     });
 
     for (const format of ["normal", "simple"] as const) {
-        const output = formatTasks(format, [a, c, d], d);
+        const output = formatTasks(format, [a, c, d, hidden], d);
         // eslint-disable-next-line ava/assertion-arguments
         t.snapshot(output.replace(/\r/g, ""), format);
     }
