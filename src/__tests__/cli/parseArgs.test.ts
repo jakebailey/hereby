@@ -19,7 +19,9 @@ test(macro, ["-T"]);
 test(macro, ["--tasks-simple"]);
 test(macro, ["build", "test", "--light=false"]);
 test(macro, ["build", "test", "--", "--light=false"]);
+test(macro, ["build", "test", "--", "not-a-task", "--light=false"]);
 test(macro, ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false"]);
+test(macro, ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false", "not-a-task"]);
 
 test.serial("usage", (t) => {
     t.snapshot(getUsage().replace(/\r/g, ""));
