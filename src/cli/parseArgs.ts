@@ -1,5 +1,5 @@
-import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
+import minimist from "minimist";
 
 import type { TaskFormat } from "./formatTasks.js";
 
@@ -12,29 +12,21 @@ interface CLIOptions {
 }
 
 export function parseArgs(argv: string[]): CLIOptions {
-    const idx = argv.indexOf("--");
-    if (idx !== -1) {
-        argv = argv.slice(0, idx);
-    }
-
-    const options = commandLineArgs(
-        [
-            { name: "run", multiple: true, defaultOption: true, type: String },
-            { name: "herebyfile", type: String },
-            { name: "tasks", alias: "T", type: Boolean, defaultValue: false },
-            { name: "tasks-simple", type: Boolean, defaultValue: false },
-            { name: "help", alias: "h", type: Boolean, defaultValue: false },
-            { name: "version", type: Boolean, defaultValue: false },
-        ],
-        {
-            argv,
-            stopAtFirstUnknown: true,
+    let parseUnknownAsTask = true;
+    const options = minimist(argv, {
+        "--": true,
+        string: ["herebyfile"],
+        boolean: ["tasks", "tasks-simple", "help", "version"],
+        alias: {
+            "h": "help",
+            "T": "tasks",
         },
-    );
+        unknown: (name) => parseUnknownAsTask && (parseUnknownAsTask = !name.startsWith("-")),
+    });
 
     return {
         help: options["help"],
-        run: options["run"] ?? [],
+        run: options["_"],
         herebyfile: options["herebyfile"],
         printTasks: options["tasks"] ? "normal" : (options["tasks-simple"] ? "simple" : undefined),
         version: options["version"],
