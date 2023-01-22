@@ -15,8 +15,7 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
         return tasks.map((task) => task.options.name).join("\n");
     }
 
-    const sections: commandLineUsage.Section[] = [];
-    sections.push({
+    return commandLineUsage({
         header: "Available tasks",
         content: tasks.map((task) => {
             const name = task === defaultTask
@@ -41,6 +40,4 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
             return { name, description: descriptionParts.join("\n") };
         }),
     });
-
-    return commandLineUsage(sections);
 }

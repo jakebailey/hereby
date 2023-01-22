@@ -1,11 +1,13 @@
 import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
+import type { TaskFormat } from "./formatTasks.js";
+
 interface CLIOptions {
     help: boolean;
     run: string[];
     herebyfile: string | undefined;
-    printTasks: "normal" | "simple" | undefined;
+    printTasks: TaskFormat | undefined;
     version: boolean;
 }
 
