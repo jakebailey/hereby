@@ -22,7 +22,7 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
 
             let descriptionParts: string[] | undefined;
             if (task.options.description) {
-                (descriptionParts ??= []).push(task.options.description);
+                descriptionParts = [task.options.description];
             }
 
             const deps = task.options.dependencies?.filter(isTaskVisible);
