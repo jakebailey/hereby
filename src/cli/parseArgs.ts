@@ -2,12 +2,11 @@ import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
 interface CLIOptions {
-    help?: boolean | undefined;
-    run?: string[] | undefined;
-    herebyfile?: string | undefined;
-    printTasks?: "normal" | "simple" | undefined;
-    printTasksSimple?: boolean | undefined;
-    version?: boolean | undefined;
+    help: boolean;
+    run: string[] | undefined;
+    herebyfile: string | undefined;
+    printTasks: "normal" | "simple" | undefined;
+    version: boolean;
 }
 
 export function parseArgs(argv: string[]): CLIOptions {
@@ -20,10 +19,10 @@ export function parseArgs(argv: string[]): CLIOptions {
         [
             { name: "run", multiple: true, defaultOption: true, type: String },
             { name: "herebyfile", type: String },
-            { name: "tasks", alias: "T", type: Boolean },
-            { name: "tasks-simple", type: Boolean },
-            { name: "help", alias: "h", type: Boolean },
-            { name: "version", type: Boolean },
+            { name: "tasks", alias: "T", type: Boolean, defaultValue: false },
+            { name: "tasks-simple", type: Boolean, defaultValue: false },
+            { name: "help", alias: "h", type: Boolean, defaultValue: false },
+            { name: "version", type: Boolean, defaultValue: false },
         ],
         {
             argv,
