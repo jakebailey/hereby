@@ -95,6 +95,7 @@
         ],
         "unicorn/catch-error-name": 0,
         "unicorn/filename-case": 0,
+        "unicorn/no-array-callback-reference": 0,
         "unicorn/no-await-expression-member": 0,
         "unicorn/no-useless-undefined": 0,
         "unicorn/prefer-top-level-await": 0, // Reenable once Node 12 is dropped.

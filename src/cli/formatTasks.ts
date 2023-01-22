@@ -7,9 +7,7 @@ import { compareStrings, compareTaskNames } from "./utils.js";
 export type TaskFormat = "normal" | "simple";
 
 export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Task) {
-    tasks = [...tasks]
-        .filter((task) => !task.options.hiddenFromTaskList)
-        .sort(compareTaskNames);
+    tasks = tasks.filter(isTaskVisible).sort(compareTaskNames);
 
     if (format === "simple") {
         return tasks.map((task) => task.options.name).join("\n");
@@ -27,7 +25,7 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
                 descriptionParts.push(task.options.description);
             }
 
-            const deps = task.options.dependencies?.filter((task) => !task.options.hiddenFromTaskList);
+            const deps = task.options.dependencies?.filter(isTaskVisible);
 
             if (deps && deps.length > 0) {
                 const depNames = deps
@@ -40,4 +38,8 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
             return { name, description: descriptionParts.join("\n") };
         }),
     });
+}
+
+function isTaskVisible(task: Task) {
+    return !task.options.hiddenFromTaskList;
 }
