@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 import pc from "picocolors";
 
@@ -41,7 +42,7 @@ export interface Herebyfile {
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
-    const herebyfile = await import(herebyfilePath);
+    const herebyfile = await import(pathToFileURL(herebyfilePath).toString());
 
     const exportedTasks = new Set<Task>();
     let defaultTask: Task | undefined;
