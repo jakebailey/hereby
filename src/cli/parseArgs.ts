@@ -3,7 +3,7 @@ import commandLineUsage from "command-line-usage";
 
 interface CLIOptions {
     help: boolean;
-    run: string[] | undefined;
+    run: string[];
     herebyfile: string | undefined;
     printTasks: "normal" | "simple" | undefined;
     version: boolean;
@@ -32,7 +32,7 @@ export function parseArgs(argv: string[]): CLIOptions {
 
     return {
         help: options["help"],
-        run: options["run"],
+        run: options["run"] ?? [],
         herebyfile: options["herebyfile"],
         printTasks: options["tasks"] ? "normal" : (options["tasks-simple"] ? "simple" : undefined),
         version: options["version"],

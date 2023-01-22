@@ -41,7 +41,7 @@ test("selectTasks default", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined);
+    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, []);
     t.is(tasks.length, 1);
     t.is(tasks[0].options.name, "runSomeProgram");
 });
@@ -74,7 +74,7 @@ test("selectTasks missing default", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "noDefault.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
-    await t.throwsAsync(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, undefined), {
+    await t.throwsAsync(() => selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, []), {
         instanceOf: UserError,
         message: "No default task has been exported from ~/simplified/noDefault.mjs; please specify a task name.",
     });

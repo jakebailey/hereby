@@ -81,7 +81,7 @@ export async function selectTasks(
     d: Pick<D, "simplifyPath">,
     herebyfile: Herebyfile,
     herebyfilePath: string,
-    taskNames: string[] | undefined,
+    taskNames: string[],
 ): Promise<Task[]> {
     const allTasks = new Map<string, Task>();
     for (const task of herebyfile.tasks) {
