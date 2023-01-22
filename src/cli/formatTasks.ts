@@ -2,14 +2,14 @@ import commandLineUsage from "command-line-usage";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { stringSorter, taskSorter } from "./utils.js";
+import { compareStrings, compareTaskNames } from "./utils.js";
 
 export type TaskFormat = "normal" | "simple";
 
 export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Task) {
     tasks = [...tasks]
         .filter((task) => !task.options.hiddenFromTaskList)
-        .sort(taskSorter);
+        .sort(compareTaskNames);
 
     if (format === "simple") {
         return tasks.map((task) => task.options.name).join("\n");
@@ -32,7 +32,7 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
             if (deps && deps.length > 0) {
                 const depNames = deps
                     .map((task) => task.options.name)
-                    .sort(stringSorter)
+                    .sort(compareStrings)
                     .map((v) => pc.blue(v));
                 descriptionParts.push(`Depends on: ${depNames.join(", ")}`);
             }

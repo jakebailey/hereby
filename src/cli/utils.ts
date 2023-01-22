@@ -5,13 +5,12 @@ import { fileURLToPath } from "node:url";
 
 import type { Task } from "../index.js";
 
-export function taskSorter(a: Task, b: Task): number {
-    return stringSorter(a.options.name, b.options.name);
+export function compareTaskNames(a: Task, b: Task): number {
+    return compareStrings(a.options.name, b.options.name);
 }
 
-export function stringSorter(a: string, b: string): number {
-    return a.localeCompare(b);
-}
+// eslint-disable-next-line @typescript-eslint/unbound-method
+export const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
 
 // Exported for testing.
 export function simplifyPath(p: string) {

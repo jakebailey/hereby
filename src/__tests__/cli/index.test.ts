@@ -33,8 +33,8 @@ test("selectTasks multiple", async (t) => {
         "buildCompiler",
     ]);
     t.is(tasks.length, 2);
-    t.is(tasks[0].options.name, "runSomeProgram");
-    t.is(tasks[1].options.name, "buildCompiler");
+    t.is(tasks[0].options.name, "buildCompiler");
+    t.is(tasks[1].options.name, "runSomeProgram");
 });
 
 test("selectTasks default", async (t) => {

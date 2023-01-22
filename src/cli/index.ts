@@ -8,7 +8,7 @@ import { findHerebyfile, Herebyfile, loadHerebyfile } from "./loadHerebyfile.js"
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { D, ExitCodeError, UserError } from "./utils.js";
+import { compareTaskNames, D, ExitCodeError, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {
@@ -55,7 +55,7 @@ async function mainWorker(d: D) {
     }
 
     const tasks = await selectTasks(d, herebyfile, herebyfilePath, args.run);
-    const taskNames = tasks.map((t) => t.options.name).sort().map((name) => pc.blue(name)).join(", ");
+    const taskNames = tasks.map((task) => pc.blue(task.options.name)).join(", ");
     d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
     const start = Date.now();
@@ -110,7 +110,7 @@ export async function selectTasks(
             tasks.push(task);
         }
 
-        return tasks;
+        return tasks.sort(compareTaskNames);
     }
 
     if (!herebyfile.defaultTask) {
