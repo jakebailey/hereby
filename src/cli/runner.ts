@@ -7,8 +7,6 @@ import type { D } from "./utils.js";
 
 export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
 
-export type Limiter = (fn: () => Promise<void>) => Promise<void>;
-
 export class Runner {
     private _addedTasks = new Map<Task, Promise<void>>();
 
