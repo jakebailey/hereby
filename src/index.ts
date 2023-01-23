@@ -36,6 +36,9 @@ export interface TaskOptions {
  * A hereby Task. To get an instance, call `test`.
  */
 export class Task {
+    // This prevents d.ts emit from emitting an empty class; all other declarations are internal.
+    private _!: never;
+
     /* @internal */
     options: TaskOptions;
 
