@@ -36,19 +36,14 @@ export interface TaskOptions {
  * A hereby Task. To get an instance, call `test`.
  */
 export class Task {
-    private _options: TaskOptions;
+    // This prevents d.ts emit from emitting an empty class; all other declarations are internal.
+    private _!: never;
 
     /* @internal */
-    get options() {
-        return this._options;
-    }
+    options: TaskOptions;
 
     /* @internal */
-    static create(options: TaskOptions): Task {
-        return new Task(options);
-    }
-
-    private constructor(options: TaskOptions) {
+    constructor(options: TaskOptions) {
         // Runtime typecheck; consumers of hereby may not have enabled
         // typechecking, so this is helpful.
 
@@ -87,7 +82,7 @@ export class Task {
             throw new Error("Task must have at run function or dependencies.");
         }
 
-        this._options = options;
+        this.options = options;
     }
 }
 
@@ -95,5 +90,5 @@ export class Task {
  * Creates a new Task.
  */
 export function task(options: TaskOptions): Task {
-    return Task.create(options);
+    return new Task(options);
 }
