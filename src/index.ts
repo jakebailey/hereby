@@ -36,14 +36,17 @@ export interface TaskOptions {
  * A hereby Task. To get an instance, call `test`.
  */
 export class Task {
-    // This prevents d.ts emit from emitting an empty class; all other declarations are internal.
-    private _!: never;
-
     /* @internal */
     options: TaskOptions;
 
     /* @internal */
-    constructor(options: TaskOptions) {
+    static create(options: TaskOptions): Task {
+        return new Task(options);
+    }
+
+    // Note: private such that "private constructor();" is emitted in the d.ts files,
+    // which prevents extending or direct instantiation.
+    private constructor(options: TaskOptions) {
         // Runtime typecheck; consumers of hereby may not have enabled
         // typechecking, so this is helpful.
 
@@ -90,5 +93,5 @@ export class Task {
  * Creates a new Task.
  */
 export function task(options: TaskOptions): Task {
-    return new Task(options);
+    return Task.create(options);
 }
