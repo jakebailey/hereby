@@ -10,10 +10,10 @@ export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
 export type Limiter = (fn: () => Promise<void>) => Promise<void>;
 
 export class Runner {
-    private _addedTasks = new WeakMap<Task, Promise<void>>();
+    private _addedTasks = new Map<Task, Promise<void>>();
 
     private _errored = false;
-    private _startTimes = new WeakMap<Task, number>();
+    private _startTimes = new Map<Task, number>();
     private _d: RunnerD;
 
     constructor(d: RunnerD) {
