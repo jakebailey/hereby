@@ -92,7 +92,7 @@ export class Runner {
     }
 }
 
-function checkDefined<T>(value: T | undefined | null): T {
-    assert(value);
+function checkDefined<T extends {}>(value: T | undefined): T {
+    assert(value !== undefined);
     return value;
 }
