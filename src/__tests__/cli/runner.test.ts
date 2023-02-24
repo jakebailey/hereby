@@ -301,3 +301,48 @@ test("dependencies with thrown error", async (t) => {
     t.is(bRun, 1);
     t.is(cRun, 0);
 });
+
+test("sibling tasks and thrown error", async (t) => {
+    let aRun = 0;
+    let bRun = 0;
+    let cRun = 0;
+
+    const a = task({
+        name: "a",
+        run: async () => {
+            aRun++;
+            throw new Error("Oops");
+        },
+    });
+
+    const b = task({
+        name: "b",
+        run: async () => {
+            bRun++;
+        },
+    });
+
+    const c = task({
+        name: "c",
+        dependencies: [a, b],
+        run: async () => {
+            cRun++;
+        },
+    });
+
+    const dMock = mock<RunnerD>(t)
+        .setup((d) => d.log)
+        .returns(() => {})
+        .setup((d) => d.error)
+        .returns(() => {})
+        .setup((d) => d.prettyMilliseconds)
+        .returns(() => "<pretty-ms>");
+
+    const runner = new Runner(dMock.object());
+
+    await t.throwsAsync(runner.runTasks(c));
+
+    t.is(aRun, 1);
+    t.is(bRun, 1);
+    t.is(cRun, 0);
+});
