@@ -85,7 +85,7 @@ export class Task {
             throw new Error('Task name must not start with "-".');
         }
         if (!options.dependencies?.length && !options.run) {
-            throw new Error("Task must have at run function or dependencies.");
+            throw new Error("Task must have a run function or dependencies.");
         }
 
         this.options = options;
