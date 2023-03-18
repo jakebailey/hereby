@@ -17,7 +17,7 @@
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": true,
-        "importsNotUsedAsValues": "error"
+        "verbatimModuleSyntax": true
     },
     "exclude": ["dist"]
 }

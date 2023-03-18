@@ -1,6 +1,6 @@
 import { pathToFileURL } from "node:url";
 
-import { D, UserError } from "./utils.js";
+import { type D, UserError } from "./utils.js";
 
 export type ReExecD = Pick<D, "error" | "resolve" | "isPnP">;
 

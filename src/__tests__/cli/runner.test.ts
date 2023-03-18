@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { Runner, RunnerD } from "../../cli/runner.js";
+import { Runner, type RunnerD } from "../../cli/runner.js";
 import { Task, task } from "../../index.js";
 import { mock } from "../__helpers__/index.js";
 

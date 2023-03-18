@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url";
 
 import test from "ava";
 
-import { reexec, ReExecD } from "../../cli/reexec.js";
+import { reexec, type ReExecD } from "../../cli/reexec.js";
 import { UserError } from "../../cli/utils.js";
 import { mock } from "../__helpers__/index.js";
 

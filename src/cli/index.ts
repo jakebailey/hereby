@@ -4,11 +4,11 @@ import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import { formatTasks } from "./formatTasks.js";
-import { findHerebyfile, Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
+import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { compareTaskNames, D, ExitCodeError, UserError } from "./utils.js";
+import { compareTaskNames, type D, ExitCodeError, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {

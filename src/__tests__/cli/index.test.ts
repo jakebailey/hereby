@@ -6,7 +6,7 @@ import { resolve } from "import-meta-resolve";
 
 import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
-import { D, UserError } from "../../cli/utils.js";
+import { type D, UserError } from "../../cli/utils.js";
 import { mock } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
