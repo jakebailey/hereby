@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [12, 14, 16, 18]
+        node-version: [12, 14, 16, 18, 20]
     runs-on: ${{ matrix.os }}
     env:
       OS: ${{ matrix.os }}
@@ -26,8 +26,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
 
       - run: npm ci
         if: ${{ github.event_name != 'schedule' }}
@@ -40,6 +38,11 @@ jobs:
         if: ${{ github.event_name == 'schedule' }}
 
       - run: npm run build
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+  
       - run: npm run coverage
       - uses: codecov/codecov-action@v3
         with:
