@@ -74,6 +74,7 @@
     },
     "packageManager": "npm@8.19.4",
     "scripts": {
+        "ci": "npm ci",
         "build": "tsc",
         "watch": "tsc --watch",
         "test": "ava",
@@ -101,6 +102,9 @@
         ]
     },
     "release-it": {
+        "npm": {
+            "publish": false
+        },
         "git": {
             "commitMessage": "Release v${version}",
             "tagName": "v${version}"
