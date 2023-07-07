@@ -72,7 +72,7 @@
             "emittery": "1.0.0"
         }
     },
-    "packageManager": "npm@8.17.0",
+    "packageManager": "npm@8.19.4",
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch",
