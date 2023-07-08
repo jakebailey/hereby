@@ -18,7 +18,10 @@
         "associations": [
             "**/*.{yaml,yml}"
         ],
-        "tabWidth": 2
+        "yml.tabWidth": 2,
+        "yaml.tabWidth": 2,
+        "yml.singleQuote": true,
+        "yaml.singleQuote": true
     },
     "excludes": [
         "**/node_modules",
