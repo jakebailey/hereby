@@ -32,7 +32,7 @@ jobs:
 
       - name: publish
         id: publish
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@c2179e60cb5b8387f2464abad3c00a601fb4b252 # v1.7.0 + fixes to npm version
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@391661a0730dc96e8e4bcc78a8796449aaa9687a # v1.7.0 + fixes to npm version and scope
         with:
           access: public
           node-auth-token: ${{ secrets.NPM_TOKEN }}
