@@ -12,6 +12,12 @@
             "allowedVersions": "^2"
         },
         {
+            "matchPackageNames": [
+                "npm"
+            ],
+            "allowedVersions": "^8"
+        },
+        {
             "matchManagers": ["github-actions"],
             "matchPackageNames": ["slsa-framework/slsa-github-generator"],
             "pinDigests": false
