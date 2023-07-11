@@ -1,0 +1,20 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        "helpers:pinGitHubActionDigests"
+    ],
+    "packageRules": [
+        {
+            "matchPackageNames": [
+                "import-meta-resolve"
+            ],
+            "allowedVersions": "^1"
+        },
+        {
+            "matchManagers": ["github-actions"],
+            "matchPackageNames": ["slsa-framework/slsa-github-generator"],
+            "pinDigests": false
+        }
+    ]
+}
