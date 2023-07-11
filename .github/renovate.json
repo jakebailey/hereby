@@ -18,6 +18,24 @@
             "allowedVersions": "^8"
         },
         {
+            "matchPackageNames": [
+                "emittery"
+            ],
+            "allowedVersions": "1.0.0"
+        },
+        {
+            "matchPackageNames": [
+                "ava"
+            ],
+            "allowedVersions": "~5.0.1"
+        },
+        {
+            "matchPackageNames": [
+                "execa"
+            ],
+            "allowedVersions": "~5.0.1"
+        },
+        {
             "matchManagers": ["github-actions"],
             "matchPackageNames": ["slsa-framework/slsa-github-generator"],
             "pinDigests": false
