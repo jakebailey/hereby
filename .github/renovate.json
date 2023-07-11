@@ -4,6 +4,7 @@
         "config:recommended",
         "helpers:pinGitHubActionDigests"
     ],
+    "rangeStrategy": "bump",
     "packageRules": [
         {
             "matchPackageNames": [
