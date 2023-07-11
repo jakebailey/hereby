@@ -28,7 +28,7 @@
         "makefile"
     ],
     "engines": {
-        "node": ">= 12.20"
+        "node": ">= v12.22.12"
     },
     "files": [
         "README.md",
