@@ -9,7 +9,7 @@
             "matchPackageNames": [
                 "import-meta-resolve"
             ],
-            "allowedVersions": "^1"
+            "allowedVersions": "^2"
         },
         {
             "matchManagers": ["github-actions"],
