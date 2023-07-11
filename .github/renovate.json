@@ -1,0 +1,50 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        "helpers:pinGitHubActionDigests"
+    ],
+    "packageRules": [
+        {
+            "matchPackageNames": [
+                "import-meta-resolve"
+            ],
+            "allowedVersions": "^2"
+        },
+        {
+            "matchPackageNames": [
+                "npm"
+            ],
+            "allowedVersions": "^8"
+        },
+        {
+            "matchPackageNames": [
+                "emittery"
+            ],
+            "allowedVersions": "1.0.0"
+        },
+        {
+            "matchPackageNames": [
+                "ava"
+            ],
+            "allowedVersions": "~5.0.1"
+        },
+        {
+            "matchPackageNames": [
+                "execa"
+            ],
+            "allowedVersions": "~5.0.1"
+        },
+        {
+            "matchPackageNames": [
+                "command-line-usage"
+            ],
+            "allowedVersions": "^6"
+        },
+        {
+            "matchManagers": ["github-actions"],
+            "matchPackageNames": ["slsa-framework/slsa-github-generator"],
+            "pinDigests": false
+        }
+    ]
+}
