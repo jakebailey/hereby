@@ -28,7 +28,7 @@
         "makefile"
     ],
     "engines": {
-        "node": ">= 12.20"
+        "node": ">= v18.17.0"
     },
     "files": [
         "README.md",
@@ -50,7 +50,7 @@
         "@tsconfig/node12": "^12.1.0",
         "@types/command-line-usage": "^5.0.2",
         "@types/minimist": "^1.2.2",
-        "@types/node": "^14.18.54",
+        "@types/node": "^18.17.2",
         "@types/tmp": "^0.2.3",
         "@typescript-eslint/eslint-plugin": "^6.2.0",
         "@typescript-eslint/parser": "^6.2.0",
