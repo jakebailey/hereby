@@ -16,7 +16,7 @@ jobs:
       contents: read # For repo checkout.
       actions: read # For getting workflow run info.
     if: startsWith(github.ref, 'refs/tags/')
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.7.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.8.0
     with:
       run-scripts: 'ci, build, test'
 
@@ -32,7 +32,7 @@ jobs:
 
       - name: publish
         id: publish
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@391661a0730dc96e8e4bcc78a8796449aaa9687a # v1.7.0 + fixes to npm version and scope
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@cdeb3a916610bc00af5dee83d1acdd3c7079923a # v1.8.0
         with:
           access: public
           node-auth-token: ${{ secrets.NPM_TOKEN }}
