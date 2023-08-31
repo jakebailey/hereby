@@ -13,8 +13,6 @@ test("no re-exec", async (t) => {
     let callCount = 0;
 
     const dMock = mock<ReExecD>(t)
-        .setup((d) => d.isPnP)
-        .returns(false)
         .setup((d) => d.resolve)
         .returns(async () => {
             callCount++;
@@ -33,21 +31,10 @@ test("no re-exec", async (t) => {
     t.false(returnNow);
 });
 
-test("pnp", async (t) => {
-    const dMock = mock<ReExecD>(t)
-        .setup((d) => d.isPnP)
-        .returns(true);
-
-    const returnNow = await reexec(dMock.object(), herebyfilePath);
-    t.false(returnNow);
-});
-
 test("fail to resolve other", async (t) => {
     let callCount = 0;
 
     const dMock = mock<ReExecD>(t)
-        .setup((d) => d.isPnP)
-        .returns(false)
         .setup((d) => d.resolve)
         .returns(async () => {
             callCount++;

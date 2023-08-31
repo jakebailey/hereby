@@ -2,7 +2,7 @@ import { pathToFileURL } from "node:url";
 
 import { type D, UserError } from "./utils.js";
 
-export type ReExecD = Pick<D, "error" | "resolve" | "isPnP">;
+export type ReExecD = Pick<D, "error" | "resolve">;
 
 const cliExportName = "hereby/cli";
 
@@ -20,16 +20,6 @@ export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolea
     // Rather than trying to fix this by messing around with Node's resolution
     // (which won't work in ESM anyway), instead opt to figure out the location
     // of hereby as imported by the Herebyfile, and then "reexec" it by importing.
-
-    if (d.isPnP) {
-        // When we are running within PnP, we can't really figure out what to
-        // do. import-meta-resolve doesn't implement this, so we can't do
-        // anything until import.meta.resolve is no longer experimental.
-        //
-        // Just assume that everything is okay; we will error later if there's
-        // a mismatch.
-        return false;
-    }
 
     const thisCLI = await d.resolve(cliExportName, import.meta.url);
     let otherCLI: string;

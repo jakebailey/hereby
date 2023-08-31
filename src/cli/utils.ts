@@ -56,7 +56,6 @@ export interface D {
     readonly argv: string[];
     readonly setExitCode: (code: number) => void;
     readonly version: () => Promise<string>;
-    readonly isPnP: boolean;
 
     // Third-party package imports.
     readonly resolve: (specifier: string, parent: string) => Promise<string>;
@@ -88,7 +87,6 @@ export async function real(): Promise<D> {
             const { version } = JSON.parse(packageJson);
             return version;
         },
-        isPnP: !!process.versions["pnp"],
         resolve: async (specifier, parent) => {
             const resolve = await importResolve();
             return resolve(specifier, parent);

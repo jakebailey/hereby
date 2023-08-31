@@ -30,6 +30,7 @@
     "engines": {
         "node": ">= 12.20"
     },
+    "preferUnplugged": true,
     "files": [
         "README.md",
         "LICENSE",
