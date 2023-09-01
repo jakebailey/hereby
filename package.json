@@ -51,7 +51,7 @@
         "@tsconfig/node12": "^12.1.0",
         "@types/command-line-usage": "^5.0.2",
         "@types/minimist": "^1.2.2",
-        "@types/node": "^14.18.56",
+        "@types/node": "^14.18.57",
         "@types/tmp": "^0.2.3",
         "@typescript-eslint/eslint-plugin": "^6.4.1",
         "@typescript-eslint/parser": "^6.4.1",
