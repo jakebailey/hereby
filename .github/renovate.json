@@ -39,6 +39,11 @@
         },
         {
             "matchManagers": ["github-actions"],
+            "groupName": "github actions",
+            "groupSlug": "github-actions"
+        },
+        {
+            "matchManagers": ["github-actions"],
             "matchPackageNames": ["slsa-framework/slsa-github-generator"],
             "pinDigests": false
         }
