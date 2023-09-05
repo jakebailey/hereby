@@ -31,11 +31,7 @@ export function simplifyPath(p: string) {
  * UserError is a special error that, when caught in the CLI will be printed
  * as a message only, without stacktrace. Use this instead of process.exit.
  */
-export class UserError extends Error {
-    constructor(message: string) {
-        super(message);
-    }
-}
+export class UserError extends Error {}
 
 /**
  * When thrown, ExitCodeError causes the process to exit with a specific error code,

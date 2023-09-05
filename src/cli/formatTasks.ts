@@ -20,13 +20,8 @@ export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Tas
                 ? `${pc.green(task.options.name)} (default)`
                 : pc.blue(task.options.name);
 
-            let descriptionParts: string[] | undefined;
-            if (task.options.description) {
-                descriptionParts = [task.options.description];
-            }
-
+            let descriptionParts = task.options.description ? [task.options.description] : undefined;
             const deps = task.options.dependencies?.filter(isTaskVisible);
-
             if (deps && deps.length > 0) {
                 const depNames = deps
                     .map((task) => task.options.name)

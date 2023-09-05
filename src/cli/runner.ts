@@ -1,5 +1,3 @@
-import assert from "node:assert";
-
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
@@ -12,11 +10,8 @@ export class Runner {
 
     private _errored = false;
     private _startTimes = new Map<Task, number>();
-    private _d: RunnerD;
 
-    constructor(d: RunnerD) {
-        this._d = d;
-    }
+    constructor(private _d: RunnerD) {}
 
     async runTasks(...tasks: Task[]): Promise<void> {
         // Using allSettled here so that we don't immediately exit; it could be
@@ -77,7 +72,7 @@ export class Runner {
             return; // Skip logging.
         }
 
-        const took = Date.now() - checkDefined(this._startTimes.get(task));
+        const took = Date.now() - this._startTimes.get(task)!;
         this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
     }
 
@@ -87,12 +82,7 @@ export class Runner {
         }
 
         this._errored = true;
-        const took = Date.now() - checkDefined(this._startTimes.get(task));
+        const took = Date.now() - this._startTimes.get(task)!;
         this._d.error(`Error in ${pc.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
     }
-}
-
-function checkDefined<T extends {}>(value: T | undefined): T {
-    assert(value !== undefined);
-    return value;
 }
