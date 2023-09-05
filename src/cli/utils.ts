@@ -63,7 +63,6 @@ export interface D {
 }
 
 export async function real(): Promise<D> {
-    const importResolve = memoize(async () => (await import("import-meta-resolve")).resolve);
     const { default: prettyMilliseconds } = await import("pretty-ms");
 
     /* eslint-disable no-restricted-globals */
@@ -80,23 +79,17 @@ export async function real(): Promise<D> {
             process.exitCode = code;
         },
         version: async () => {
-            // Not bothering to memoize this function; it will only be called once.
-            const resolve = await importResolve();
+            const { resolve } = await import("import-meta-resolve");
             const packageJsonPath = fileURLToPath(await resolve("hereby/package.json", import.meta.url));
             const packageJson = await fs.promises.readFile(packageJsonPath, "utf8");
             const { version } = JSON.parse(packageJson);
             return version;
         },
         resolve: async (specifier, parent) => {
-            const resolve = await importResolve();
+            const { resolve } = await import("import-meta-resolve");
             return resolve(specifier, parent);
         },
         prettyMilliseconds,
     };
     /* eslint-enable no-restricted-globals */
-}
-
-function memoize<T extends {}>(fn: () => T): () => T {
-    let value: T | undefined;
-    return () => (value ??= fn());
 }
