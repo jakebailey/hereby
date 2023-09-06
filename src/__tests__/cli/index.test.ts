@@ -235,6 +235,27 @@ test("main random throw", async (t) => {
     t.true(log[0][1].includes("index.test"));
 });
 
+test("main random throw primitive", async (t) => {
+    t.plan(3);
+
+    const log: [fn: "log" | "error", message: string][] = [];
+
+    const dMock = mock<D>(t)
+        .setup((d) => d.argv)
+        .throws(1234)
+        .setup((d) => d.error)
+        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
+        .setup((d) => d.setExitCode)
+        .returns((code) => {
+            t.is(code, 1);
+        });
+
+    await main(dMock.object());
+
+    t.is(log[0][0], "error");
+    t.true(log[0][1].includes("1234"));
+});
+
 test("main print version", async (t) => {
     t.plan(1);
     const version = "1.0.0";
