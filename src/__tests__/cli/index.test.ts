@@ -27,14 +27,15 @@ test("selectTasks single", async (t) => {
 test("selectTasks multiple", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "Herebyfile.mjs");
     const herebyfile = await loadHerebyfile(herebyfilePath);
-
-    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, [
+    const requested = [
         "runSomeProgram",
         "buildCompiler",
-    ]);
+    ];
+
+    const tasks = await selectTasks({ simplifyPath: fakeSimplifyPath }, herebyfile, herebyfilePath, requested);
     t.is(tasks.length, 2);
-    t.is(tasks[0].options.name, "buildCompiler");
-    t.is(tasks[1].options.name, "runSomeProgram");
+    t.is(tasks[0].options.name, requested[0]);
+    t.is(tasks[1].options.name, requested[1]);
 });
 
 test("selectTasks default", async (t) => {

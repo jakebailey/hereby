@@ -8,7 +8,7 @@ import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfil
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { compareTaskNames, type D, ExitCodeError, UserError } from "./utils.js";
+import { type D, ExitCodeError, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {
@@ -112,5 +112,5 @@ export async function selectTasks(
         tasks.push(task);
     }
 
-    return tasks.sort(compareTaskNames);
+    return tasks;
 }
