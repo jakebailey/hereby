@@ -14,10 +14,8 @@ const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
 
 // Exported for testing.
 export function simplifyPath(p: string) {
-    let homedir = os.homedir();
-    if (!p.endsWith(path.sep)) {
-        homedir += path.sep;
-    }
+    p = path.normalize(p);
+    const homedir = path.normalize(os.homedir() + path.sep);
 
     if (p.startsWith(homedir)) {
         p = p.slice(homedir.length);
