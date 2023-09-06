@@ -1,4 +1,5 @@
 import path from "node:path";
+import { isNativeError } from "node:util/types";
 
 import pc from "picocolors";
 
@@ -16,12 +17,16 @@ export async function main(d: D) {
     } catch (e) {
         if (e instanceof ExitCodeError) {
             d.setExitCode(e.exitCode);
-        } else if (e instanceof UserError) {
-            d.error(`${pc.red("Error")}: ${e.message}`);
-            d.setExitCode(1);
-        } else {
-            throw e;
+            return;
         }
+        if (e instanceof UserError) {
+            d.error(`${pc.red("Error")}: ${e.message}`);
+        } else if (isNativeError(e)) {
+            d.error(e.stack || e.message);
+        } else {
+            d.error(`${e}`);
+        }
+        d.setExitCode(1);
     }
 }
 

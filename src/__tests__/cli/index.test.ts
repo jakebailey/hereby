@@ -214,13 +214,25 @@ test("main user error", async (t) => {
 });
 
 test("main random throw", async (t) => {
+    t.plan(4);
+
+    const log: [fn: "log" | "error", message: string][] = [];
+
     const dMock = mock<D>(t)
         .setup((d) => d.argv)
-        .throws(new Error("test error"));
+        .throws(new Error("test error"))
+        .setup((d) => d.error)
+        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
+        .setup((d) => d.setExitCode)
+        .returns((code) => {
+            t.is(code, 1);
+        });
 
-    await t.throwsAsync(() => main(dMock.object()), {
-        message: "test error",
-    });
+    await main(dMock.object());
+
+    t.is(log[0][0], "error");
+    t.true(log[0][1].includes("test error"));
+    t.true(log[0][1].includes("index.test"));
 });
 
 test("main print version", async (t) => {
