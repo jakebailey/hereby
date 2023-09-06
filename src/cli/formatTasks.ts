@@ -6,7 +6,7 @@ import { compareStrings, compareTaskNames } from "./utils.js";
 
 export type TaskFormat = "normal" | "simple";
 
-export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask?: Task) {
+export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask: Task | undefined) {
     tasks = tasks.filter(isTaskVisible).sort(compareTaskNames);
 
     if (format === "simple") {
