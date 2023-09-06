@@ -21,8 +21,8 @@ export async function main(d: D) {
         }
         if (e instanceof UserError) {
             d.error(`${pc.red("Error")}: ${e.message}`);
-        } else if (util.types.isNativeError(e)) {
-            d.error(e.stack || e.message);
+        } else if (util.types.isNativeError(e) && e.stack) {
+            d.error(e.stack);
         } else {
             d.error(`${e}`);
         }
