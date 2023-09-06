@@ -39,7 +39,7 @@ export async function findHerebyfile(dir: string): Promise<string> {
 
 export interface Herebyfile {
     tasks: Task[];
-    defaultTask?: Task | undefined;
+    defaultTask: Task | undefined;
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {

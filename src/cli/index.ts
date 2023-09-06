@@ -83,40 +83,34 @@ export async function selectTasks(
     herebyfilePath: string,
     taskNames: string[],
 ): Promise<Task[]> {
-    const allTasks = new Map<string, Task>();
-    for (const task of herebyfile.tasks) {
-        allTasks.set(task.options.name, task);
-    }
-
-    if (taskNames.length > 0) {
-        const tasks: Task[] = [];
-
-        for (const name of taskNames) {
-            const task = allTasks.get(name);
-            if (!task) {
-                let message = `Task "${name}" does not exist or is not exported from ${
-                    d.simplifyPath(herebyfilePath)
-                }.`;
-
-                const { closest, distance } = await import("fastest-levenshtein");
-
-                const candidate = closest(name, [...allTasks.keys()]);
-                if (distance(name, candidate) < name.length * 0.4) {
-                    message += ` Did you mean "${candidate}"?`;
-                }
-
-                throw new UserError(message);
-            }
-            tasks.push(task);
+    if (taskNames.length === 0) {
+        if (!herebyfile.defaultTask) {
+            throw new UserError(
+                `No default task has been exported from ${d.simplifyPath(herebyfilePath)}; please specify a task name.`,
+            );
         }
-
-        return tasks.sort(compareTaskNames);
+        return [herebyfile.defaultTask];
     }
 
-    if (!herebyfile.defaultTask) {
-        throw new UserError(
-            `No default task has been exported from ${d.simplifyPath(herebyfilePath)}; please specify a task name.`,
-        );
+    const allTasks = new Map(herebyfile.tasks.map((task) => [task.options.name, task]));
+    const tasks: Task[] = [];
+
+    for (const name of taskNames) {
+        const task = allTasks.get(name);
+        if (!task) {
+            let message = `Task "${name}" does not exist or is not exported from ${d.simplifyPath(herebyfilePath)}.`;
+
+            const { closest, distance } = await import("fastest-levenshtein");
+
+            const candidate = closest(name, [...allTasks.keys()]);
+            if (distance(name, candidate) < name.length * 0.4) {
+                message += ` Did you mean "${candidate}"?`;
+            }
+
+            throw new UserError(message);
+        }
+        tasks.push(task);
     }
-    return [herebyfile.defaultTask];
+
+    return tasks.sort(compareTaskNames);
 }

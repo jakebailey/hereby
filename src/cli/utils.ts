@@ -10,7 +10,7 @@ export function compareTaskNames(a: Task, b: Task): number {
 }
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-export const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
+const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
 
 // Exported for testing.
 export function simplifyPath(p: string) {
