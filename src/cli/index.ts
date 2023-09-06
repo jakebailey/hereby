@@ -1,5 +1,5 @@
 import path from "node:path";
-import { isNativeError } from "node:util/types";
+import util from "node:util";
 
 import pc from "picocolors";
 
@@ -21,7 +21,7 @@ export async function main(d: D) {
         }
         if (e instanceof UserError) {
             d.error(`${pc.red("Error")}: ${e.message}`);
-        } else if (isNativeError(e)) {
+        } else if (util.types.isNativeError(e)) {
             d.error(e.stack || e.message);
         } else {
             d.error(`${e}`);
