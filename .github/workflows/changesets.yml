@@ -1,0 +1,38 @@
+name: Changesets
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+
+jobs:
+  changesets:
+    name: Changesets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          # We clone using a deploy key so that this workflow can
+          # push tags and trigger the release workflow, which GHA
+          # tokens don't allow.
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
+
+      - run: npm ci
+        if: ${{ github.event_name != 'schedule' }}
+
+      - run: npm run build
+      - run: npm test
+
+      - uses: changesets/action@v1
+        with:
+          publish: npx changeset tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
