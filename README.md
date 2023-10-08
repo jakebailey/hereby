@@ -11,7 +11,7 @@
 
 `hereby` is a simple task runner.
 
-```
+```console
 $ npm i -D hereby
 $ yarn add -D hereby
 ```
@@ -73,7 +73,7 @@ export const bundle = task({
 
 Given the above Herebyfile:
 
-```
+```console
 $ hereby build        # Run the "build" task
 $ hereby test         # Run the "test" task, which depends on "build".
 $ hereby              # Run the default exported task.
@@ -84,7 +84,7 @@ $ hereby test bundle  # Run the "test" and "bundle" tasks in parallel.
 
 `hereby` also supports a handful of flags:
 
-```
+```console
 -h, --help          Display this usage guide.
 --herebyfile path   A path to a Herebyfile. Optional.
 -T, --tasks         Print a listing of the available tasks.
@@ -125,7 +125,7 @@ anyway).
 To run tasks in a specific order and more than once, run `hereby` multiple
 times:
 
-```
+```console
 $ hereby build
 $ hereby clean
 $ hereby build
