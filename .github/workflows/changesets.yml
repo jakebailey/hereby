@@ -23,7 +23,7 @@ jobs:
           # push tags and trigger the release workflow, which GHA
           # tokens don't allow.
           ssh-key: ${{ secrets.DEPLOY_KEY }}
-      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4
 
       - run: npm ci
         if: ${{ github.event_name != 'schedule' }}
