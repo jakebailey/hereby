@@ -38,8 +38,8 @@ export async function findHerebyfile(dir: string): Promise<string> {
 }
 
 export interface Herebyfile {
-    tasks: Task[];
-    defaultTask: Task | undefined;
+    readonly tasks: ReadonlyMap<string, Task>;
+    readonly defaultTask: Task | undefined;
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
@@ -70,26 +70,23 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
         throw new UserError("No tasks found. Did you forget to export your tasks?");
     }
 
-    const tasks = [...exportedTasks.values()];
-
     // We check this here by walking the DAG, as some dependencies may not be
     // exported and therefore would not be seen by the above loop.
-    checkTaskInvariants(tasks);
+    checkTaskInvariants(exportedTasks);
 
-    return {
-        tasks,
-        defaultTask,
-    };
+    const tasks = new Map([...exportedTasks.values()].map((task) => [task.options.name, task]));
+
+    return { tasks, defaultTask };
 }
 
-function checkTaskInvariants(tasks: readonly Task[]) {
+function checkTaskInvariants(tasks: Iterable<Task>) {
     const checkedTasks = new Set<Task>();
     const taskStack = new Set<Task>();
     const seenNames = new Set<string>();
 
     checkTaskInvariantsWorker(tasks);
 
-    function checkTaskInvariantsWorker(tasks: readonly Task[]) {
+    function checkTaskInvariantsWorker(tasks: Iterable<Task>) {
         for (const task of tasks) {
             if (checkedTasks.has(task)) {
                 continue;

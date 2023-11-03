@@ -6,16 +6,16 @@ import { compareTaskNames } from "./utils.js";
 
 export type TaskFormat = "normal" | "simple";
 
-export function formatTasks(format: TaskFormat, tasks: Task[], defaultTask: Task | undefined) {
-    tasks = tasks.filter(isTaskVisible).sort(compareTaskNames);
+export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTask: Task | undefined) {
+    const visibleTasks = [...tasks].filter(isTaskVisible).sort(compareTaskNames);
 
     if (format === "simple") {
-        return tasks.map((task) => task.options.name).join("\n");
+        return visibleTasks.map((task) => task.options.name).join("\n");
     }
 
     return commandLineUsage({
         header: "Available tasks",
-        content: tasks.map((task) => {
+        content: visibleTasks.map((task) => {
             const name = task === defaultTask
                 ? `${pc.green(task.options.name)} (default)`
                 : pc.blue(task.options.name);

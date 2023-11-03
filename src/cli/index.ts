@@ -55,7 +55,7 @@ async function mainWorker(d: D) {
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
-        d.log(formatTasks(args.printTasks, herebyfile.tasks, herebyfile.defaultTask));
+        d.log(formatTasks(args.printTasks, herebyfile.tasks.values(), herebyfile.defaultTask));
         return;
     }
 
@@ -97,17 +97,16 @@ export async function selectTasks(
         return [herebyfile.defaultTask];
     }
 
-    const allTasks = new Map(herebyfile.tasks.map((task) => [task.options.name, task]));
     const tasks: Task[] = [];
 
     for (const name of taskNames) {
-        const task = allTasks.get(name);
+        const task = herebyfile.tasks.get(name);
         if (!task) {
             let message = `Task "${name}" does not exist or is not exported from ${d.simplifyPath(herebyfilePath)}.`;
 
             const { closest, distance } = await import("fastest-levenshtein");
 
-            const candidate = closest(name, [...allTasks.keys()]);
+            const candidate = closest(name, [...herebyfile.tasks.keys()]);
             if (distance(name, candidate) < name.length * 0.4) {
                 message += ` Did you mean "${candidate}"?`;
             }
