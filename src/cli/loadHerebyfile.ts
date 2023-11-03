@@ -30,7 +30,7 @@ export async function findHerebyfile(dir: string): Promise<string> {
             return candidate;
         }
         if (entries.includes("package.json")) {
-            break;
+            break; // TODO: Is this actually desirable? What about monorepos?
         }
     }
 
