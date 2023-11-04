@@ -15,7 +15,7 @@ function isHerebyfile(p: string) {
 export function findHerebyfile(dir: string): string {
     const root = path.parse(dir).root;
 
-    for (; dir !== root; dir = path.dirname(dir)) {
+    while (true) {
         const entries = fs.readdirSync(dir);
         const matching = entries.filter(isHerebyfile);
         if (matching.length > 1) {
@@ -32,6 +32,9 @@ export function findHerebyfile(dir: string): string {
         if (entries.includes("package.json")) {
             break; // TODO: Is this actually desirable? What about monorepos?
         }
+
+        if (dir === root) break;
+        dir = path.dirname(dir);
     }
 
     throw new UserError("Unable to find Herebyfile.");
