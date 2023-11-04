@@ -12,18 +12,18 @@ function isHerebyfile(p: string) {
     return p === "herebyfile.mjs" || p === "herebyfile.js";
 }
 
-export async function findHerebyfile(dir: string): Promise<string> {
+export function findHerebyfile(dir: string): string {
     const root = path.parse(dir).root;
 
     for (; dir !== root; dir = path.dirname(dir)) {
-        const entries = await fs.promises.readdir(dir);
+        const entries = fs.readdirSync(dir);
         const matching = entries.filter(isHerebyfile);
         if (matching.length > 1) {
             throw new UserError(`Found more than one Herebyfile: ${matching.join(", ")}`);
         }
         if (matching.length === 1) {
             const candidate = path.join(dir, matching[0]);
-            const stat = await fs.promises.stat(candidate);
+            const stat = fs.statSync(candidate);
             if (!stat.isFile()) {
                 throw new UserError(`${matching[0]} is not a file.`);
             }

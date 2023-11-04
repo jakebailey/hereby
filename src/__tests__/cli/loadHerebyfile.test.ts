@@ -64,34 +64,34 @@ test("findHerebyfile", async (t) => {
     await fs.promises.writeFile(path.join(packageRoot, "package.json"), "{}");
     await fs.promises.writeFile(expectedHerebyFile, "export {}");
 
-    await t.throwsAsync(async () => await findHerebyfile(dir), {
+    t.throws(() => findHerebyfile(dir), {
         instanceOf: UserError,
         message: "Unable to find Herebyfile.",
     });
 
-    await t.throwsAsync(async () => await findHerebyfile(path.join(dir, "source")), {
+    t.throws(() => findHerebyfile(path.join(dir, "source")), {
         instanceOf: UserError,
         message: "Unable to find Herebyfile.",
     });
 
-    await t.throwsAsync(async () => await findHerebyfile(packageRoot), {
+    t.throws(() => findHerebyfile(packageRoot), {
         instanceOf: UserError,
         message: "Unable to find Herebyfile.",
     });
 
-    t.is(await findHerebyfile(deepest), expectedHerebyFile);
-    t.is(await findHerebyfile(src), expectedHerebyFile);
+    t.is(findHerebyfile(deepest), expectedHerebyFile);
+    t.is(findHerebyfile(src), expectedHerebyFile);
 
     await fs.promises.mkdir(path.join(deepest, "Herebyfile.js"));
 
-    await t.throwsAsync(async () => await findHerebyfile(deepest), {
+    t.throws(() => findHerebyfile(deepest), {
         instanceOf: UserError,
         message: "Herebyfile.js is not a file.",
     });
 
     await fs.promises.writeFile(unexpectedHerebyFile, "export {}");
 
-    await t.throwsAsync(async () => await findHerebyfile(src), {
+    t.throws(() => findHerebyfile(src), {
         instanceOf: UserError,
         message: "Found more than one Herebyfile: Herebyfile.js, Herebyfile.mjs",
     });
