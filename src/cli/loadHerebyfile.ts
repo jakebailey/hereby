@@ -7,17 +7,14 @@ import pc from "picocolors";
 import { Task } from "../index.js";
 import { UserError } from "./utils.js";
 
-function isHerebyfile(p: string) {
-    p = p.toLowerCase();
-    return p === "herebyfile.mjs" || p === "herebyfile.js";
-}
+const herebyfileRegExp = /^herebyfile\.m?js$/i;
 
 export function findHerebyfile(dir: string): string {
     const root = path.parse(dir).root;
 
     while (true) {
         const entries = fs.readdirSync(dir);
-        const matching = entries.filter(isHerebyfile);
+        const matching = entries.filter((e) => herebyfileRegExp.test(e));
         if (matching.length > 1) {
             throw new UserError(`Found more than one Herebyfile: ${matching.join(", ")}`);
         }
