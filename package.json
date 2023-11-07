@@ -50,7 +50,7 @@
         "@ava/typescript": "^3.0.1",
         "@changesets/cli": "^2.26.2",
         "@tsconfig/node12": "^12.1.0",
-        "@types/command-line-usage": "^5.0.3",
+        "@types/command-line-usage": "^5.0.4",
         "@types/minimist": "^1.2.4",
         "@types/node": "^20.8.10",
         "@types/tmp": "^0.2.5",
