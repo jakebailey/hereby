@@ -64,7 +64,7 @@
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "eslint-plugin-unicorn": "^49.0.0",
         "execa": "^6.1.0",
-        "moq.ts": "^10.0.8",
+        "moq.ts": "^10.1.0",
         "rimraf": "^5.0.5",
         "tmp": "^0.2.1",
         "typescript": "^5.2.2"
