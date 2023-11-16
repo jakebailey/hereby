@@ -11,7 +11,7 @@
             "matchPackageNames": ["node"],
             "matchManagers": ["npm"],
             "matchDepTypes": ["engines"],
-            "dependencyDashboardApproval": true
+            "enabled": false
         },
         {
             "matchPackageNames": ["import-meta-resolve"],
