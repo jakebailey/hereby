@@ -48,7 +48,7 @@
     },
     "devDependencies": {
         "@ava/typescript": "^3.0.1",
-        "@changesets/cli": "^2.26.2",
+        "@changesets/cli": "^2.27.1",
         "@tsconfig/node12": "^12.1.0",
         "@types/command-line-usage": "^5.0.4",
         "@types/minimist": "^1.2.5",
