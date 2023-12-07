@@ -48,18 +48,18 @@
     },
     "devDependencies": {
         "@ava/typescript": "^3.0.1",
-        "@changesets/cli": "^2.26.2",
+        "@changesets/cli": "^2.27.1",
         "@tsconfig/node12": "^12.1.0",
         "@types/command-line-usage": "^5.0.4",
         "@types/minimist": "^1.2.5",
-        "@types/node": "^20.9.4",
+        "@types/node": "^20.10.4",
         "@types/tmp": "^0.2.6",
-        "@typescript-eslint/eslint-plugin": "^6.12.0",
-        "@typescript-eslint/parser": "^6.12.0",
+        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/parser": "^6.13.2",
         "ava": "~5.0.1",
         "c8": "^8.0.1",
-        "dprint": "^0.43.0",
-        "eslint": "^8.54.0",
+        "dprint": "^0.43.2",
+        "eslint": "^8.55.0",
         "eslint-plugin-ava": "^14.0.0",
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "eslint-plugin-unicorn": "^49.0.0",
@@ -67,7 +67,7 @@
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.5",
         "tmp": "^0.2.1",
-        "typescript": "^5.3.2"
+        "typescript": "^5.3.3"
     },
     "overrides": {
         "ava": {
