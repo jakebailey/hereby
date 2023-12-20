@@ -73,7 +73,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     // exported and therefore would not be seen by the above loop.
     checkTaskInvariants(exportedTasks);
 
-    const tasks = new Map([...exportedTasks.values()].map((task) => [task.options.name, task]));
+    const tasks = new Map([...exportedTasks].map((task) => [task.options.name, task]));
 
     return { tasks, defaultTask };
 }
