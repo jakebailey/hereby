@@ -11,20 +11,19 @@ const herebyfileRegExp = /^herebyfile\.m?js$/i;
 
 export function findHerebyfile(dir: string): string {
     const result = findUp(dir, (dir) => {
-        const entries = fs.readdirSync(dir);
-        const matching = entries.filter((e) => herebyfileRegExp.test(e));
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        const matching = entries.filter((e) => herebyfileRegExp.test(e.name));
         if (matching.length > 1) {
-            throw new UserError(`Found more than one Herebyfile: ${matching.join(", ")}`);
+            throw new UserError(`Found more than one Herebyfile: ${matching.map((e) => e.name).join(", ")}`);
         }
         if (matching.length === 1) {
-            const candidate = path.join(dir, matching[0]);
-            const stat = fs.statSync(candidate);
-            if (!stat.isFile()) {
-                throw new UserError(`${matching[0]} is not a file.`);
+            const candidate = matching[0];
+            if (!candidate.isFile()) {
+                throw new UserError(`${candidate.name} is not a file.`);
             }
-            return candidate;
+            return path.join(dir, candidate.name);
         }
-        if (entries.includes("package.json")) {
+        if (entries.some((e) => e.name === "package.json")) {
             return false; // TODO: Is this actually desirable? What about monorepos?
         }
         return undefined;
