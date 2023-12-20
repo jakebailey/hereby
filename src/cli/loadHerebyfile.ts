@@ -5,14 +5,12 @@ import { pathToFileURL } from "node:url";
 import pc from "picocolors";
 
 import { Task } from "../index.js";
-import { UserError } from "./utils.js";
+import { findUp, UserError } from "./utils.js";
 
 const herebyfileRegExp = /^herebyfile\.m?js$/i;
 
 export function findHerebyfile(dir: string): string {
-    const root = path.parse(dir).root;
-
-    while (true) {
+    const result = findUp(dir, (dir) => {
         const entries = fs.readdirSync(dir);
         const matching = entries.filter((e) => herebyfileRegExp.test(e));
         if (matching.length > 1) {
@@ -27,11 +25,13 @@ export function findHerebyfile(dir: string): string {
             return candidate;
         }
         if (entries.includes("package.json")) {
-            break; // TODO: Is this actually desirable? What about monorepos?
+            return false; // TODO: Is this actually desirable? What about monorepos?
         }
+        return undefined;
+    });
 
-        if (dir === root) break;
-        dir = path.dirname(dir);
+    if (result) {
+        return result;
     }
 
     throw new UserError("Unable to find Herebyfile.");

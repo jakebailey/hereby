@@ -25,6 +25,19 @@ export function simplifyPath(p: string) {
     return p;
 }
 
+export function findUp<T>(p: string, predicate: (dir: string) => T | undefined): T | undefined {
+    const root = path.parse(p).root;
+
+    while (true) {
+        const result = predicate(p);
+        if (result !== undefined) return result;
+        if (p === root) break;
+        p = path.dirname(p);
+    }
+
+    return undefined;
+}
+
 /**
  * UserError is a special error that, when caught in the CLI will be printed
  * as a message only, without stacktrace. Use this instead of process.exit.
