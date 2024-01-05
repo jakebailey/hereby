@@ -1,5 +1,0 @@
----
-"hereby": patch
----
-
-Minor refactors
