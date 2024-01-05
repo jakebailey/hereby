@@ -5,6 +5,7 @@ module.exports = {
         if (dependencyName === "execa") return "patch"; // Trying to support Node 12.
         if (dependencyName === "command-line-usage") return "minor"; // Package got big.
         if (dependencyName === "import-meta-resolve") return "minor"; // For old versions of node.
+        if (dependencyName === "c8") return "minor"; // For old versions of node.
         if (major === "0") return "minor";
         return "latest";
     },
