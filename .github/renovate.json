@@ -38,6 +38,10 @@
             "allowedVersions": "^6"
         },
         {
+            "matchPackageNames": ["c8"],
+            "allowedVersions": "^8"
+        },
+        {
             "matchManagers": ["github-actions"],
             "groupName": "github actions",
             "groupSlug": "github-actions"
