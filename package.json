@@ -44,7 +44,7 @@
         "import-meta-resolve": "^2.2.2",
         "minimist": "^1.2.8",
         "picocolors": "^1.0.0",
-        "pretty-ms": "^8.0.0"
+        "pretty-ms": "^9.0.0"
     },
     "devDependencies": {
         "@ava/typescript": "^3.0.1",
