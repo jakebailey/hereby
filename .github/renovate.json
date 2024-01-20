@@ -42,6 +42,10 @@
             "allowedVersions": "^8"
         },
         {
+            "matchPackageNames": ["pretty-ms"],
+            "allowedVersions": "^8"
+        },
+        {
             "matchManagers": ["github-actions"],
             "groupName": "github actions",
             "groupSlug": "github-actions"
