@@ -6,6 +6,7 @@ module.exports = {
         if (dependencyName === "command-line-usage") return "minor"; // Package got big.
         if (dependencyName === "import-meta-resolve") return "minor"; // For old versions of node.
         if (dependencyName === "c8") return "minor"; // For old versions of node.
+        if (dependencyName === "pretty-ms") return "minor"; // For old versions of node.
         if (major === "0") return "minor";
         return "latest";
     },
