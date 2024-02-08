@@ -81,20 +81,54 @@ async function mainWorker(d: D) {
     }
 }
 
+declare const process: {
+    env: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        npm_lifecycle_event?: string;
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        npm_package_scripts_test?: string;
+    };
+};
+
+function detectTaskNameFromNpm(): string | undefined {
+    if (process === undefined) {
+        return undefined;
+    }
+
+    /**
+     * the `npm_lifecycle_event` environment variable is set to whichever stage of the cycle is being executed.
+     * ref: https://docs.npmjs.com/cli/v10/using-npm/scripts#packagejson-vars
+     */
+    if (process.env["npm_lifecycle_event"]) {
+        return process.env["npm_lifecycle_event"];
+    }
+
+    return undefined;
+}
+
 // Exported for testing.
 export async function selectTasks(
-    d: Pick<D, "simplifyPath">,
+    d: Pick<D, "simplifyPath" | "log">,
     herebyfile: Herebyfile,
     herebyfilePath: string,
     taskNames: string[],
 ): Promise<Task[]> {
     if (taskNames.length === 0) {
-        if (!herebyfile.defaultTask) {
-            throw new UserError(
-                `No default task has been exported from ${d.simplifyPath(herebyfilePath)}; please specify a task name.`,
-            );
+        if (herebyfile.defaultTask) {
+            return [herebyfile.defaultTask];
+        } else {
+            const npmTaskName = detectTaskNameFromNpm();
+            if (npmTaskName) {
+                d.log(`Detected npm task: ${pc.blue(npmTaskName)}`);
+                taskNames.push(npmTaskName);
+            } else {
+                throw new UserError(
+                    `No default task has been exported from ${
+                        d.simplifyPath(herebyfilePath)
+                    }; please specify a task name.`,
+                );
+            }
         }
-        return [herebyfile.defaultTask];
     }
 
     const tasks: Task[] = [];
