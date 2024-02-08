@@ -73,3 +73,27 @@ jobs:
       - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
       - run: npm ci
       - run: npx dprint check
+
+  required:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - test
+      - eslint
+      - dprint
+
+    steps:
+      - name: Check required jobs
+        run: |
+          results=(
+            "${{ needs.test.result }}"
+            "${{ needs.eslint.result }}"
+            "${{ needs.dprint.result }}"
+          )
+
+          for result in "${results[@]}"; do
+            if [[ "$result" != "success" ]]; then
+              echo "One or more jobs failed"
+              exit 1
+            fi
+          done
