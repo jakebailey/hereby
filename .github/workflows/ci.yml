@@ -86,8 +86,8 @@ jobs:
         run: |
           results=(
             "${{ needs.test.result }}"
-            "${{ needs.eslint.result }}"
-            "${{ needs.dprint.result }}"
+            "${{ github.event_name != 'schedule' && needs.eslint.result || 'success' }}"
+            "${{ github.event_name != 'schedule' && needs.dprint.result || 'success' }}"
           )
 
           for result in "${results[@]}"; do
