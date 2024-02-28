@@ -10,4 +10,10 @@ module.exports = {
         if (major === "0") return "minor";
         return "latest";
     },
+    reject: (name, semver) => {
+        if (name === "tmp") {
+            return true;
+        }
+        return false;
+    },
 };

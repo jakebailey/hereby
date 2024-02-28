@@ -46,6 +46,10 @@
             "allowedVersions": "^8"
         },
         {
+            "matchPackageNames": ["tmp"],
+            "allowedVersions": "0.2.1"
+        },
+        {
             "matchManagers": ["github-actions"],
             "groupName": "github actions",
             "groupSlug": "github-actions"
