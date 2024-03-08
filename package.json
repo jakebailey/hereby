@@ -52,10 +52,10 @@
         "@tsconfig/node12": "^12.1.1",
         "@types/command-line-usage": "^5.0.4",
         "@types/minimist": "^1.2.5",
-        "@types/node": "^20.11.21",
+        "@types/node": "^20.11.25",
         "@types/tmp": "^0.2.6",
-        "@typescript-eslint/eslint-plugin": "^7.1.0",
-        "@typescript-eslint/parser": "^7.1.0",
+        "@typescript-eslint/eslint-plugin": "^7.1.1",
+        "@typescript-eslint/parser": "^7.1.1",
         "ava": "~5.0.1",
         "c8": "^8.0.1",
         "dprint": "^0.45.0",
@@ -67,7 +67,7 @@
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.5",
         "tmp": "0.2.1",
-        "typescript": "^5.3.3"
+        "typescript": "^5.4.2"
     },
     "overrides": {
         "ava": {
