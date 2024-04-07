@@ -49,25 +49,25 @@
     "devDependencies": {
         "@ava/typescript": "^3.0.1",
         "@changesets/cli": "^2.27.1",
-        "@tsconfig/node12": "^12.1.1",
+        "@tsconfig/node12": "^12.1.3",
         "@types/command-line-usage": "^5.0.4",
         "@types/minimist": "^1.2.5",
-        "@types/node": "^20.11.30",
+        "@types/node": "^20.12.5",
         "@types/tmp": "^0.2.6",
-        "@typescript-eslint/eslint-plugin": "^7.4.0",
-        "@typescript-eslint/parser": "^7.4.0",
-        "ava": "~5.0.1",
+        "@typescript-eslint/eslint-plugin": "^7.5.0",
+        "@typescript-eslint/parser": "^7.5.0",
+        "ava": "~5.3.1",
         "c8": "^8.0.1",
-        "dprint": "^0.45.0",
+        "dprint": "^0.45.1",
         "eslint": "^8.57.0",
         "eslint-plugin-ava": "^14.0.0",
         "eslint-plugin-simple-import-sort": "^12.0.0",
-        "eslint-plugin-unicorn": "^51.0.1",
+        "eslint-plugin-unicorn": "^52.0.0",
         "execa": "^6.1.0",
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.5",
         "tmp": "0.2.1",
-        "typescript": "^5.4.3"
+        "typescript": "^5.4.4"
     },
     "overrides": {
         "ava": {
