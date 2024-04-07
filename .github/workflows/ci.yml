@@ -27,14 +27,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - run: |
+          node --version
+          npm --version
+          corepack enable npm
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - run: |
+          node --version
+          npm --version
 
       - run: npm ci
         if: ${{ github.event_name != 'schedule' }}
 
       - shell: bash
         run: |
-          npm install -g $(jq -r '.packageManager' < package.json)
           rm package-lock.json
           npm i
         if: ${{ github.event_name == 'schedule' }}
@@ -44,6 +50,9 @@ jobs:
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: ${{ matrix.node-version }}
+      - run: |
+          node --version
+          npm --version
 
       - run: npm run coverage
       - uses: codecov/codecov-action@c16abc29c95fcf9174b58eb7e1abf4c866893bc8 # v4.1.1
