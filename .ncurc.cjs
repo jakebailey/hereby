@@ -7,6 +7,7 @@ module.exports = {
         if (dependencyName === "import-meta-resolve") return "minor"; // For old versions of node.
         if (dependencyName === "c8") return "minor"; // For old versions of node.
         if (dependencyName === "pretty-ms") return "minor"; // For old versions of node.
+        if (dependencyName === "eslint") return "minor";
         if (major === "0") return "minor";
         return "latest";
     },
