@@ -20,6 +20,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [12, 14, 16, 18, 20, 21]
+        exclude:
+          # macos-latest is now ARM, so exclude Node 12/14
+          - os: macos-latest
+            node-version: 12
+          - os: macos-latest
+            node-version: 14
     runs-on: ${{ matrix.os }}
     env:
       OS: ${{ matrix.os }}
