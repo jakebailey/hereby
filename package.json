@@ -65,7 +65,7 @@
         "eslint-plugin-unicorn": "^52.0.0",
         "execa": "^6.1.0",
         "moq.ts": "^10.1.0",
-        "rimraf": "^5.0.5",
+        "rimraf": "^5.0.7",
         "tmp": "0.2.1",
         "typescript": "^5.4.5"
     },
