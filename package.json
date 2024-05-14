@@ -43,7 +43,7 @@
         "fastest-levenshtein": "^1.0.16",
         "import-meta-resolve": "^2.2.2",
         "minimist": "^1.2.8",
-        "picocolors": "^1.0.0",
+        "picocolors": "^1.0.1",
         "pretty-ms": "^8.0.0"
     },
     "devDependencies": {
