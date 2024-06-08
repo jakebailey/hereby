@@ -8,6 +8,7 @@ module.exports = {
         if (dependencyName === "c8") return "minor"; // For old versions of node.
         if (dependencyName === "pretty-ms") return "minor"; // For old versions of node.
         if (dependencyName === "eslint") return "minor";
+        if (dependencyName === "eslint-plugin-ava") return "minor";
         if (major === "0") return "minor";
         return "latest";
     },
