@@ -67,7 +67,7 @@
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.7",
         "tmp": "0.2.1",
-        "typescript": "^5.4.5"
+        "typescript": "^5.5.2"
     },
     "overrides": {
         "ava": {
