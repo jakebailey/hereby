@@ -61,7 +61,7 @@
         "dprint": "^0.46.3",
         "eslint": "^8.57.0",
         "eslint-plugin-ava": "^14.0.0",
-        "eslint-plugin-simple-import-sort": "^12.1.0",
+        "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-unicorn": "^54.0.0",
         "execa": "^6.1.0",
         "moq.ts": "^10.1.0",
