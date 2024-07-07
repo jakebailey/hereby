@@ -24,7 +24,7 @@ export function simplifyPath(p: string) {
     return p;
 }
 
-export function findUp<T>(p: string, predicate: (dir: string) => T | undefined): T | undefined {
+export function findUp<T extends {}>(p: string, predicate: (dir: string) => T | undefined): T | undefined {
     const root = path.parse(p).root;
 
     while (true) {
@@ -51,7 +51,7 @@ export interface D {
     readonly cwd: () => string;
     readonly chdir: (directory: string) => void;
     readonly simplifyPath: (p: string) => string;
-    readonly argv: string[];
+    readonly argv: readonly string[];
     readonly setExitCode: (code: number) => void;
     readonly version: () => string;
 
