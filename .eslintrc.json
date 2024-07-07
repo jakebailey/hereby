@@ -2,6 +2,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict-type-checked",
         "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:ava/recommended",
         "plugin:unicorn/recommended"
@@ -40,6 +41,7 @@
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
@@ -97,6 +99,9 @@
                 }
             }
         ],
+        "@typescript-eslint/no-unnecessary-condition": ["error", {
+            "allowConstantLoopConditions": true
+        }],
         "unicorn/catch-error-name": "off",
         "unicorn/filename-case": "off",
         "unicorn/no-array-callback-reference": "off",

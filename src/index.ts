@@ -53,6 +53,8 @@ export class Task {
         // Runtime typecheck; consumers of hereby may not have enabled
         // typechecking, so this is helpful.
 
+        /* eslint-disable @typescript-eslint/no-unnecessary-condition */
+
         if (typeof options.name !== "string") {
             throw new TypeError("Task name is not a string.");
         }
@@ -75,6 +77,8 @@ export class Task {
         if (typeof options.run !== "function" && options.run !== undefined) {
             throw new TypeError("Task run is not a function or undefined.");
         }
+
+        /* eslint-enable @typescript-eslint/no-unnecessary-condition */
 
         // Non-type checks.
 

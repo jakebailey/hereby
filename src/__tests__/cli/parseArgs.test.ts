@@ -8,7 +8,7 @@ const macro = test.macro<[string[]]>({
     },
     title(providedTitle, input) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return providedTitle || `${input.join(" ")}` || "no args";
+        return providedTitle || input.join(" ") || "no args";
     },
 });
 
