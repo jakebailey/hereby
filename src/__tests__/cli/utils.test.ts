@@ -14,6 +14,7 @@ const macro = test.macro<[string, string]>({
         t.is(normalizeSlashes(simplifyPath(input)), normalizeSlashes(expected));
     },
     title(providedTitle, input) {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return providedTitle || input;
     },
 });

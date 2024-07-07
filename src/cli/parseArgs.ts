@@ -26,7 +26,7 @@ export function parseArgs(argv: string[]): CLIOptions {
 
     return {
         help: options["help"],
-        run: options["_"],
+        run: options._,
         herebyfile: options["herebyfile"],
         printTasks: options["tasks"] ? "normal" : (options["tasks-simple"] ? "simple" : undefined),
         version: options["version"],

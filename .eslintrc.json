@@ -2,6 +2,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:ava/recommended",
         "plugin:unicorn/recommended"
     ],
@@ -104,8 +105,11 @@
         "unicorn/prefer-top-level-await": "off", // Reenable once Node 12 is dropped.
         "unicorn/prevent-abbreviations": "off",
         "unicorn/switch-case-braces": "off",
-        "unicorn/prefer-string-replace-all": 0 // Bad suggestion for old targets
+        "unicorn/prefer-string-replace-all": "off" // Bad suggestion for old targets
     },
-    "overrides": [{ "files": ["Herebyfile.*", "**/__fixtures__/**"], "rules": { "no-restricted-globals": 0 } }],
+    "overrides": [
+        { "files": ["Herebyfile.*", "**/__fixtures__/**"], "rules": { "no-restricted-globals": "off" } },
+        { "files": ["**/__tests__/**"], "rules": { "@typescript-eslint/no-empty-function": "off" } }
+    ],
     "ignorePatterns": ["**/dist/**", "**/node_modules/**", "bin/**", "coverage/**"]
 }
