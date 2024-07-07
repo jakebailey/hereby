@@ -288,7 +288,7 @@ test("main print version", async (t) => {
         .setup((d) => d.argv)
         .returns(["node", "cli.js", "--version"])
         .setup((d) => d.version)
-        .returns(async () => version)
+        .returns(() => version)
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)

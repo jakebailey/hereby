@@ -46,7 +46,7 @@ async function mainWorker(d: D) {
     }
 
     if (args.version) {
-        d.log(`hereby ${await d.version()}`);
+        d.log(`hereby ${d.version()}`);
         return;
     }
 

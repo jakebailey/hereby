@@ -61,7 +61,7 @@ export interface D {
     readonly simplifyPath: (p: string) => string;
     readonly argv: string[];
     readonly setExitCode: (code: number) => void;
-    readonly version: () => Promise<string>;
+    readonly version: () => string;
 
     // Third-party package imports.
     readonly resolve: (specifier: string, parent: string) => Promise<string>;
@@ -84,9 +84,9 @@ export async function real(): Promise<D> {
         setExitCode: (code) => {
             process.exitCode = code;
         },
-        version: async () => {
+        version: () => {
             const packageJsonURL = new URL("../../package.json", import.meta.url);
-            const packageJson = await fs.promises.readFile(packageJsonURL, "utf8");
+            const packageJson = fs.readFileSync(packageJsonURL, "utf8");
             return JSON.parse(packageJson).version;
         },
         resolve: async (specifier, parent) => {
