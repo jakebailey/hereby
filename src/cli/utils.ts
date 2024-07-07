@@ -43,14 +43,6 @@ export function findUp<T>(p: string, predicate: (dir: string) => T | undefined):
  */
 export class UserError extends Error {}
 
-/**
- * When thrown, ExitCodeError causes the process to exit with a specific error code,
- * without logging anything.
- */
-export class ExitCodeError {
-    constructor(public exitCode: number, public reason?: any) {}
-}
-
 /** Contains all dependencies, for mocking. */
 export interface D {
     // Globals.

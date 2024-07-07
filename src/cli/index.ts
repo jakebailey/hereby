@@ -9,16 +9,12 @@ import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfil
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { type D, ExitCodeError, UserError } from "./utils.js";
+import { type D, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {
         await mainWorker(d);
     } catch (e) {
-        if (e instanceof ExitCodeError) {
-            d.setExitCode(e.exitCode);
-            return;
-        }
         if (e instanceof UserError) {
             d.error(`${pc.red("Error")}: ${e.message}`);
         } else if (types.isNativeError(e) && e.stack) {
@@ -69,12 +65,12 @@ async function mainWorker(d: D) {
     try {
         const runner = new Runner(d);
         await runner.runTasks(...tasks);
-    } catch (e) {
+    } catch {
         errored = true;
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,
         // so we don't end up with an unflushed output.
-        throw new ExitCodeError(1, e);
+        d.setExitCode(1);
     } finally {
         const took = Date.now() - start;
         d.log(`Completed ${taskNames}${errored ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);

@@ -3,7 +3,7 @@ import path from "node:path";
 
 import test from "ava";
 
-import { ExitCodeError, real, simplifyPath, UserError } from "../../cli/utils.js";
+import { real, simplifyPath, UserError } from "../../cli/utils.js";
 
 function normalizeSlashes(p: string) {
     return p.replace(/\\/g, "/");
@@ -38,9 +38,4 @@ test.serial("real dependencies", async (t) => {
 test("UserError", (t) => {
     const e = new UserError("message");
     t.is(e.message, "message");
-});
-
-test("ExitCodeError", (t) => {
-    const e = new ExitCodeError(1);
-    t.is(e.exitCode, 1);
 });
