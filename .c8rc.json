@@ -1,3 +1,5 @@
 {
-    "reporter": ["v8", "lcovonly", "codecov"]
+    "reporter": ["v8", "lcovonly", "codecov", "console-details"],
+    "exclude": ["**/__tests__/**", "**/*.d.ts"],
+    "all": true
 }
