@@ -25,7 +25,7 @@
         "no-inner-declarations": "off",
         "no-undef": "off",
         "no-unused-vars": "off",
-        "no-restricted-globals": ["error", "console", "process"],
+        "no-restricted-globals": ["error", "console", "process", "Date"],
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error",
         "@typescript-eslint/no-import-type-side-effects": "error",
