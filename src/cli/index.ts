@@ -37,7 +37,7 @@ async function mainWorker(d: D) {
     let herebyfilePath = args.herebyfile ?? findHerebyfile(d.cwd());
     herebyfilePath = path.resolve(d.cwd(), herebyfilePath);
 
-    if (await reexec(d, herebyfilePath)) {
+    if (await reexec(herebyfilePath)) {
         return;
     }
 

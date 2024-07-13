@@ -56,7 +56,6 @@ export interface D {
     readonly version: () => string;
 
     // Third-party package imports.
-    readonly resolve: (specifier: string, parent: string) => Promise<string>;
     readonly prettyMilliseconds: (milliseconds: number) => string;
 }
 
@@ -80,10 +79,6 @@ export async function real(): Promise<D> {
             const packageJsonURL = new URL("../../package.json", import.meta.url);
             const packageJson = fs.readFileSync(packageJsonURL, "utf8");
             return JSON.parse(packageJson).version;
-        },
-        resolve: async (specifier, parent) => {
-            const { resolve } = await import("import-meta-resolve");
-            return resolve(specifier, parent);
         },
         prettyMilliseconds,
     };

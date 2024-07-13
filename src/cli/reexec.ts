@@ -1,17 +1,21 @@
-import { pathToFileURL } from "node:url";
+import fs from "node:fs";
+import path from "node:path";
+import url from "node:url";
 
-import { type D, UserError } from "./utils.js";
+import { findUp, UserError } from "./utils.js";
 
-export type ReExecD = Pick<D, "error" | "resolve">;
+const expectedCliPath = path.join("node_modules", "hereby", "dist", "cli.js");
 
-const cliExportName = "hereby/cli";
+const __filename = url.fileURLToPath(new URL(import.meta.url));
+const __dirname = path.dirname(__filename);
+const thisCLI = path.resolve(__dirname, "..", "cli.js");
 
 /**
  * Checks to see if we need to re-exec another version of hereby.
  * If this function returns true, the caller should return immediately
  * and do no further work.
  */
-export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolean> {
+export async function reexec(herebyfilePath: string): Promise<boolean> {
     // If hereby is installed globally, but run against a Herebyfile in some
     // other package, that Herebyfile's import will resolve to a different
     // installation of the hereby package. There's no guarantee that the two
@@ -21,19 +25,30 @@ export async function reexec(d: ReExecD, herebyfilePath: string): Promise<boolea
     // (which won't work in ESM anyway), instead opt to figure out the location
     // of hereby as imported by the Herebyfile, and then "reexec" it by importing.
 
-    const thisCLI = await d.resolve(cliExportName, import.meta.url);
-    let otherCLI: string;
+    const otherCLI = findUp(herebyfilePath, (dir) => {
+        const p = path.resolve(dir, expectedCliPath);
+        if (fs.existsSync(p)) {
+            return p;
+        }
+        try {
+            const packageJson = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf8"));
+            if (packageJson.name === "hereby") {
+                return path.resolve(dir, "dist", "cli.js");
+            }
+        } catch {
+            // Ignore.
+        }
+        return undefined;
+    });
 
-    try {
-        otherCLI = await d.resolve(cliExportName, pathToFileURL(herebyfilePath).toString());
-    } catch {
+    if (!otherCLI) {
         throw new UserError("Unable to find hereby; ensure hereby is installed in your package.");
     }
 
-    if (thisCLI === otherCLI) {
+    if (fs.realpathSync(thisCLI) === fs.realpathSync(otherCLI)) {
         return false;
     }
 
-    await import(otherCLI);
+    await import(url.pathToFileURL(otherCLI).toString());
     return true;
 }

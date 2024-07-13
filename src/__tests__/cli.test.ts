@@ -26,21 +26,16 @@ test("run cli reexec", async (t) => {
     t.teardown(tmpdir.removeCallback);
     const dir = tmpdir.name;
 
-    const fakeHereby = path.join(dir, "node_modules", "hereby");
+    await fs.promises.writeFile(path.join(dir, "Herebyfile.mjs"), "export {};");
+
+    const { exitCode, stderr } = await execaNode(cliPath, { cwd: dir, reject: false });
+    t.is(exitCode, 1);
+    t.assert(stderr.includes("Unable to find hereby; ensure hereby is installed in your package."));
+
+    const fakeHereby = path.join(dir, "node_modules", "hereby", "dist");
     await fs.promises.mkdir(fakeHereby, { recursive: true });
 
-    await fs.promises.writeFile(
-        path.join(fakeHereby, "package.json"),
-        JSON.stringify({
-            name: "hereby",
-            type: "module",
-            exports: {
-                "./cli": "./fake.js",
-            },
-        }),
-    );
-
-    await fs.promises.writeFile(path.join(fakeHereby, "fake.js"), "console.log('It works!')");
+    await fs.promises.writeFile(path.join(fakeHereby, "cli.js"), "console.log('It works!')");
 
     await fs.promises.writeFile(
         path.join(dir, "package.json"),
@@ -49,8 +44,6 @@ test("run cli reexec", async (t) => {
             type: "module",
         }),
     );
-
-    await fs.promises.writeFile(path.join(dir, "Herebyfile.mjs"), "export {};");
 
     const { stdout } = await execaNode(cliPath, { cwd: dir });
     t.is(stdout, "It works!");
