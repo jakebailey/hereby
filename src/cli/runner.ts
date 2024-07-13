@@ -1,3 +1,5 @@
+import { performance } from "node:perf_hooks";
+
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
@@ -58,7 +60,7 @@ export class Runner {
     }
 
     protected onTaskStart(task: Task): void {
-        this._startTimes.set(task, Date.now());
+        this._startTimes.set(task, performance.now());
 
         if (this._errored) {
             return; // Skip logging.
@@ -72,7 +74,7 @@ export class Runner {
             return; // Skip logging.
         }
 
-        const took = Date.now() - this._startTimes.get(task)!;
+        const took = performance.now() - this._startTimes.get(task)!;
         this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
     }
 
@@ -82,7 +84,7 @@ export class Runner {
         }
 
         this._errored = true;
-        const took = Date.now() - this._startTimes.get(task)!;
+        const took = performance.now() - this._startTimes.get(task)!;
         this._d.error(`Error in ${pc.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
     }
 }
