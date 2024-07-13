@@ -1,0 +1,3 @@
+{
+    "reporter": ["v8", "lcovonly", "codecov"]
+}
