@@ -1,4 +1,5 @@
 import path from "node:path";
+import { performance } from "node:perf_hooks";
 import { types } from "node:util";
 
 import pc from "picocolors";
@@ -59,7 +60,7 @@ async function mainWorker(d: D) {
     const taskNames = tasks.map((task) => pc.blue(task.options.name)).join(", ");
     d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
-    const start = Date.now();
+    const start = performance.now();
 
     let errored = false;
     try {
@@ -72,7 +73,7 @@ async function mainWorker(d: D) {
         // so we don't end up with an unflushed output.
         d.setExitCode(1);
     } finally {
-        const took = Date.now() - start;
+        const took = performance.now() - start;
         d.log(`Completed ${taskNames}${errored ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
     }
 }
