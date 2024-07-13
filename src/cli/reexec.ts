@@ -30,13 +30,13 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
         if (fs.existsSync(p)) {
             return p;
         }
-        try {
-            const packageJson = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf8"));
-            if (packageJson.name === "hereby") {
-                return path.resolve(dir, "dist", "cli.js");
-            }
-        } catch {
-            // Ignore.
+        const packageJsonPath = path.join(dir, "package.json");
+        if (!fs.existsSync(packageJsonPath)) {
+            return undefined;
+        }
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+        if (packageJson.name === "hereby") {
+            return path.resolve(dir, "dist", "cli.js");
         }
         return undefined;
     });
