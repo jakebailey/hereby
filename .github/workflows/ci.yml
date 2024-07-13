@@ -89,6 +89,31 @@ jobs:
       - run: npm ci
       - run: npx dprint check
 
+  check-run:
+    name: Check run
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' }}
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: '*'
+      - run: npm ci
+      - run: npm pack
+
+      - run: npm install -g hereby
+
+      - run: |
+          cd $(mktemp -d)
+          npm init -y
+          npm install ${{ github.workspace }}/*.tgz
+
+          cp ${{ github.workspace }}/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
+
+          hereby --tasks
+        name: Verify that latest hereby can run local hereby
+
   required:
     runs-on: ubuntu-latest
     if: ${{ always() }}
@@ -96,6 +121,7 @@ jobs:
       - test
       - eslint
       - dprint
+      - check-run
 
     steps:
       - name: Check required jobs
@@ -104,6 +130,7 @@ jobs:
             "${{ needs.test.result }}"
             "${{ github.event_name != 'schedule' && needs.eslint.result || 'success' }}"
             "${{ github.event_name != 'schedule' && needs.dprint.result || 'success' }}"
+            "${{ needs.check-run.result }}"
           )
 
           for result in "${results[@]}"; do
