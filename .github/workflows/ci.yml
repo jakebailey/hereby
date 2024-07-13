@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   test:
     strategy:
@@ -103,6 +107,50 @@ jobs:
       - run: npm ci
       - run: npx dprint check
 
+  check-latest:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    name: Check latest on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    if: ${{ github.event_name != 'schedule' }}
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: '*'
+      - run: npm ci
+      - run: npm pack
+
+      - run: npm install -g hereby
+
+      - run: |
+          set -exo pipefail
+          WORKSPACE=$PWD
+          cd $(mktemp -d)
+          npm init -y
+          npm install $WORKSPACE/*.tgz
+
+          cp $WORKSPACE/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
+
+          hereby --tasks
+        name: Verify that latest hereby can run local hereby
+
+      - run: |
+          set -exo pipefail
+          WORKSPACE=$PWD
+          cd $(mktemp -d)
+          npm init -y
+          npm install hereby
+
+          cp $WORKSPACE/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
+
+          node $WORKSPACE/bin/hereby.js --tasks
+        name: Verify that local hereby can run latest hereby
+
   required:
     runs-on: ubuntu-latest
     if: ${{ always() }}
@@ -110,6 +158,7 @@ jobs:
       - test
       - eslint
       - dprint
+      - check-latest
 
     steps:
       - name: Check required jobs
@@ -118,6 +167,7 @@ jobs:
             "${{ needs.test.result }}"
             "${{ github.event_name != 'schedule' && needs.eslint.result || 'success' }}"
             "${{ github.event_name != 'schedule' && needs.dprint.result || 'success' }}"
+            "${{ needs.check-latest.result }}"
           )
 
           for result in "${results[@]}"; do
