@@ -50,6 +50,17 @@ test("no exports", async (t) => {
     );
 });
 
+test("no tasks", async (t) => {
+    const herebyfilePath = path.join(fixturesPath, "notTask.mjs");
+
+    await t.throwsAsync(
+        async () => {
+            await loadHerebyfile(herebyfilePath);
+        },
+        { instanceOf: UserError, message: "No tasks found. Did you forget to export your tasks?" },
+    );
+});
+
 test("findHerebyfile", async (t) => {
     const tmpdir = tmp.dirSync({ unsafeCleanup: true });
     t.teardown(tmpdir.removeCallback);
