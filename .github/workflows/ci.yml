@@ -19,17 +19,25 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [12, 14, 16, 18, 20, 22]
+        node-version: [14, 16, 18, 20, 22]
+        coverage: [true]
+        include:
+          - os: ubuntu-latest
+            node-version: 12
+            coverage: false
+          - os: windows-latest
+            node-version: 12
+            coverage: false
         exclude:
           # macos-latest is now ARM, so exclude Node 12/14
-          - os: macos-latest
-            node-version: 12
           - os: macos-latest
             node-version: 14
     runs-on: ${{ matrix.os }}
     env:
       OS: ${{ matrix.os }}
       NODE: ${{ matrix.node-version }}
+
+    name: Test on ${{ matrix.os }} with Node.js ${{ matrix.node-version }}
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -54,14 +62,20 @@ jobs:
           node-version: ${{ matrix.node-version }}
           check-latest: true
 
+      - run: npm run test
+        if: ${{ ! matrix.coverage }}
+
       - run: npm run coverage
+        if: ${{ matrix.coverage }}
+
       - uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
-        if: ${{ github.event_name != 'schedule' }}
+        if: ${{ matrix.coverage && github.event_name != 'schedule' }}
         continue-on-error: true
         timeout-minutes: 5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           env_vars: OS,NODE
+          file: ./coverage/codecov.json
 
   eslint:
     name: ESLint
