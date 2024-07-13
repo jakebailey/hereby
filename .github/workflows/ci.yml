@@ -90,8 +90,13 @@ jobs:
       - run: npx dprint check
 
   check-latest:
-    name: Check latest
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    name: Check latest on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     if: ${{ github.event_name != 'schedule' }}
 
     steps:
@@ -123,7 +128,7 @@ jobs:
 
           cp ${{ github.workspace }}/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
 
-          ${{ github.workspace }}/bin/hereby.js --tasks
+          node ${{ github.workspace }}/bin/hereby.js --tasks
         name: Verify that local hereby can run latest hereby
 
   required:
