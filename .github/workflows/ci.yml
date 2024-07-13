@@ -89,8 +89,8 @@ jobs:
       - run: npm ci
       - run: npx dprint check
 
-  check-run:
-    name: Check run
+  check-latest:
+    name: Check latest
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'schedule' }}
 
@@ -122,7 +122,7 @@ jobs:
       - test
       - eslint
       - dprint
-      - check-run
+      - check-latest
 
     steps:
       - name: Check required jobs
@@ -131,7 +131,7 @@ jobs:
             "${{ needs.test.result }}"
             "${{ github.event_name != 'schedule' && needs.eslint.result || 'success' }}"
             "${{ github.event_name != 'schedule' && needs.dprint.result || 'success' }}"
-            "${{ needs.check-run.result }}"
+            "${{ needs.check-latest.result }}"
           )
 
           for result in "${results[@]}"; do
