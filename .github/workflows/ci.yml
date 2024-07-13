@@ -115,24 +115,26 @@ jobs:
 
       - run: |
           set -exo pipefail
+          WORKSPACE=$PWD
           cd $(mktemp -d)
           npm init -y
-          npm install ${{ github.workspace }}/*.tgz
+          npm install $WORKSPACE/*.tgz
 
-          cp ${{ github.workspace }}/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
+          cp $WORKSPACE/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
 
           hereby --tasks
         name: Verify that latest hereby can run local hereby
 
       - run: |
           set -exo pipefail
+          WORKSPACE=$PWD
           cd $(mktemp -d)
           npm init -y
           npm install hereby
 
-          cp ${{ github.workspace }}/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
+          cp $WORKSPACE/dist/__tests__/cli/__fixtures__/Herebyfile.mjs .
 
-          node ${{ github.workspace }}/bin/hereby.js --tasks
+          node $WORKSPACE/bin/hereby.js --tasks
         name: Verify that local hereby can run latest hereby
 
   required:
