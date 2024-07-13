@@ -105,6 +105,7 @@ jobs:
       - run: npm install -g hereby
 
       - run: |
+          set -exo pipefail
           cd $(mktemp -d)
           npm init -y
           npm install ${{ github.workspace }}/*.tgz
