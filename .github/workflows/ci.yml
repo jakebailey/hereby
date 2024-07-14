@@ -115,7 +115,6 @@ jobs:
 
     name: Check latest on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    if: ${{ github.event_name != 'schedule' }}
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
