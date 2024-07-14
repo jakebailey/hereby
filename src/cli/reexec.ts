@@ -4,7 +4,8 @@ import url from "node:url";
 
 import { findUp, UserError } from "./utils.js";
 
-const expectedCliPath = path.join("node_modules", "hereby", "dist", "cli.js");
+const distCliPath = path.join("dist", "cli.js");
+const expectedCliPath = path.join("node_modules", "hereby", distCliPath);
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -28,15 +29,18 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
     const otherCLI = findUp(herebyfilePath, (dir) => {
         const p = path.resolve(dir, expectedCliPath);
         if (fs.existsSync(p)) {
+            // This is the typical case; we've walked up and found it in node_modules.
             return p;
         }
+        // Otherwise, we check to see if we're self-resolving. Realistically,
+        // this only happens when developing hereby itself.
         const packageJsonPath = path.join(dir, "package.json");
         if (!fs.existsSync(packageJsonPath)) {
             return undefined;
         }
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
         if (packageJson.name === "hereby") {
-            return path.resolve(dir, "dist", "cli.js");
+            return path.resolve(dir, distCliPath);
         }
         return undefined;
     });
