@@ -24,14 +24,14 @@ export function simplifyPath(p: string) {
     return p;
 }
 
-export function findUp<T extends {}>(p: string, predicate: (dir: string) => T | undefined): T | undefined {
-    const root = path.parse(p).root;
+export function findUp<T extends {}>(dir: string, predicate: (dir: string) => T | undefined): T | undefined {
+    const root = path.parse(dir).root;
 
     while (true) {
-        const result = predicate(p);
+        const result = predicate(dir);
         if (result !== undefined) return result;
-        if (p === root) break;
-        p = path.dirname(p);
+        if (dir === root) break;
+        dir = path.dirname(dir);
     }
 
     return undefined;
