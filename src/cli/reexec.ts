@@ -5,8 +5,8 @@ import url from "node:url";
 import { findUp, UserError } from "./utils.js";
 
 const thisCLI = url.fileURLToPath(new URL("../cli.js", import.meta.url));
-const distCliPath = path.join("dist", "cli.js");
-const expectedCliPath = path.join("node_modules", "hereby", distCliPath);
+const distCLIPath = path.join("dist", "cli.js");
+const expectedCLIPath = path.join("node_modules", "hereby", distCLIPath);
 
 /**
  * Checks to see if we need to re-exec another version of hereby.
@@ -24,7 +24,7 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
     // of hereby as imported by the Herebyfile, and then "reexec" it by importing.
 
     const otherCLI = findUp(path.dirname(herebyfilePath), (dir) => {
-        const p = path.resolve(dir, expectedCliPath);
+        const p = path.resolve(dir, expectedCLIPath);
         if (fs.existsSync(p)) {
             // This is the typical case; we've walked up and found it in node_modules.
             return p;
@@ -35,7 +35,7 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
         if (fs.existsSync(packageJsonPath)) {
             const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
             if (packageJson.name === "hereby") {
-                return path.resolve(dir, distCliPath);
+                return path.resolve(dir, distCLIPath);
             }
         }
         return undefined;
