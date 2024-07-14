@@ -35,6 +35,10 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
 
         // Otherwise, we check to see if we're self-resolving. Realistically,
         // this only happens when developing hereby itself.
+        //
+        // Technically, this should go before the above check since self-resolution
+        // comes before node_modules resolution, but this could only happen if hereby
+        // happened to depend on itself somehow.
         const packageJsonPath = path.join(dir, "package.json");
         if (fs.existsSync(packageJsonPath)) {
             const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
