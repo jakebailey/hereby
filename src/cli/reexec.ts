@@ -32,12 +32,11 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
         // Otherwise, we check to see if we're self-resolving. Realistically,
         // this only happens when developing hereby itself.
         const packageJsonPath = path.join(dir, "package.json");
-        if (!fs.existsSync(packageJsonPath)) {
-            return undefined;
-        }
-        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-        if (packageJson.name === "hereby") {
-            return path.resolve(dir, distCliPath);
+        if (fs.existsSync(packageJsonPath)) {
+            const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+            if (packageJson.name === "hereby") {
+                return path.resolve(dir, distCliPath);
+            }
         }
         return undefined;
     });
