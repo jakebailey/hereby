@@ -22,6 +22,11 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
     // Rather than trying to fix this by messing around with Node's resolution
     // (which won't work in ESM anyway), instead opt to figure out the location
     // of hereby as imported by the Herebyfile, and then "reexec" it by importing.
+    //
+    // This code used to use `import.meta.resolve` to find `hereby/cli`, but
+    // manually encoding this behavior is faster and avoids the dependency.
+    // If Node ever makes the two-argument form of `import.meta.resolve` unflagged,
+    // we could switch to that.
 
     const otherCLI = findUp(path.dirname(herebyfilePath), (dir) => {
         const p = path.resolve(dir, expectedCLIPath);
