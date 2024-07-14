@@ -4,12 +4,9 @@ import url from "node:url";
 
 import { findUp, UserError } from "./utils.js";
 
+const thisCLI = url.fileURLToPath(new URL("../cli.js", import.meta.url));
 const distCliPath = path.join("dist", "cli.js");
 const expectedCliPath = path.join("node_modules", "hereby", distCliPath);
-
-const __filename = url.fileURLToPath(new URL(import.meta.url));
-const __dirname = path.dirname(__filename);
-const thisCLI = path.resolve(__dirname, "..", "cli.js");
 
 /**
  * Checks to see if we need to re-exec another version of hereby.
