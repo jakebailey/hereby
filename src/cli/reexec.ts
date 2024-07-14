@@ -23,7 +23,7 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
     // (which won't work in ESM anyway), instead opt to figure out the location
     // of hereby as imported by the Herebyfile, and then "reexec" it by importing.
 
-    const otherCLI = findUp(herebyfilePath, (dir) => {
+    const otherCLI = findUp(path.dirname(herebyfilePath), (dir) => {
         const p = path.resolve(dir, expectedCliPath);
         if (fs.existsSync(p)) {
             // This is the typical case; we've walked up and found it in node_modules.
