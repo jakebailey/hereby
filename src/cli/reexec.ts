@@ -25,10 +25,9 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
 
     const otherCLI = findUp(path.dirname(herebyfilePath), (dir) => {
         const p = path.resolve(dir, expectedCLIPath);
-        if (fs.existsSync(p)) {
-            // This is the typical case; we've walked up and found it in node_modules.
-            return p;
-        }
+        // This is the typical case; we've walked up and found it in node_modules.
+        if (fs.existsSync(p)) return p;
+
         // Otherwise, we check to see if we're self-resolving. Realistically,
         // this only happens when developing hereby itself.
         const packageJsonPath = path.join(dir, "package.json");
