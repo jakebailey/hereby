@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import url from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { findUp, UserError } from "./utils.js";
 
-const thisCLI = url.fileURLToPath(new URL("../cli.js", import.meta.url));
+const thisCLI = fileURLToPath(new URL("../cli.js", import.meta.url));
 const distCLIPath = path.join("dist", "cli.js");
 const expectedCLIPath = path.join("node_modules", "hereby", distCLIPath);
 
@@ -48,6 +48,8 @@ export async function reexec(herebyfilePath: string): Promise<boolean> {
         return false;
     }
 
-    await import(url.pathToFileURL(otherCLI).toString());
+    // Note: calling pathToFileURL is required on Windows to disambiguate URLs
+    // from drive letters.
+    await import(pathToFileURL(otherCLI).toString());
     return true;
 }
