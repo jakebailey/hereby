@@ -2,7 +2,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import test from "ava";
-import { resolve } from "import-meta-resolve";
 
 import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
@@ -111,8 +110,6 @@ test("main print tasks", async (t) => {
         .returns(() => fixturesPath)
         .setup((d) => d.log)
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
-        .setup((d) => d.resolve)
-        .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath));
 
@@ -133,8 +130,6 @@ test("main success", async (t) => {
         .returns(() => fixturesPath)
         .setup((d) => d.log)
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
-        .setup((d) => d.resolve)
-        .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -159,8 +154,6 @@ test("main failure", async (t) => {
         .returns(() => fixturesPath)
         .setup((d) => d.log)
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
-        .setup((d) => d.resolve)
-        .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -193,8 +186,6 @@ test("main user error", async (t) => {
         .returns(() => fixturesPath)
         .setup((d) => d.log)
         .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
-        .setup((d) => d.resolve)
-        .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -293,8 +284,6 @@ test("main print version", async (t) => {
         .returns(() => fixturesPath)
         .setup((d) => d.log)
         .returns((message) => t.is(message, `hereby ${version}`))
-        .setup((d) => d.resolve)
-        .returns(resolve)
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath));
 
