@@ -28,7 +28,8 @@
         "**/node_modules",
         "**/*-lock.json",
         "dist/**",
-        "coverage/**"
+        "coverage/**",
+        "CHANGELOG.md"
     ],
     "plugins": [
         "https://plugins.dprint.dev/typescript-0.91.3.wasm",
