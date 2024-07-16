@@ -40,7 +40,7 @@ export class Task {
     private _!: never;
 
     /* @internal */
-    options: TaskOptions;
+    readonly options: TaskOptions;
 
     /* @internal */
     static create(options: TaskOptions): Task {
@@ -66,11 +66,9 @@ export class Task {
         if (!Array.isArray(options.dependencies) && options.dependencies !== undefined) {
             throw new TypeError("Task dependencies is not an array or undefined.");
         }
-        if (options.dependencies) {
-            for (const dep of options.dependencies) {
-                if (!(dep instanceof Task)) {
-                    throw new TypeError("Task dependency is not a task.");
-                }
+        for (const dep of options.dependencies ?? []) {
+            if (!(dep instanceof Task)) {
+                throw new TypeError("Task dependency is not a task.");
             }
         }
 
