@@ -22,9 +22,7 @@ export class Runner {
         const results = await Promise.allSettled(
             tasks.map((task) => {
                 const cached = this._addedTasks.get(task);
-                if (cached) {
-                    return cached;
-                }
+                if (cached) return cached;
 
                 const promise = this._runTask(task);
                 this._addedTasks.set(task, promise);
@@ -45,9 +43,7 @@ export class Runner {
             await this.runTasks(...dependencies);
         }
 
-        if (!run) {
-            return;
-        }
+        if (!run) return;
 
         try {
             this.onTaskStart(task);
@@ -62,26 +58,20 @@ export class Runner {
     protected onTaskStart(task: Task): void {
         this._startTimes.set(task, performance.now());
 
-        if (this._errored) {
-            return; // Skip logging.
-        }
+        if (this._errored) return; // Skip logging.
 
         this._d.log(`Starting ${pc.blue(task.options.name)}`);
     }
 
     protected onTaskFinish(task: Task): void {
-        if (this._errored) {
-            return; // Skip logging.
-        }
+        if (this._errored) return; // Skip logging.
 
         const took = performance.now() - this._startTimes.get(task)!;
         this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
     }
 
     protected onTaskError(task: Task, e: unknown): void {
-        if (this._errored) {
-            return; // Skip logging.
-        }
+        if (this._errored) return; // Skip logging.
 
         this._errored = true;
         const took = performance.now() - this._startTimes.get(task)!;

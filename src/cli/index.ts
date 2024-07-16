@@ -37,9 +37,7 @@ async function mainWorker(d: D) {
 
     const herebyfilePath = path.resolve(d.cwd(), args.herebyfile ?? findHerebyfile(d.cwd()));
 
-    if (await reexec(herebyfilePath)) {
-        return;
-    }
+    if (await reexec(herebyfilePath)) return;
 
     if (args.version) {
         d.log(`hereby ${d.version()}`);
@@ -85,12 +83,10 @@ export async function selectTasks(
     taskNames: string[],
 ): Promise<Task[]> {
     if (taskNames.length === 0) {
-        if (!herebyfile.defaultTask) {
-            throw new UserError(
-                `No default task has been exported from ${d.simplifyPath(herebyfilePath)}; please specify a task name.`,
-            );
-        }
-        return [herebyfile.defaultTask];
+        if (herebyfile.defaultTask) return [herebyfile.defaultTask];
+        throw new UserError(
+            `No default task has been exported from ${d.simplifyPath(herebyfilePath)}; please specify a task name.`,
+        );
     }
 
     const tasks: Task[] = [];

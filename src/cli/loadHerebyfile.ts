@@ -50,14 +50,14 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     let defaultTask: Task | undefined;
 
     for (const [key, value] of Object.entries(herebyfile)) {
-        if (value instanceof Task) {
-            if (key === "default") {
-                defaultTask = value;
-            } else if (exportedTasks.has(value)) {
-                throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
-            } else {
-                exportedTasks.add(value);
-            }
+        if (!(value instanceof Task)) continue;
+
+        if (key === "default") {
+            defaultTask = value;
+        } else if (exportedTasks.has(value)) {
+            throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
+        } else {
+            exportedTasks.add(value);
         }
     }
 
@@ -87,9 +87,7 @@ function checkTaskInvariants(tasks: Iterable<Task>) {
 
     function checkTaskInvariantsWorker(tasks: Iterable<Task>) {
         for (const task of tasks) {
-            if (checkedTasks.has(task)) {
-                continue;
-            }
+            if (checkedTasks.has(task)) continue;
 
             if (taskStack.has(task)) {
                 throw new UserError(`Task "${pc.blue(task.options.name)}" references itself.`);
