@@ -4,11 +4,11 @@ import minimist from "minimist";
 import type { TaskFormat } from "./formatTasks.js";
 
 interface CLIOptions {
-    help: boolean;
-    run: string[];
-    herebyfile: string | undefined;
-    printTasks: TaskFormat | undefined;
-    version: boolean;
+    readonly help: boolean;
+    readonly run: readonly string[];
+    readonly herebyfile: string | undefined;
+    readonly printTasks: TaskFormat | undefined;
+    readonly version: boolean;
 }
 
 export function parseArgs(argv: string[]): CLIOptions {

@@ -8,12 +8,12 @@ import type { D } from "./utils.js";
 export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
 
 export class Runner {
-    private _addedTasks = new Map<Task, Promise<void>>();
+    private readonly _addedTasks = new Map<Task, Promise<void>>();
 
     private _errored = false;
-    private _startTimes = new Map<Task, number>();
+    private readonly _startTimes = new Map<Task, number>();
 
-    constructor(private _d: RunnerD) {}
+    constructor(private readonly _d: RunnerD) {}
 
     async runTasks(...tasks: Task[]): Promise<void> {
         // Using allSettled here so that we don't immediately exit; it could be

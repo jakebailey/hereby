@@ -80,8 +80,8 @@ export async function selectTasks(
     d: Pick<D, "simplifyPath">,
     herebyfile: Herebyfile,
     herebyfilePath: string,
-    taskNames: string[],
-): Promise<Task[]> {
+    taskNames: readonly string[],
+): Promise<readonly Task[]> {
     if (taskNames.length === 0) {
         if (herebyfile.defaultTask) return [herebyfile.defaultTask];
         throw new UserError(
