@@ -86,6 +86,9 @@
         "prepack": "rimraf dist && npm run build"
     },
     "ava": {
+        "files": [
+            "**/*.test.ts"
+        ],
         "typescript": {
             "rewritePaths": {
                 "src/": "dist/"
