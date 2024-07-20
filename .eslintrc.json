@@ -114,7 +114,14 @@
     },
     "overrides": [
         { "files": ["Herebyfile.*", "**/__fixtures__/**"], "rules": { "no-restricted-globals": "off" } },
-        { "files": ["**/__tests__/**"], "rules": { "@typescript-eslint/no-empty-function": "off" } }
+        {
+            "files": ["**/__tests__/**"],
+            "rules": {
+                "@typescript-eslint/no-empty-function": "off",
+                "no-restricted-globals": "off",
+                "ava/no-import-test-files": "off"
+            }
+        }
     ],
     "ignorePatterns": ["**/dist/**", "**/node_modules/**", "bin/**", "coverage/**"]
 }
