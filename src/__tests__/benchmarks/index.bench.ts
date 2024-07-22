@@ -30,14 +30,25 @@ async function depsForBenchmark(argv: readonly string[], cwd: string): Promise<D
 
 export const bench = withCodSpeed(new Bench());
 
-function registerBenchmark(name: string, argv: readonly string[], cwd = process.cwd()) {
+type BenchmarkOptions = Parameters<Bench["add"]>[2] & {
+    cwd?: string;
+};
+
+function registerBenchmark(name: string, argv: readonly string[], opts: BenchmarkOptions = {}) {
     let deps: D;
+    const cwd = opts.cwd ?? process.cwd();
     bench.add(name, () => main(deps), {
-        beforeEach: async () => {
+        ...opts,
+        beforeEach: async function(this) {
+            if (opts.beforeEach) {
+                await opts.beforeEach.bind(this)();
+            }
             deps = await depsForBenchmark(argv, cwd);
         },
     });
 }
+
+const fixturesDir = path.join(__dirname, "..", "cli", "__fixtures__");
 
 registerBenchmark(
     "main print version",
@@ -47,19 +58,19 @@ registerBenchmark(
 registerBenchmark(
     "main print tasks",
     ["node", "cli.js", "--tasks"],
-    path.join(__dirname, "..", "cli", "__fixtures__"),
+    { cwd: fixturesDir },
 );
 
 registerBenchmark(
     "main print tasks simple",
     ["node", "cli.js", "--tasks-simple"],
-    path.join(__dirname, "..", "cli", "__fixtures__"),
+    { cwd: fixturesDir },
 );
 
 registerBenchmark(
     "main run wrong name",
     ["node", "cli.js", "buildCompile"],
-    path.join(__dirname, "..", "cli", "__fixtures__"),
+    { cwd: fixturesDir },
 );
 
 await bench.run();
