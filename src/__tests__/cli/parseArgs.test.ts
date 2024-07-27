@@ -1,3 +1,4 @@
+import { fc, testProp } from "@fast-check/ava";
 import test from "ava";
 
 import { getUsage, parseArgs } from "../../cli/parseArgs.js";
@@ -12,29 +13,46 @@ const macro = test.macro<[string[]]>({
     },
 });
 
-test(macro, []);
-test(macro, ["--help"]);
-test(macro, ["-h"]);
-test(macro, ["--tasks"]);
-test(macro, ["--tasks", "true"]);
-test(macro, ["--tasks=true"]);
-test(macro, ["--tasks", "TRUE"]);
-test(macro, ["--tasks", "yes"]);
-test(macro, ["--tasks", "1"]);
-test(macro, ["--tasks", "false"]);
-test(macro, ["--tasks=false"]);
-test(macro, ["--tasks", "FALSE"]);
-test(macro, ["--tasks", "0"]);
-test(macro, ["-T"]);
-test(macro, ["-T", "true"]);
-test(macro, ["-T", "false"]);
-test(macro, ["--tasks-simple"]);
-test(macro, ["--tasks-simple", "true"]);
-test(macro, ["build", "test", "--light=false"]);
-test(macro, ["build", "test", "--", "--light=false"]);
-test(macro, ["build", "test", "--", "not-a-task", "--light=false"]);
-test(macro, ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false"]);
-test(macro, ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false", "not-a-task"]);
+const argvTests = [
+    [],
+    ["--help"],
+    ["-h"],
+    ["--tasks"],
+    ["--tasks", "true"],
+    ["--tasks=true"],
+    ["--tasks", "TRUE"],
+    ["--tasks", "yes"],
+    ["--tasks", "1"],
+    ["--tasks", "false"],
+    ["--tasks=false"],
+    ["--tasks", "FALSE"],
+    ["--tasks", "0"],
+    ["-T"],
+    ["-T", "true"],
+    ["-T", "false"],
+    ["--tasks-simple"],
+    ["--tasks-simple", "true"],
+    ["build", "test", "--light=false"],
+    ["build", "test", "--", "--light=false"],
+    ["build", "test", "--", "not-a-task", "--light=false"],
+    ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false"],
+    ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false", "not-a-task"],
+];
+
+for (const argv of argvTests) {
+    test(macro, argv);
+}
+
+testProp(
+    "fast-check",
+    [fc.array(fc.string())],
+    (t, argv) => {
+        t.true(typeof parseArgs(argv) === "object");
+    },
+    {
+        examples: argvTests.map((v) => [v]),
+    },
+);
 
 test.serial("usage", (t) => {
     t.snapshot(getUsage().replace(/\r/g, ""));
