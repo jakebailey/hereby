@@ -64,7 +64,7 @@
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-unicorn": "^55.0.0",
         "execa": "^6.1.0",
-        "monocart-coverage-reports": "^2.9.3",
+        "monocart-coverage-reports": "^2.10.0",
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.9",
         "tinybench": "^2.8.0",
