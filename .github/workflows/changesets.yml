@@ -7,16 +7,19 @@ on:
       - main
 
 permissions:
-  contents: write
-  checks: read
-  issues: read
-  pull-requests: write
+  contents: read
 
 jobs:
   changesets:
     name: Changesets
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      checks: read
+      issues: read
+      pull-requests: write
+    
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
