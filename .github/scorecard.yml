@@ -1,0 +1,5 @@
+annotations:
+  - checks:
+      - pinned-dependencies
+    reasons:
+      - reason: not-supported # npm is pinned via package.json packageManager
