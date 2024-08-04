@@ -68,7 +68,7 @@
         "monocart-coverage-reports": "^2.10.0",
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.10",
-        "tinybench": "~2.8.0",
+        "tinybench": "~2.9.0",
         "tmp": "0.2.1",
         "typescript": "^5.5.4"
     },
