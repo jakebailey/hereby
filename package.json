@@ -70,7 +70,7 @@
         "rimraf": "^5.0.10",
         "tinybench": "~2.8.0",
         "tmp": "0.2.1",
-        "typescript": "^5.5.4"
+        "typescript": "^5.6.2"
     },
     "overrides": {
         "ava": {
