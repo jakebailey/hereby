@@ -1,5 +1,5 @@
 ---
-"hereby": patch
+"hereby": minor
 ---
 
 Use enableCompileCache
