@@ -1,0 +1,5 @@
+---
+"hereby": minor
+---
+
+Use enableCompileCache
