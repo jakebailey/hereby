@@ -1,5 +1,11 @@
 # hereby
 
+## 1.10.0
+
+### Minor Changes
+
+- b3bc063: Enable V8 compile caching where available (`enableCompileCache`)
+
 ## 1.9.0
 
 ### Minor Changes
