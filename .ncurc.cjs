@@ -8,8 +8,6 @@ module.exports = {
         if (dependencyName === "eslint") return "minor";
         if (dependencyName === "eslint-plugin-ava") return "minor";
         if (dependencyName === "rimraf") return "minor";
-        if (dependencyName === "@typescript-eslint/eslint-plugin") return "minor";
-        if (dependencyName === "@typescript-eslint/parser") return "minor";
         if (dependencyName === "tinybench") return "patch";
         if (dependencyName === "npm") return "minor";
         if (major === "0") return "minor";
