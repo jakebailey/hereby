@@ -39,7 +39,7 @@ jobs:
       - run: npm run build
       - run: npm test
 
-      - uses: changesets/action@3de3850952bec538fde60aac71731376e57b9b57 # v1.4.8
+      - uses: changesets/action@c8bada60c408975afd1a20b3db81d6eee6789308 # v1.4.9
         with:
           publish: npx changeset tag
         env:
