@@ -1,9 +1,6 @@
 import module from "node:module";
 
-declare module "node:module" {
-    export const enableCompileCache: (() => void) | undefined;
-}
-
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 module.enableCompileCache?.();
 
 async function run() {
