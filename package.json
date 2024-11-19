@@ -63,7 +63,7 @@
         "eslint": "^8.57.1",
         "eslint-plugin-ava": "^14.0.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-unicorn": "^56.0.0",
+        "eslint-plugin-unicorn": "^56.0.1",
         "execa": "^6.1.0",
         "monocart-coverage-reports": "^2.11.1",
         "moq.ts": "^10.1.0",
