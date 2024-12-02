@@ -59,7 +59,7 @@
         "@typescript-eslint/parser": "^8.11.0",
         "ava": "~5.0.1",
         "c8": "^10.1.2",
-        "dprint": "^0.47.4",
+        "dprint": "^0.47.6",
         "eslint": "^8.57.1",
         "eslint-plugin-ava": "^14.0.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",
