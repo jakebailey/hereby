@@ -161,17 +161,7 @@ jobs:
 
     steps:
       - name: Check required jobs
+        env:
+          NEEDS: ${{ toJson(needs) }}
         run: |
-          results=(
-            "${{ needs.test.result }}"
-            "${{ github.event_name != 'schedule' && needs.eslint.result || 'success' }}"
-            "${{ github.event_name != 'schedule' && needs.dprint.result || 'success' }}"
-            "${{ needs.check-latest.result }}"
-          )
-
-          for result in "${results[@]}"; do
-            if [[ "$result" != "success" ]]; then
-              echo "One or more jobs failed"
-              exit 1
-            fi
-          done
+          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select(.result != "success")'
