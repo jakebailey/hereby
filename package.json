@@ -55,22 +55,22 @@
         "@types/minimist": "^1.2.5",
         "@types/node": "^22.10.1",
         "@types/tmp": "^0.2.6",
-        "@typescript-eslint/eslint-plugin": "^8.17.0",
-        "@typescript-eslint/parser": "^8.17.0",
         "ava": "~5.0.1",
         "c8": "^10.1.2",
         "dprint": "^0.47.6",
-        "eslint": "^8.57.1",
-        "eslint-plugin-ava": "^14.0.0",
+        "eslint": "^9.16.0",
+        "eslint-plugin-ava": "^15.0.1",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-unicorn": "^56.0.1",
         "execa": "^6.1.0",
+        "globals": "^15.13.0",
         "monocart-coverage-reports": "^2.11.4",
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.10",
         "tinybench": "~2.8.0",
         "tmp": "0.2.1",
-        "typescript": "^5.7.2"
+        "typescript": "^5.7.2",
+        "typescript-eslint": "^8.17.0"
     },
     "overrides": {
         "ava": {

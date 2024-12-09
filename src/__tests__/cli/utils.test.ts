@@ -27,12 +27,10 @@ test(macro, path.dirname(os.homedir()), path.dirname(os.homedir()));
 test.serial("real dependencies", async (t) => {
     const d = await real();
 
-    /* eslint-disable no-restricted-globals */
     const saveExitCode = process.exitCode;
     d.setExitCode(123);
     t.is(process.exitCode, 123);
     process.exitCode = saveExitCode;
-    /* eslint-enable no-restricted-globals */
 });
 
 test("UserError", (t) => {
