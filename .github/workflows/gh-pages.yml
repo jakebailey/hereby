@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: success()
-        uses: crazy-max/ghaction-github-pages@c05ee637ec73429400a359430db8e5629f3f2564 # v4.0.0
+        uses: crazy-max/ghaction-github-pages@fbf0a4fa4e00f45accd6cf3232368436ec06ed59 # v4.1.0
         with:
           target_branch: gh-pages
           build_dir: gh-pages
