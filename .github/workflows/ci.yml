@@ -79,7 +79,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           env_vars: OS,NODE
-          file: ./coverage/codecov.json
+          files: ./coverage/codecov.json
 
   eslint:
     name: ESLint
