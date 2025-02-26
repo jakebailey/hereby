@@ -64,7 +64,7 @@
         "eslint-plugin-unicorn": "^57.0.0",
         "execa": "^6.1.0",
         "globals": "^15.15.0",
-        "monocart-coverage-reports": "^2.12.1",
+        "monocart-coverage-reports": "^2.12.2",
         "moq.ts": "^10.1.0",
         "rimraf": "^5.0.10",
         "tinybench": "~2.8.0",
