@@ -16,7 +16,7 @@ jobs:
       contents: read # For repo checkout.
       actions: read # For getting workflow run info.
     if: startsWith(github.ref, 'refs/tags/')
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v2.0.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v2.1.0
     with:
       run-scripts: 'ci, build, test'
 
@@ -25,14 +25,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node registry authentication
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
           node-version: 18
           registry-url: 'https://registry.npmjs.org'
 
       - name: publish
         id: publish
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@5a775b367a56d5bd118a224a811bba288150a563 # v2.0.0
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a # v2.1.0
         with:
           access: public
           node-auth-token: ${{ secrets.NPM_TOKEN }}
