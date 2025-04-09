@@ -108,6 +108,31 @@ test("findHerebyfile", async (t) => {
     });
 });
 
+for (
+    const name of [
+        // javascript
+        "Herebyfile.mjs",
+        "Herebyfile.js",
+
+        // typescript
+        "Herebyfile.ts",
+        "Herebyfile.mts",
+
+        // case insensitive
+        "herebyfile.mts",
+    ]
+) {
+    test(`finds ${name}`, async (t) => {
+        const tmpdir = tmp.dirSync({ unsafeCleanup: true });
+        t.teardown(tmpdir.removeCallback);
+        const dir = tmpdir.name;
+        const expectedHerebyFile = path.join(dir, name);
+
+        await fs.promises.writeFile(expectedHerebyFile, "export {}");
+        t.is(findHerebyfile(dir), expectedHerebyFile);
+    });
+}
+
 test("cycle", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "cycle.mjs");
 
