@@ -47,7 +47,7 @@
     },
     "devDependencies": {
         "@ava/typescript": "^3.0.1",
-        "@changesets/cli": "^2.28.1",
+        "@changesets/cli": "^2.29.2",
         "@codspeed/tinybench-plugin": "^4.0.0",
         "@fast-check/ava": "2.0.1",
         "@tsconfig/node12": "^12.1.4",
