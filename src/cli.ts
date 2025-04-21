@@ -1,5 +1,6 @@
 import module from "node:module";
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 if (module.enableCompileCache) {
     module.enableCompileCache();
 }
