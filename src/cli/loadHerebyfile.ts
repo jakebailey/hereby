@@ -7,7 +7,7 @@ import pc from "picocolors";
 import { Task } from "../index.js";
 import { findUp, UserError } from "./utils.js";
 
-const herebyfileRegExp = /^herebyfile\.m?js$/i;
+const herebyfileRegExp = /^herebyfile\.m?[jt]s$/i;
 
 export function findHerebyfile(dir: string): string {
     const result = findUp(dir, (dir) => {
