@@ -1,7 +1,8 @@
 import module from "node:module";
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-module.enableCompileCache?.();
+if (module.enableCompileCache) {
+    module.enableCompileCache();
+}
 
 async function run() {
     const { main } = await import("./cli/index.js");
