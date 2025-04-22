@@ -69,13 +69,15 @@ async function mainWorker(d: D) {
         d.setExitCode(1);
     } finally {
         const took = performance.now() - start;
+        const failed = runner.failedTasks.length > 0
         d.log(
-            `Completed ${taskNames}${runner.failedTasks.length > 0 ? pc.red(" with errors") : ""} in ${
+            `Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${
                 d.prettyMilliseconds(took)
             }`,
         );
-        for (const failedTask of runner.failedTasks) {
-            d.log(` - ${pc.red(failedTask.name)} ${failedTask.error}\n`);
+        if (failed) {
+            const names = runner.failedTasks.sort().map(task => pc.red(task.name)).join(", ")
+            d.log(`Failed tasks: ${names}`);
         }
     }
 }

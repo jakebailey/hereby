@@ -174,6 +174,38 @@ test("main failure", async (t) => {
     t.snapshot(log);
 });
 
+test("multi failure", async (t) => {
+    t.plan(4);
+
+    const log: [fn: "log" | "error", message: string][] = [];
+
+    const dMock = mock<D>(t)
+        .setup((d) => d.argv)
+        .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "multiple:failures"])
+        .setup((d) => d.cwd)
+        .returns(() => fixturesPath)
+        .setup((d) => d.log)
+        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
+        .setup((d) => d.chdir)
+        .returns((directory) => t.is(directory, fixturesPath))
+        .setup((d) => d.simplifyPath)
+        .returns(fakeSimplifyPath)
+        .setup((d) => d.prettyMilliseconds)
+        .returns(() => "<pretty-ms>")
+        .setup((d) => d.error)
+        .returns((message) => {
+            t.is(message, "Error in failure in <pretty-ms>\nError: failure!");
+        })
+        .setup((d) => d.setExitCode)
+        .returns((code) => {
+            t.is(code, 1);
+        });
+
+    await main(dMock.object());
+
+    t.snapshot(log);
+});
+
 test("main user error", async (t) => {
     t.plan(3);
 
