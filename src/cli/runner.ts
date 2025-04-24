@@ -6,15 +6,10 @@ import type { Task } from "../index.js";
 import type { D } from "./utils.js";
 
 export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
-export interface FailedTask {
-    name: string;
-    error: unknown;
-}
-
 export class Runner {
     private readonly _addedTasks = new Map<Task, Promise<void>>();
 
-    readonly failedTasks: FailedTask[] = [];
+    readonly failedTasks: string[] = [];
     private readonly _startTimes = new Map<Task, number>();
 
     constructor(private readonly _d: RunnerD) {}
@@ -75,7 +70,7 @@ export class Runner {
     }
 
     protected onTaskError(task: Task, e: unknown): void {
-        this.failedTasks.push({ name: task.options.name, error: e });
+        this.failedTasks.push(task.options.name);
         if (this.failedTasks.length > 1) return; // Skip logging.
 
         const took = performance.now() - this._startTimes.get(task)!;

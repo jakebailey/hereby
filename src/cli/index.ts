@@ -76,7 +76,7 @@ async function mainWorker(d: D) {
             }`,
         );
         if (failed) {
-            const names = runner.failedTasks.sort().map(task => pc.red(task.name)).join(", ")
+            const names = runner.failedTasks.sort().map(task => pc.red(task)).join(", ")
             d.log(`Failed tasks: ${names}`);
         }
     }
