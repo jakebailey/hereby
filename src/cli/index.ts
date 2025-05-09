@@ -70,9 +70,7 @@ async function mainWorker(d: D) {
     } finally {
         const took = performance.now() - start;
         const failed = runner.failedTasks.length > 0;
-        d.log(
-            `Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`,
-        );
+        d.log(`Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
         if (failed) {
             const names = runner.failedTasks.sort().map((task) => pc.red(task)).join(", ");
             d.log(`Failed tasks: ${names}`);
