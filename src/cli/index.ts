@@ -59,19 +59,22 @@ async function mainWorker(d: D) {
 
     const start = performance.now();
 
-    let errored = false;
+    const runner = new Runner(d);
     try {
-        const runner = new Runner(d);
         await runner.runTasks(...tasks);
     } catch {
-        errored = true;
         // We will have already printed some message here.
         // Set the error code and let the process run to completion,
         // so we don't end up with an unflushed output.
         d.setExitCode(1);
     } finally {
         const took = performance.now() - start;
-        d.log(`Completed ${taskNames}${errored ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
+        const failed = runner.failedTasks.length > 0;
+        d.log(`Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
+        if (failed) {
+            const names = runner.failedTasks.sort().map((task) => pc.red(task)).join(", ");
+            d.log(`Failed tasks: ${names}`);
+        }
     }
 }
 
