@@ -6,6 +6,7 @@ import type { Task } from "../index.js";
 import type { D } from "./utils.js";
 
 export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
+
 export class Runner {
     private readonly _addedTasks = new Map<Task, Promise<void>>();
 
