@@ -1,5 +1,12 @@
 # hereby
 
+## 1.11.0
+
+### Minor Changes
+
+- dbb7d94: Support typescript herebyfiles (in runtimes that support typescript)
+- 71ecd72: Print list of failed tasks when completing with errors
+
 ## 1.10.0
 
 ### Minor Changes
