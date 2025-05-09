@@ -102,6 +102,12 @@ a CommonJS project; ES modules can import CommonJS modules.
 If your package already sets `"type": "module"`, `Herebyfile.js` will work as
 well.
 
+## TypeScript support
+
+`hereby` supports `Herebyfile.mts` and `Herebyfile.ts`, so long as your runtime
+supports loading these files. This includes like Node's type stripping, `bun`,
+or even a custom loader, and so on.
+
 ## Caveats
 
 ### No serial tasks
