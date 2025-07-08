@@ -18,13 +18,13 @@ jobs:
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '20.19.1'
+          node-version: '20.19.3'
 
       - run: npm ci
       - run: npm run build
 
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@0010eb0ca6e89b80c88e8edaaa07cfe5f3e6664d # v3.5.0
+        uses: CodSpeedHQ/action@c28fe9fbe7d57a3da1b7834ae3761c1d8217612d # v3.7.0
         with:
           token: ${{ secrets.CODSPEED_TOKEN }}
           run: 'node ./dist/__tests__/benchmarks/index.bench.js'
