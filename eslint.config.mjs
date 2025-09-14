@@ -131,6 +131,7 @@ export default tseslint.config(
             "unicorn/prevent-abbreviations": "off",
             "unicorn/switch-case-braces": "off",
             "unicorn/prefer-string-replace-all": "off", // Bad suggestion for old targets
+            "unicorn/no-array-sort": "off", // Bad suggestion for old targets
         },
     },
     { "files": ["Herebyfile.*", "**/__fixtures__/**"], "rules": { "no-restricted-globals": "off" } },
