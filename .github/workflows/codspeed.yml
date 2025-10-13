@@ -27,4 +27,5 @@ jobs:
         uses: CodSpeedHQ/action@6b43a0cd438f6ca5ad26f9ed03ed159ed2df7da9 # v4.1.1
         with:
           token: ${{ secrets.CODSPEED_TOKEN }}
+          mode: 'instrumentation'
           run: 'node ./dist/__tests__/benchmarks/index.bench.js'
