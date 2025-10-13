@@ -1,5 +1,11 @@
 # hereby
 
+## 1.11.1
+
+### Patch Changes
+
+- 47e86c7: Enable OIDC publishing
+
 ## 1.11.0
 
 ### Minor Changes
