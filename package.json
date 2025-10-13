@@ -84,7 +84,8 @@
         "watch": "tsc --watch",
         "test": "ava",
         "coverage": "c8 --experimental-monocart ava",
-        "prepack": "rimraf dist && npm run build"
+        "prepack": "rimraf dist && npm run build",
+        "version": "changeset version && npm install"
     },
     "ava": {
         "files": [
