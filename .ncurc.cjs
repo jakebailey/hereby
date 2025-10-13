@@ -8,6 +8,7 @@ module.exports = {
         if (dependencyName === "pretty-ms") return "minor"; // For old versions of node.
         if (dependencyName === "rimraf") return "minor";
         if (dependencyName === "tinybench") return "patch";
+        if (dependencyName === "@codspeed/tinybench-plugin") return "patch";
         if (dependencyName === "npm") return "minor";
         if (major === "0") return "minor";
         return "latest";
