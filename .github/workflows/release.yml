@@ -23,22 +23,35 @@ jobs:
   publish:
     needs: [build]
     runs-on: ubuntu-latest
-    steps:
-      - name: Set up Node registry authentication
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
-        with:
-          node-version: 22.20.0
-          registry-url: 'https://registry.npmjs.org'
 
-      - name: publish
-        id: publish
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/publish@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a # v2.1.0
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          access: public
-          node-auth-token: ${{ secrets.NPM_TOKEN }}
-          package-name: ${{ needs.build.outputs.package-name }}
-          package-download-name: ${{ needs.build.outputs.package-download-name }}
-          package-download-sha256: ${{ needs.build.outputs.package-download-sha256 }}
-          provenance-name: ${{ needs.build.outputs.provenance-name }}
-          provenance-download-name: ${{ needs.build.outputs.provenance-download-name }}
-          provenance-download-sha256: ${{ needs.build.outputs.provenance-download-sha256 }}
+          node-version: '*'
+
+      - run: npm install -g npm@latest
+
+      - name: Download tarball
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-package-download@v2.1.0
+        with:
+          name: ${{ needs.build.outputs.package-download-name }}
+          path: ${{ needs.build.outputs.package-name }}
+          sha256: ${{ needs.build.outputs.package-download-sha256 }}
+
+      - name: Download provenance
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@v2.1.0
+        with:
+          name: ${{ needs.build.outputs.provenance-download-name }}
+          path: 'attestations'
+          sha256: ${{ needs.build.outputs.provenance-download-sha256 }}
+
+      - name: Publish the package
+        env:
+          TARBALL_PATH: '${{ needs.build.outputs.package-name }}'
+          PROVENANCE_PATH: './attestations/${{ needs.build.outputs.provenance-name }}'
+        run: |
+          npm publish "${TARBALL_PATH}" --access=public --provenance-file="${PROVENANCE_PATH}"
