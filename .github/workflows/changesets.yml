@@ -33,8 +33,8 @@ jobs:
         with:
           node-version: '*'
 
+      - run: npm install -g $(jq -r '.packageManager' < package.json)
       - run: npm ci
-        if: ${{ github.event_name != 'schedule' }}
 
       - run: npm run build
       - run: npm test
