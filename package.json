@@ -70,7 +70,7 @@
         "tinybench": "~2.8.0",
         "tmp": "0.2.1",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.46.0"
+        "typescript-eslint": "^8.46.2"
     },
     "overrides": {
         "ava": {
