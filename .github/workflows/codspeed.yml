@@ -18,13 +18,13 @@ jobs:
 
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: '22.20.0'
+          node-version: '22.21.0'
 
       - run: npm ci
       - run: npm run build
 
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@6b43a0cd438f6ca5ad26f9ed03ed159ed2df7da9 # v4.1.1
+        uses: CodSpeedHQ/action@4348f634fa7309fe23aac9502e88b999ec90a164 # v4.3.1
         with:
           token: ${{ secrets.CODSPEED_TOKEN }}
           mode: 'instrumentation'
