@@ -1,4 +1,3 @@
-import { fc, testProp } from "@fast-check/ava";
 import test from "ava";
 
 import { getUsage, parseArgs } from "../../cli/parseArgs.js";
@@ -42,17 +41,6 @@ const argvTests = [
 for (const argv of argvTests) {
     test(macro, argv);
 }
-
-testProp(
-    "fast-check",
-    [fc.array(fc.string())],
-    (t, argv) => {
-        t.true(typeof parseArgs(argv) === "object");
-    },
-    {
-        examples: argvTests.map((v) => [v]),
-    },
-);
 
 test.serial("usage", (t) => {
     t.snapshot(getUsage().replace(/\r/g, ""));

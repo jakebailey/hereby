@@ -15,7 +15,6 @@ module.exports = {
     reject: (name, semver) => {
         if (name === "tmp") return true;
         if (name === "picocolors") return true;
-        if (name === "@fast-check/ava") return true;
         return false;
     },
 };

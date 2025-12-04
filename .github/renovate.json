@@ -46,10 +46,6 @@
             "allowedVersions": "0.2.1"
         },
         {
-            "matchPackageNames": ["@fast-check/ava"],
-            "allowedVersions": "2.0.1"
-        },
-        {
             "matchManagers": ["github-actions"],
             "groupName": "github actions",
             "groupSlug": "github-actions"
