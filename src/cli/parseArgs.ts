@@ -1,5 +1,5 @@
-import commandLineUsage from "command-line-usage";
 import minimist from "minimist";
+import pc from "picocolors";
 
 import type { TaskFormat } from "./formatTasks.js";
 
@@ -34,54 +34,29 @@ export function parseArgs(argv: string[]): CLIOptions {
 }
 
 export function getUsage(): string {
-    const usage = commandLineUsage([
-        {
-            header: "hereby",
-            content: "A simple task runner.",
-        },
-        {
-            header: "Synopsis",
-            content: "$ hereby <task>",
-        },
-        {
-            header: "Options",
-            optionList: [
-                {
-                    name: "help",
-                    description: "Display this usage guide.",
-                    alias: "h",
-                    type: Boolean,
-                },
-                {
-                    name: "herebyfile",
-                    description: "A path to a Herebyfile. Optional.",
-                    type: String,
-                    defaultOption: true,
-                    typeLabel: "{underline path}",
-                },
-                {
-                    name: "tasks",
-                    description: "Print a listing of the available tasks.",
-                    alias: "T",
-                    type: Boolean,
-                },
-                {
-                    name: "version",
-                    description: "Print the current hereby version.",
-                    type: Boolean,
-                },
-            ],
-        },
-        {
-            header: "Example usage",
-            content: [
-                "$ hereby build",
-                "$ hereby build lint",
-                "$ hereby test --skip someTest --lint=false",
-                "$ hereby --tasks",
-            ],
-        },
-    ]);
+    const header = (text: string) => pc.bold(pc.underline(text));
 
-    return usage;
+    return `
+${header("hereby")}
+
+  A simple task runner.
+
+${header("Synopsis")}
+
+  $ hereby <task>
+
+${header("Options")}
+
+  ${pc.bold('-h, --help')}          Display this usage guide.
+  ${pc.bold('--herebyfile')} ${pc.underline('path')}   A path to a Herebyfile. Optional.
+  ${pc.bold('-T, --tasks')}         Print a listing of the available tasks.
+  ${pc.bold('--version')}           Print the current hereby version.
+
+${header("Example usage")}
+
+  $ hereby build
+  $ hereby build lint
+  $ hereby test --skip someTest --lint=false
+  $ hereby --tasks
+`;
 }

@@ -1,6 +1,7 @@
 import test from "ava";
 
 import { getUsage, parseArgs } from "../../cli/parseArgs.js";
+import { normalizeOutput } from "../__helpers__/index.js";
 
 const macro = test.macro<[string[]]>({
     exec(t, input) {
@@ -43,5 +44,5 @@ for (const argv of argvTests) {
 }
 
 test.serial("usage", (t) => {
-    t.snapshot(getUsage().replace(/\r/g, ""));
+    t.snapshot(normalizeOutput(getUsage()));
 });

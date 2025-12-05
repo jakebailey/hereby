@@ -6,7 +6,7 @@ import test from "ava";
 import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { type D, UserError } from "../../cli/utils.js";
-import { mock } from "../__helpers__/index.js";
+import { mock, normalizeOutput } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
 
@@ -91,7 +91,7 @@ test("main usage", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message.replace(/\r/g, "")]));
+        .returns((message) => log.push(["log", normalizeOutput(message)]));
 
     await main(dMock.object());
 
@@ -109,7 +109,7 @@ test("main print tasks", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["log", normalizeOutput(message)]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath));
 
@@ -129,7 +129,7 @@ test("main success", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["log", normalizeOutput(message)]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -153,7 +153,7 @@ test("main failure", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["log", normalizeOutput(message)]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -185,7 +185,7 @@ test("multi failure", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["log", normalizeOutput(message)]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -217,7 +217,7 @@ test("main user error", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["log", normalizeOutput(message)]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
@@ -225,7 +225,7 @@ test("main user error", async (t) => {
         .setup((d) => d.prettyMilliseconds)
         .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
-        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["error", normalizeOutput(message)]))
         .setup((d) => d.setExitCode)
         .returns((code) => {
             t.is(code, 1);
@@ -245,7 +245,7 @@ test("main random throw", async (t) => {
         .setup((d) => d.argv)
         .throws(new Error("test error"))
         .setup((d) => d.error)
-        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["error", normalizeOutput(message)]))
         .setup((d) => d.setExitCode)
         .returns((code) => {
             t.is(code, 1);
@@ -270,7 +270,7 @@ test("main random throw no stack", async (t) => {
         .setup((d) => d.argv)
         .throws(error)
         .setup((d) => d.error)
-        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["error", normalizeOutput(message)]))
         .setup((d) => d.setExitCode)
         .returns((code) => {
             t.is(code, 1);
@@ -292,7 +292,7 @@ test("main random throw primitive", async (t) => {
         .setup((d) => d.argv)
         .throws(1234)
         .setup((d) => d.error)
-        .returns((message) => log.push(["error", message.replace(/\r/g, "")]))
+        .returns((message) => log.push(["error", normalizeOutput(message)]))
         .setup((d) => d.setExitCode)
         .returns((code) => {
             t.is(code, 1);
