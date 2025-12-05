@@ -41,3 +41,8 @@ test("printTasks", (t) => {
         t.snapshot(normalizeOutput(output), format);
     }
 });
+
+test("printTasks with empty tasks", (t) => {
+    const output = formatTasks("normal", [], undefined);
+    t.is(output.trim(), "Available tasks");
+});
