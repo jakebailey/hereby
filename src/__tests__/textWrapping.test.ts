@@ -1,5 +1,5 @@
 import test from "ava";
-import { wrapText } from "../cli/textWrapping.js";
+import { formatAsColumns, wrapText } from "../cli/textWrapping.js";
 
 const RED = "\x1b[31m";
 const RESET = "\x1b[0m";
@@ -37,5 +37,19 @@ test("handles long coloured word split correctly", (t) => {
         `${RED}ragilistic${RESET}`,
         `${RED}expialidoc${RESET}`,
         `${RED}i${RESET}ous`,
+    ]);
+});
+
+test("formatAsColumns formats single line correctly", (t) => {
+    const output = formatAsColumns("X", "label", 8, "description", 12);
+    t.is(output, `Xlabel      description\n`);
+});
+
+test("formatAsColumns handles multiple lines correctly", (t) => {
+    const output = formatAsColumns("X", "label", 8, "description on two lines", 12);
+    const lines = output.split("\n").filter(Boolean); // Skip empty lines
+    t.deepEqual(lines, [
+        "Xlabel      description",
+        "X           on two lines",
     ]);
 });
