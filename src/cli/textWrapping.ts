@@ -112,9 +112,5 @@ export function wrapText(text: string, maxWidth: number): string[] {
         }
     }
 
-    if (currentLine) {
-        lines.push(currentLine);
-    }
-
     return lines;
 }
