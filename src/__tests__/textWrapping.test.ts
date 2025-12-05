@@ -14,6 +14,11 @@ test("splits text at hyphens", (t) => {
     t.deepEqual(result, ["long-word-", "with-hyphens"]);
 });
 
+test("handles single newlines", (t) => {
+    const result = wrapText("Line one\nLine two", 15);
+    t.deepEqual(result, ["Line one", "Line two"]);
+});
+
 test("handles multiple newlines and preserves empty lines", (t) => {
     const result = wrapText("Line one\n\nLine two", 10);
     t.deepEqual(result, ["Line one", "", "Line two"]);

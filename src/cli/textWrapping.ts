@@ -97,17 +97,18 @@ export function wrapText(text: string, maxWidth: number): string[] {
     let currentLine = "";
     for (const line of (text ?? "").split(/\r?\n/)) {
         const chunks = line.match(/[^\s-]+-|\S+/g) || [];
-        if (chunks.length === 0) {
-            // Finalize the previous line and preserve the intentional empty line from input.
-            if (currentLine) {
-                currentLine = addLine(currentLine, lines);
-            }
+        for (const chunk of chunks) {
+            currentLine = processLineChunk(chunk, maxWidth, lines, currentLine);
+        }
 
+        // Finish the line to preserve newlines
+        if (currentLine) {
+            currentLine = addLine(currentLine, lines);
+        }
+
+        // Preserve explicit empty lines
+        if (chunks.length === 0) {
             lines.push("");
-        } else {
-            for (const chunk of chunks) {
-                currentLine = processLineChunk(chunk, maxWidth, lines, currentLine);
-            }
         }
     }
 
