@@ -1,3 +1,5 @@
+import { stdout } from "node:process";
+
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
@@ -50,7 +52,7 @@ function formatTasksAsColumns(tasks: TaskInfo[]): string {
 
     // There's a 2 space indent plus 3 spaces between columns, hence take away 5
     // padding spaces from the available width
-    const maxTotalWidth = (process.stdout.columns ?? 80) - 5;
+    const maxTotalWidth = (stdout.isTTY ? stdout.columns : 80) - 5;
     const maxNameWidth = Math.max(...tasks.map((task) => visibleLength(task.name)));
 
     // Check the name doesn't take up more than half the space

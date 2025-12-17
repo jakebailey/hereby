@@ -47,10 +47,10 @@ ${header("Synopsis")}
 
 ${header("Options")}
 
-  ${pc.bold('-h, --help')}          Display this usage guide.
-  ${pc.bold('--herebyfile')} ${pc.underline('path')}   A path to a Herebyfile. Optional.
-  ${pc.bold('-T, --tasks')}         Print a listing of the available tasks.
-  ${pc.bold('--version')}           Print the current hereby version.
+  ${pc.bold("-h, --help")}          Display this usage guide.
+  ${pc.bold("--herebyfile")} ${pc.underline("path")}   A path to a Herebyfile. Optional.
+  ${pc.bold("-T, --tasks")}         Print a listing of the available tasks.
+  ${pc.bold("--version")}           Print the current hereby version.
 
 ${header("Example usage")}
 

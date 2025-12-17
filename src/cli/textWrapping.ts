@@ -1,22 +1,24 @@
-const ANSI_REGEX = /\x1b\[([0-9]{1,2})m/g;
+// eslint-disable-next-line no-control-regex
+const ANSI_REGEX = /\u001B\[([0-9]{1,2})m/g;
 
 function addLine(text: string, lines: string[]): string {
     const foreground = getActiveAnsiCode(text);
-    const endCode = foreground ? "\x1b[0m" : "";
+    const endCode = foreground ? "\u001B[0m" : "";
     lines.push(text + endCode);
     return foreground ?? "";
 }
 
-function getActiveAnsiCode(str: string): string | null {
-    const matches = Array.from(str.matchAll(ANSI_REGEX));
+function getActiveAnsiCode(str: string): string | undefined {
+    const matches = [...str.matchAll(ANSI_REGEX)];
     if (matches.length === 0) {
-        return null;
+        return;
     }
 
+    // eslint-disable-next-line unicorn/prefer-at
     const lastMatch = matches[matches.length - 1];
     const code = Number(lastMatch[1]);
     const isEndCode = code === 0 || code === 39;
-    return isEndCode ? null : lastMatch[0];
+    return isEndCode ? undefined : lastMatch[0];
 }
 
 function handleLongWord(word: string, maxWidth: number, lines: string[]): string {
@@ -25,20 +27,20 @@ function handleLongWord(word: string, maxWidth: number, lines: string[]): string
     let visibleCount = 0;
     let foreground = "";
     for (let index = 0; index < word.length; index++) {
-        const match = ansiRegex.exec(word.substring(index));
+        const match = ansiRegex.exec(word.slice(index));
         if (match) {
             index += match[0].length - 1;
         } else {
             visibleCount++;
             if (visibleCount === maxWidth) {
-                foreground = addLine(foreground + word.substring(startIndex, index + 1), lines);
+                foreground = addLine(foreground + word.slice(startIndex, index + 1), lines);
                 startIndex = index + 1;
                 visibleCount = 0;
             }
         }
     }
 
-    return foreground + word.substring(startIndex);
+    return foreground + word.slice(startIndex);
 }
 
 function processLineChunk(
@@ -92,11 +94,11 @@ export function visibleLength(str: string): number {
     return str.replace(ANSI_REGEX, "").length;
 }
 
-export function wrapText(text: string, maxWidth: number): string[] {
+export function wrapText(text: string | undefined, maxWidth: number): string[] {
     const lines: string[] = [];
     let currentLine = "";
     for (const line of (text ?? "").split(/\r?\n/)) {
-        const chunks = line.match(/[^\s-]+-|\S+/g) || [];
+        const chunks = line.match(/[^\s-]+-|\S+/g) ?? [];
         for (const chunk of chunks) {
             currentLine = processLineChunk(chunk, maxWidth, lines, currentLine);
         }

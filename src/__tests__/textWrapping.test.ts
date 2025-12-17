@@ -1,8 +1,9 @@
 import test from "ava";
+
 import { formatAsColumns, wrapText } from "../cli/textWrapping.js";
 
-const RED = "\x1b[31m";
-const RESET = "\x1b[0m";
+const RED = "\u001B[31m";
+const RESET = "\u001B[0m";
 
 test("splits text at spaces within max width", (t) => {
     const result = wrapText("Long text that should wrap at spaces", 12);
