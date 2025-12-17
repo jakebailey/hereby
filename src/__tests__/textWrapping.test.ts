@@ -46,6 +46,11 @@ test("handles long coloured word split correctly", (t) => {
     ]);
 });
 
+test("handles undefined strings", (t) => {
+    const result = wrapText(undefined, 10);
+    t.deepEqual(result, []);
+});
+
 test("formatAsColumns formats single line correctly", (t) => {
     const output = formatAsColumns("X", "label", 8, "description", 12);
     t.is(output, `Xlabel      description\n`);

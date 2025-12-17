@@ -96,8 +96,12 @@ export function visibleLength(str: string): number {
 
 export function wrapText(text: string | undefined, maxWidth: number): string[] {
     const lines: string[] = [];
+    if (!text) {
+        return lines;
+    }
+
     let currentLine = "";
-    for (const line of (text ?? "").split(/\r?\n/)) {
+    for (const line of text.split(/\r?\n/)) {
         const chunks = line.match(/[^\s-]+-|\S+/g) ?? [];
         for (const chunk of chunks) {
             currentLine = processLineChunk(chunk, maxWidth, lines, currentLine);
