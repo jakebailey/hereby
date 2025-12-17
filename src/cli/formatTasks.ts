@@ -41,6 +41,10 @@ ${pc.bold(pc.underline("Available tasks"))}
 ${formatTasksAsColumns(taskInfos)}`;
 }
 
+export function getOutputWidth(output: { isTTY: boolean; columns: number | undefined; }): number {
+    return output.isTTY && output.columns ? output.columns : 80;
+}
+
 function isTaskVisible(task: Task) {
     return !task.options.hiddenFromTaskList;
 }
@@ -52,7 +56,7 @@ function formatTasksAsColumns(tasks: TaskInfo[]): string {
 
     // There's a 2 space indent plus 3 spaces between columns, hence take away 5
     // padding spaces from the available width
-    const maxTotalWidth = (stdout.isTTY ? stdout.columns : 80) - 5;
+    const maxTotalWidth = getOutputWidth(stdout) - 5;
     const maxNameWidth = Math.max(...tasks.map((task) => visibleLength(task.name)));
 
     // Check the name doesn't take up more than half the space

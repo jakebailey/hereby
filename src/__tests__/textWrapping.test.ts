@@ -26,8 +26,8 @@ test("handles multiple newlines and preserves empty lines", (t) => {
 });
 
 test("splits long words correctly", (t) => {
-    const result = wrapText("supercalifragilisticexpialidocious", 10);
-    t.deepEqual(result, ["supercalif", "ragilistic", "expialidoc", "ious"]);
+    const result = wrapText("alone supercalifragilisticexpialidocious", 10);
+    t.deepEqual(result, ["alone", "supercalif", "ragilistic", "expialidoc", "ious"]);
 });
 
 test("handles ANSI colours without breaking visible width", (t) => {
