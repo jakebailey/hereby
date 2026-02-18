@@ -43,9 +43,15 @@ export function findUp<T extends {}>(dir: string, predicate: (dir: string) => T 
  */
 export class UserError extends Error {}
 
+export interface Output {
+    isTTY: boolean;
+    columns: number;
+}
+
 /** Contains all dependencies, for mocking. */
 export interface D {
     // Globals.
+    readonly output: Output | undefined;
     readonly log: (message: string) => void;
     readonly error: (message: string) => void;
     readonly cwd: () => string;
@@ -64,6 +70,7 @@ export async function real(): Promise<D> {
 
     /* eslint-disable no-restricted-globals */
     return {
+        output: process.stdout,
         log: console.log,
         error: console.error,
         // eslint-disable-next-line @typescript-eslint/unbound-method

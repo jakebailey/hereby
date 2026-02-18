@@ -36,14 +36,14 @@ test("printTasks", (t) => {
     });
 
     for (const format of ["normal", "simple"] as const) {
-        const output = formatTasks(format, [a, c, d, hidden], d);
+        const output = formatTasks(format, [a, c, d, hidden], d, undefined);
         // eslint-disable-next-line ava/assertion-arguments
         t.snapshot(normalizeOutput(output), format);
     }
 });
 
 test("printTasks with empty tasks", (t) => {
-    const output = formatTasks("normal", [], undefined);
+    const output = formatTasks("normal", [], undefined, undefined);
     t.is(output.trim(), "Available tasks");
 });
 
@@ -54,7 +54,7 @@ test("getOutputWidth returns the terminal width if available", (t) => {
 
 test("getOutputWidth returns default when not terminal", (t) => {
     const noConsole = getOutputWidth({ isTTY: false, columns: 100 });
-    const noColumns = getOutputWidth({ isTTY: true, columns: undefined });
+    const noColumns = getOutputWidth(undefined);
 
     t.is(noConsole, noColumns);
     t.true(noConsole > 0);

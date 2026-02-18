@@ -1,10 +1,8 @@
-import { stdout } from "node:process";
-
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import { formatAsColumns, visibleLength } from "./textWrapping.js";
-import { compareTaskNames } from "./utils.js";
+import { compareTaskNames, type Output } from "./utils.js";
 
 interface TaskInfo {
     name: string;
@@ -13,7 +11,12 @@ interface TaskInfo {
 
 export type TaskFormat = "normal" | "simple";
 
-export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTask: Task | undefined) {
+export function formatTasks(
+    format: TaskFormat,
+    tasks: Iterable<Task>,
+    defaultTask: Task | undefined,
+    output: Output | undefined,
+) {
     const visibleTasks = [...tasks].filter(isTaskVisible).sort(compareTaskNames);
 
     if (format === "simple") {
@@ -38,25 +41,25 @@ export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTa
     return `
 ${pc.bold(pc.underline("Available tasks"))}
 
-${formatTasksAsColumns(taskInfos)}`;
+${formatTasksAsColumns(output, taskInfos)}`;
 }
 
-export function getOutputWidth(output: { isTTY: boolean; columns: number | undefined; }): number {
-    return output.isTTY && output.columns ? output.columns : 80;
+export function getOutputWidth(output: Output | undefined): number {
+    return output?.isTTY && output.columns ? output.columns : 80;
 }
 
 function isTaskVisible(task: Task) {
     return !task.options.hiddenFromTaskList;
 }
 
-function formatTasksAsColumns(tasks: TaskInfo[]): string {
+function formatTasksAsColumns(output: Output | undefined, tasks: TaskInfo[]): string {
     if (tasks.length === 0) {
         return "";
     }
 
     // There's a 2 space indent plus 3 spaces between columns, hence take away 5
     // padding spaces from the available width
-    const maxTotalWidth = getOutputWidth(stdout) - 5;
+    const maxTotalWidth = getOutputWidth(output) - 5;
     const maxNameWidth = Math.max(...tasks.map((task) => visibleLength(task.name)));
 
     // Check the name doesn't take up more than half the space
