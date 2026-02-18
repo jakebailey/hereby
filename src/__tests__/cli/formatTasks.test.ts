@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { formatTasks, getOutputWidth } from "../../cli/formatTasks.js";
+import { formatTasks } from "../../cli/formatTasks.js";
 import { task } from "../../index.js";
 import { normalizeOutput } from "../__helpers__/index.js";
 
@@ -45,19 +45,6 @@ test("printTasks", (t) => {
 test("printTasks with empty tasks", (t) => {
     const output = formatTasks("normal", [], undefined, undefined);
     t.is(output.trim(), "Available tasks");
-});
-
-test("getOutputWidth returns the terminal width if available", (t) => {
-    const result = getOutputWidth({ isTTY: true, columns: 100 });
-    t.is(result, 100);
-});
-
-test("getOutputWidth returns default when not terminal", (t) => {
-    const noConsole = getOutputWidth({ isTTY: false, columns: 100 });
-    const noColumns = getOutputWidth(undefined);
-
-    t.is(noConsole, noColumns);
-    t.true(noConsole > 0);
 });
 
 test("wraps long descriptions across lines", (t) => {

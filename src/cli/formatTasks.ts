@@ -2,7 +2,7 @@ import pc from "picocolors";
 import Wordwrap from "wordwrapjs";
 
 import type { Task } from "../index.js";
-import { compareTaskNames, type Output } from "./utils.js";
+import { compareTaskNames, getOutputWidth, type Output } from "./utils.js";
 
 export type TaskFormat = "normal" | "simple";
 
@@ -48,10 +48,6 @@ export function formatTasks(
 ${pc.bold(pc.underline("Available tasks"))}
 
 ${formatted.join("")}`;
-}
-
-export function getOutputWidth(output: Output | undefined): number {
-    return output?.isTTY && output.columns ? output.columns : 80;
 }
 
 function isTaskVisible(task: Task) {

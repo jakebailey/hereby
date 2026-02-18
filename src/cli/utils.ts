@@ -48,6 +48,10 @@ export interface Output {
     columns: number;
 }
 
+export function getOutputWidth(output: Output | undefined): number {
+    return output?.isTTY && output.columns ? output.columns : 80;
+}
+
 /** Contains all dependencies, for mocking. */
 export interface D {
     // Globals.
