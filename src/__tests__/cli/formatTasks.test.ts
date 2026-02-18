@@ -59,3 +59,73 @@ test("getOutputWidth returns default when not terminal", (t) => {
     t.is(noConsole, noColumns);
     t.true(noConsole > 0);
 });
+
+test("wraps long descriptions across lines", (t) => {
+    const a = task({
+        name: "a",
+        description: "word ".repeat(20).trim(),
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, { isTTY: true, columns: 30 });
+    t.snapshot(normalizeOutput(output));
+});
+
+test("wraps at hyphens in descriptions", (t) => {
+    const a = task({
+        name: "a",
+        description: "compile-and-run-all-the-tests-now",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, { isTTY: true, columns: 35 });
+    t.snapshot(normalizeOutput(output));
+});
+
+test("breaks long words in descriptions", (t) => {
+    const a = task({
+        name: "a",
+        description: "supercalifragilisticexpialidocious",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, { isTTY: true, columns: 25 });
+    t.snapshot(normalizeOutput(output));
+});
+
+test("handles multiline descriptions", (t) => {
+    const a = task({
+        name: "a",
+        description: "Line one\nLine two",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, undefined);
+    t.snapshot(normalizeOutput(output));
+});
+
+test("handles task with no description", (t) => {
+    const a = task({
+        name: "a",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, undefined);
+    t.snapshot(normalizeOutput(output));
+});
+
+test("formats dependencies in description", (t) => {
+    const dep = task({
+        name: "dep",
+        run: async () => {},
+    });
+
+    const main = task({
+        name: "main",
+        dependencies: [dep],
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [dep, main], undefined, undefined);
+    t.snapshot(normalizeOutput(output));
+});
