@@ -1,5 +1,11 @@
 # hereby
 
+## 1.12.0
+
+### Minor Changes
+
+- 5087031: Replace `command-line-usage` dependency
+
 ## 1.11.1
 
 ### Patch Changes
