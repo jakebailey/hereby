@@ -113,7 +113,11 @@ test("run cli --tasks", async (t) => {
     t.snapshot(stdout);
 });
 
-test("run cli --tasks wide columns", async (t) => {
+const supportsImport = Number(process.versions.node.split(".")[0]) >= 20;
+
+const importTest = supportsImport ? test : test.skip;
+
+importTest("run cli --tasks wide columns", async (t) => {
     const tmpdir = tmp.dirSync({ unsafeCleanup: true });
     t.teardown(tmpdir.removeCallback);
 
