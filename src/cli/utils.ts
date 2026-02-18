@@ -46,6 +46,7 @@ export class UserError extends Error {}
 /** Contains all dependencies, for mocking. */
 export interface D {
     // Globals.
+    readonly columns: () => number;
     readonly log: (message: string) => void;
     readonly error: (message: string) => void;
     readonly cwd: () => string;
@@ -64,6 +65,7 @@ export async function real(): Promise<D> {
 
     /* eslint-disable no-restricted-globals */
     return {
+        columns: () => process.stdout.isTTY && process.stdout.columns || 80,
         log: console.log,
         error: console.error,
         // eslint-disable-next-line @typescript-eslint/unbound-method

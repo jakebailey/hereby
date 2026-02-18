@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import test from "ava";
 import { execaNode } from "execa";
@@ -106,6 +106,35 @@ test("run cli reexec within hereby", async (t) => {
 
     const { stdout } = await execaNode(cliPath, { cwd: fakeHerebyDep });
     t.is(stdout, "It works!");
+});
+
+test("run cli --tasks", async (t) => {
+    const { stdout } = await execaNode(cliPath, ["--tasks"], { cwd: fixturesPath });
+    t.snapshot(stdout);
+});
+
+const supportsImport = Number(process.versions.node.split(".")[0]) >= 20;
+
+const importTest = supportsImport ? test : test.skip;
+
+importTest("run cli --tasks wide columns", async (t) => {
+    const tmpdir = tmp.dirSync({ unsafeCleanup: true });
+    t.teardown(tmpdir.removeCallback);
+
+    const preloadPath = path.join(tmpdir.name, "preload.mjs");
+    await fs.promises.writeFile(
+        preloadPath,
+        [
+            "Object.defineProperty(process.stdout, 'isTTY', { value: true });",
+            "Object.defineProperty(process.stdout, 'columns', { value: 200 });",
+        ].join("\n"),
+    );
+
+    const { stdout } = await execaNode(cliPath, ["--tasks"], {
+        cwd: fixturesPath,
+        nodeOptions: ["--import", pathToFileURL(preloadPath).href],
+    });
+    t.snapshot(stdout);
 });
 
 test("exception", async (t) => {

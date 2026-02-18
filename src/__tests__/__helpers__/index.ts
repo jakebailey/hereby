@@ -15,3 +15,12 @@ export function mock<T>(t: ExecutionContext) {
             throw new Error(message);
         });
 }
+
+/**
+ * Normalizes the console output to standardise trailing whitespace and newlines.
+ * @param output The console output
+ * @returns The normalized string
+ */
+export function normalizeOutput(output: string) {
+    return output.replace(/\r|([ \r]+$)/gm, "");
+}
