@@ -19,9 +19,7 @@ export function formatTasks(
     }
 
     const names = visibleTasks.map((task) =>
-        task === defaultTask
-            ? `${pc.green(task.options.name)} (default)`
-            : pc.blue(task.options.name)
+        task === defaultTask ? `${pc.green(task.options.name)} (default)` : pc.blue(task.options.name)
     );
 
     const descriptions = visibleTasks.map((task) => {
