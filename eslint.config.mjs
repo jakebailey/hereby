@@ -17,13 +17,14 @@ export default tseslint.config(
             "bin/**",
             "coverage/**",
             "Herebyfile.mjs",
+            "package.json",
         ],
     },
     eslint.configs.recommended,
     ...tseslint.configs.strictTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
     eslintPluginUnicorn.configs["flat/recommended"],
-    eslintPluginAva.configs["flat/recommended"],
+    eslintPluginAva.configs.recommended,
     {
         languageOptions: {
             parserOptions: {
@@ -147,6 +148,7 @@ export default tseslint.config(
         files: [
             ".ncurc.cjs",
             "eslint.config.mjs",
+            "package.json",
         ],
         extends: [tseslint.configs.disableTypeChecked],
     },

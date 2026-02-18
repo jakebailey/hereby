@@ -13,11 +13,13 @@ const fixturesPath = fileURLToPath(new URL("cli/__fixtures__", import.meta.url))
 
 test("run cli --help", async (t) => {
     await execaNode(cliPath, ["--help"]);
+    t.plan(1);
     t.pass();
 });
 
 test("run cli --version", async (t) => {
     await execaNode(cliPath, ["--version"], { cwd: fixturesPath });
+    t.plan(1);
     t.pass();
 });
 
