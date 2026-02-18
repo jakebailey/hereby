@@ -2,4 +2,4 @@
 'hereby': minor
 ---
 
-Tweaked usage output to remove external dependency
+Replace `command-line-usage` dependency
