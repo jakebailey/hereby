@@ -3,7 +3,7 @@ import path from "node:path";
 
 import test from "ava";
 
-import { getOutputWidth, real, simplifyPath, UserError } from "../../cli/utils.js";
+import { real, simplifyPath, UserError } from "../../cli/utils.js";
 
 function normalizeSlashes(p: string) {
     return p.replace(/\\/g, "/");
@@ -36,17 +36,4 @@ test.serial("real dependencies", async (t) => {
 test("UserError", (t) => {
     const e = new UserError("message");
     t.is(e.message, "message");
-});
-
-test("getOutputWidth returns the terminal width if available", (t) => {
-    const result = getOutputWidth({ isTTY: true, columns: 100 });
-    t.is(result, 100);
-});
-
-test("getOutputWidth returns default when not terminal", (t) => {
-    const noConsole = getOutputWidth({ isTTY: false, columns: 100 });
-    const noColumns = getOutputWidth(undefined);
-
-    t.is(noConsole, noColumns);
-    t.true(noConsole > 0);
 });

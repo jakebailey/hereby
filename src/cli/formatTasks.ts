@@ -2,16 +2,11 @@ import pc from "picocolors";
 import Wordwrap from "wordwrapjs";
 
 import type { Task } from "../index.js";
-import { compareTaskNames, getOutputWidth, type Output } from "./utils.js";
+import { compareTaskNames } from "./utils.js";
 
 export type TaskFormat = "normal" | "simple";
 
-export function formatTasks(
-    format: TaskFormat,
-    tasks: Iterable<Task>,
-    defaultTask: Task | undefined,
-    output: Output | undefined,
-) {
+export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTask: Task | undefined, columns: number) {
     const visibleTasks = [...tasks].filter(isTaskVisible).sort(compareTaskNames);
 
     if (format === "simple") {
@@ -34,7 +29,7 @@ export function formatTasks(
 
     // There's a 2 space indent plus 3 spaces between columns, hence take away 5
     // padding spaces from the available width
-    const maxTotalWidth = getOutputWidth(output) - 5;
+    const maxTotalWidth = columns - 5;
     const maxNameWidth = Math.max(...names.map(visibleLength));
 
     // Check the name doesn't take up more than half the space

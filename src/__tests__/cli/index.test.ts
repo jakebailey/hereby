@@ -112,8 +112,8 @@ test("main print tasks", async (t) => {
         .returns((message) => log.push(["log", normalizeOutput(message)]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
-        .setup((d) => d.output)
-        .returns({ isTTY: true, columns: 80 });
+        .setup((d) => d.columns)
+        .returns(() => 80);
 
     await main(dMock.object());
 

@@ -49,7 +49,7 @@ async function mainWorker(d: D) {
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
-        d.log(formatTasks(args.printTasks, herebyfile.tasks.values(), herebyfile.defaultTask, d.output));
+        d.log(formatTasks(args.printTasks, herebyfile.tasks.values(), herebyfile.defaultTask, d.columns()));
         return;
     }
 

@@ -36,14 +36,14 @@ test("printTasks", (t) => {
     });
 
     for (const format of ["normal", "simple"] as const) {
-        const output = formatTasks(format, [a, c, d, hidden], d, undefined);
+        const output = formatTasks(format, [a, c, d, hidden], d, 80);
         // eslint-disable-next-line ava/assertion-arguments
         t.snapshot(normalizeOutput(output), format);
     }
 });
 
 test("printTasks with empty tasks", (t) => {
-    const output = formatTasks("normal", [], undefined, undefined);
+    const output = formatTasks("normal", [], undefined, 80);
     t.is(output.trim(), "Available tasks");
 });
 
@@ -54,7 +54,7 @@ test("wraps long descriptions across lines", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, { isTTY: true, columns: 30 });
+    const output = formatTasks("normal", [a], undefined, 30);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -65,7 +65,7 @@ test("wraps at hyphens in descriptions", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, { isTTY: true, columns: 35 });
+    const output = formatTasks("normal", [a], undefined, 35);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -76,7 +76,7 @@ test("breaks long words in descriptions", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, { isTTY: true, columns: 25 });
+    const output = formatTasks("normal", [a], undefined, 25);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -87,7 +87,7 @@ test("handles multiline descriptions", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, undefined);
+    const output = formatTasks("normal", [a], undefined, 80);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -97,7 +97,7 @@ test("handles task with no description", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, undefined);
+    const output = formatTasks("normal", [a], undefined, 80);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -113,6 +113,6 @@ test("formats dependencies in description", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [dep, main], undefined, undefined);
+    const output = formatTasks("normal", [dep, main], undefined, 80);
     t.snapshot(normalizeOutput(output));
 });
