@@ -37,6 +37,25 @@ export function findUp<T extends {}>(dir: string, predicate: (dir: string) => T 
     return undefined;
 }
 
+// Exported for testing.
+export function prettyMilliseconds(ms: number): string {
+    if (ms < 1000) return `${Math.ceil(ms)}ms`;
+
+    const seconds = (ms / 1000) % 60;
+    const minutes = Math.floor(ms / 60_000) % 60;
+    const hours = Math.floor(ms / 3_600_000);
+    // Round to one decimal, with an epsilon to avoid floating point errors (e.g. 5.0000001 -> 5).
+    const roundedSeconds = Math.floor(seconds * 10 + 0.000_000_1) / 10;
+
+    const parts: string[] = [];
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}m`);
+    if (roundedSeconds > 0) {
+        parts.push(roundedSeconds % 1 === 0 ? `${roundedSeconds}s` : `${roundedSeconds.toFixed(1)}s`);
+    }
+    return parts.join(" ");
+}
+
 /**
  * UserError is a special error that, when caught in the CLI will be printed
  * as a message only, without stacktrace. Use this instead of process.exit.
@@ -55,14 +74,10 @@ export interface D {
     readonly argv: readonly string[];
     readonly setExitCode: (code: number) => void;
     readonly version: () => string;
-
-    // Third-party package imports.
     readonly prettyMilliseconds: (milliseconds: number) => string;
 }
 
-export async function real(): Promise<D> {
-    const { default: prettyMilliseconds } = await import("pretty-ms");
-
+export function real(): D {
     /* eslint-disable no-restricted-globals */
     return {
         columns: () => process.stdout.isTTY && process.stdout.columns || 80,

@@ -8,7 +8,7 @@ if (module.enableCompileCache) {
 async function run() {
     const { main } = await import("./cli/index.js");
     const { real } = await import("./cli/utils.js");
-    await main(await real());
+    await main(real());
 }
 
 void run();
