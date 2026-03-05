@@ -1,3 +1,5 @@
+import assert from "node:assert";
+
 export interface TaskOptions {
     /**
      * The name of the task, as referenced in logs and the CLI.
@@ -54,41 +56,29 @@ export class Task {
         // typechecking, so this is helpful.
 
         /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-
-        if (typeof options.name !== "string") {
-            throw new TypeError("Task name is not a string.");
-        }
-
-        if (typeof options.description !== "string" && options.description !== undefined) {
-            throw new TypeError("Task description is not a string or undefined.");
-        }
-
-        if (!Array.isArray(options.dependencies) && options.dependencies !== undefined) {
-            throw new TypeError("Task dependencies is not an array or undefined.");
-        }
+        assert.ok(typeof options.name === "string", "Task name is not a string.");
+        assert.ok(
+            typeof options.description === "string" || options.description === undefined,
+            "Task description is not a string or undefined.",
+        );
+        assert.ok(
+            Array.isArray(options.dependencies) || options.dependencies === undefined,
+            "Task dependencies is not an array or undefined.",
+        );
         for (const dep of options.dependencies ?? []) {
-            if (!(dep instanceof Task)) {
-                throw new TypeError("Task dependency is not a task.");
-            }
+            assert.ok(dep instanceof Task, "Task dependency is not a task.");
         }
-
-        if (typeof options.run !== "function" && options.run !== undefined) {
-            throw new TypeError("Task run is not a function or undefined.");
-        }
-
+        assert.ok(
+            typeof options.run === "function" || options.run === undefined,
+            "Task run is not a function or undefined.",
+        );
         /* eslint-enable @typescript-eslint/no-unnecessary-condition */
 
         // Non-type checks.
-
-        if (!options.name) {
-            throw new Error("Task name must not be empty.");
-        }
-        if (options.name.startsWith("-")) {
-            throw new Error('Task name must not start with "-".');
-        }
-        if (!options.dependencies?.length && !options.run) {
-            throw new Error("Task must have a run function or dependencies.");
-        }
+        assert.ok(options.name !== "", "Task name must not be empty.");
+        assert.ok(!options.name.startsWith("-"), 'Task name must not start with "-".');
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        assert.ok(!!(options.dependencies?.length || options.run), "Task must have a run function or dependencies.");
 
         this.options = options;
     }
