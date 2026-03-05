@@ -24,7 +24,7 @@ test(macro, path.join(os.homedir(), "foo", "bar", "Herebyfile.js"), "~/foo/bar/H
 test(macro, `${os.homedir()}////foo/bar/../bar/Herebyfile.js`, "~/foo/bar/Herebyfile.js");
 test(macro, path.dirname(os.homedir()), path.dirname(os.homedir()));
 
-test.serial("real dependencies", async (t) => {
+test.serial("real dependencies", (t) => {
     const d = real();
 
     const saveExitCode = process.exitCode;
