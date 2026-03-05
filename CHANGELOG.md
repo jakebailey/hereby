@@ -1,5 +1,12 @@
 # hereby
 
+## 1.13.0
+
+### Minor Changes
+
+- 68b31e1: Simplify task runner
+- b91a16b: Remove pretty-ms dep, use small local replacement
+
 ## 1.12.0
 
 ### Minor Changes
