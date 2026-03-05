@@ -2,7 +2,7 @@ import test from "ava";
 
 import { Runner, type RunnerD } from "../../cli/runner.js";
 import { task } from "../../index.js";
-import { mock } from "../__helpers__/index.js";
+import { mock, normalizeTiming } from "../__helpers__/index.js";
 
 function sleep(ms: number) {
     return new Promise((resolve) => {
@@ -69,11 +69,9 @@ test("runner", async (t) => {
 
     const dMock = mock<RunnerD>(t)
         .setup((d) => d.log)
-        .returns((m) => log.push(["log", m]))
+        .returns((m) => log.push(["log", normalizeTiming(m)]))
         .setup((d) => d.error)
-        .returns((m) => log.push(["error", m]))
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns((m) => log.push(["error", normalizeTiming(m)]));
 
     const runner = new Runner(dMock.object());
 
@@ -106,9 +104,7 @@ test("basic use", async (t) => {
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
-        .returns(() => {})
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns(() => {});
 
     const runner = new Runner(dMock.object());
 
@@ -141,9 +137,7 @@ test("multiple calls", async (t) => {
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
-        .returns(() => {})
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns(() => {});
 
     const runner = new Runner(dMock.object());
 
@@ -202,9 +196,7 @@ test("dependencies", async (t) => {
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
-        .returns(() => {})
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns(() => {});
 
     const runner = new Runner(dMock.object());
 
@@ -259,9 +251,7 @@ test("dependencies with thrown error", async (t) => {
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
-        .returns(() => {})
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns(() => {});
 
     const runner = new Runner(dMock.object());
 
@@ -304,9 +294,7 @@ test("sibling tasks and thrown error", async (t) => {
         .setup((d) => d.log)
         .returns(() => {})
         .setup((d) => d.error)
-        .returns(() => {})
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns(() => {});
 
     const runner = new Runner(dMock.object());
 

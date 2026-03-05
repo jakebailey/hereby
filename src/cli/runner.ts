@@ -3,9 +3,10 @@ import { performance } from "node:perf_hooks";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
+import { prettyMilliseconds } from "./utils.js";
 import type { D } from "./utils.js";
 
-export type RunnerD = Pick<D, "log" | "error" | "prettyMilliseconds">;
+export type RunnerD = Pick<D, "log" | "error">;
 
 export class Runner {
     private readonly _addedTasks = new Map<Task, Promise<void>>();
@@ -52,13 +53,13 @@ export class Runner {
             await run();
             if (this.failedTasks.length === 0) {
                 const took = performance.now() - start;
-                this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
+                this._d.log(`Finished ${pc.green(task.options.name)} in ${prettyMilliseconds(took)}`);
             }
         } catch (e) {
             this.failedTasks.push(task.options.name);
             if (this.failedTasks.length === 1) {
                 const took = performance.now() - start;
-                this._d.error(`Error in ${pc.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
+                this._d.error(`Error in ${pc.red(task.options.name)} in ${prettyMilliseconds(took)}\n${e}`);
             }
             throw e;
         }

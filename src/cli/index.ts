@@ -10,7 +10,7 @@ import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfil
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { type D, UserError } from "./utils.js";
+import { type D, prettyMilliseconds, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {
@@ -70,7 +70,7 @@ async function mainWorker(d: D) {
     } finally {
         const took = performance.now() - start;
         const failed = runner.failedTasks.length > 0;
-        d.log(`Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${d.prettyMilliseconds(took)}`);
+        d.log(`Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${prettyMilliseconds(took)}`);
         if (failed) {
             const names = runner.failedTasks.sort().map((task) => pc.red(task)).join(", ");
             d.log(`Failed tasks: ${names}`);

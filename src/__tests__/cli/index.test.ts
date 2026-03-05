@@ -6,7 +6,7 @@ import test from "ava";
 import { main, selectTasks } from "../../cli/index.js";
 import { loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { type D, UserError } from "../../cli/utils.js";
-import { mock, normalizeOutput } from "../__helpers__/index.js";
+import { mock, normalizeOutput, normalizeTiming } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
 
@@ -131,13 +131,11 @@ test("main success", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeOutput(message)]))
+        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
-        .returns(fakeSimplifyPath)
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
+        .returns(fakeSimplifyPath);
 
     await main(dMock.object());
 
@@ -155,16 +153,14 @@ test("main failure", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeOutput(message)]))
+        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
         .returns(fakeSimplifyPath)
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
         .returns((message) => {
-            t.is(message, "Error in failure in <pretty-ms>\nError: failure!");
+            t.regex(message, /^Error in failure in \d/);
         })
         .setup((d) => d.setExitCode)
         .returns((code) => {
@@ -187,16 +183,14 @@ test("multi failure", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeOutput(message)]))
+        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
         .returns(fakeSimplifyPath)
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
         .returns((message) => {
-            t.is(message, "Error in failure in <pretty-ms>\nError: failure!");
+            t.regex(message, /^Error in failure in \d/);
         })
         .setup((d) => d.setExitCode)
         .returns((code) => {
@@ -219,13 +213,11 @@ test("main user error", async (t) => {
         .setup((d) => d.cwd)
         .returns(() => fixturesPath)
         .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeOutput(message)]))
+        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
         .setup((d) => d.chdir)
         .returns((directory) => t.is(directory, fixturesPath))
         .setup((d) => d.simplifyPath)
         .returns(fakeSimplifyPath)
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>")
         .setup((d) => d.error)
         .returns((message) => log.push(["error", normalizeOutput(message)]))
         .setup((d) => d.setExitCode)

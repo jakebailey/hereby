@@ -24,3 +24,11 @@ export function mock<T>(t: ExecutionContext) {
 export function normalizeOutput(output: string) {
     return output.replace(/\r|([ \r]+$)/gm, "");
 }
+
+/**
+ * Replaces real timing values like "12ms", "1.5s", "2m 5s" with "<time>"
+ * so snapshots are deterministic.
+ */
+export function normalizeTiming(message: string) {
+    return message.replace(/\b(\d+(\.\d+)? *(ms|s|h) *)+/g, "<time>");
+}

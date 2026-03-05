@@ -37,7 +37,6 @@ export function findUp<T extends {}>(dir: string, predicate: (dir: string) => T 
     return undefined;
 }
 
-// Exported for testing.
 export function prettyMilliseconds(ms: number): string {
     if (ms < 1000) return `${Math.ceil(ms)}ms`;
 
@@ -74,7 +73,6 @@ export interface D {
     readonly argv: readonly string[];
     readonly setExitCode: (code: number) => void;
     readonly version: () => string;
-    readonly prettyMilliseconds: (milliseconds: number) => string;
 }
 
 export function real(): D {
@@ -97,7 +95,6 @@ export function real(): D {
             const packageJson = fs.readFileSync(packageJsonURL, "utf8");
             return JSON.parse(packageJson).version;
         },
-        prettyMilliseconds,
     };
     /* eslint-enable no-restricted-globals */
 }
