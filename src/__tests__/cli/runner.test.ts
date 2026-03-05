@@ -1,7 +1,7 @@
 import test from "ava";
 
 import { Runner, type RunnerD } from "../../cli/runner.js";
-import { Task, task } from "../../index.js";
+import { task } from "../../index.js";
 import { mock } from "../__helpers__/index.js";
 
 function sleep(ms: number) {
@@ -81,36 +81,6 @@ test("runner", async (t) => {
         await runner.runTasks(d);
     });
 
-    t.snapshot(log, "log");
-});
-
-class TestRunner extends Runner {
-    override async runTasks(...tasks: Task[]): Promise<void> {
-        for (const [i, task] of tasks.entries()) {
-            this.onTaskStart(task);
-
-            if (i % 2 === 0) {
-                this.onTaskFinish(task);
-            } else {
-                this.onTaskError(task, new Error("test error"));
-            }
-        }
-    }
-}
-
-test("runner direct", async (t) => {
-    const log: any[] = [];
-
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns((m) => log.push(["log", m]))
-        .setup((d) => d.error)
-        .returns((m) => log.push(["error", m]))
-        .setup((d) => d.prettyMilliseconds)
-        .returns(() => "<pretty-ms>");
-
-    const runner = new TestRunner(dMock.object());
-    await runner.runTasks(a, a2, b, c, d);
     t.snapshot(log, "log");
 });
 

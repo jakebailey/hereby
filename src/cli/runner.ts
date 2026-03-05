@@ -11,7 +11,6 @@ export class Runner {
     private readonly _addedTasks = new Map<Task, Promise<void>>();
 
     readonly failedTasks: string[] = [];
-    private readonly _startTimes = new Map<Task, number>();
 
     constructor(private readonly _d: RunnerD) {}
 
@@ -45,36 +44,23 @@ export class Runner {
 
         if (!run) return;
 
+        const start = performance.now();
         try {
-            this.onTaskStart(task);
+            if (this.failedTasks.length === 0) {
+                this._d.log(`Starting ${pc.blue(task.options.name)}`);
+            }
             await run();
-            this.onTaskFinish(task);
+            if (this.failedTasks.length === 0) {
+                const took = performance.now() - start;
+                this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
+            }
         } catch (e) {
-            this.onTaskError(task, e);
+            this.failedTasks.push(task.options.name);
+            if (this.failedTasks.length === 1) {
+                const took = performance.now() - start;
+                this._d.error(`Error in ${pc.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
+            }
             throw e;
         }
-    }
-
-    protected onTaskStart(task: Task): void {
-        this._startTimes.set(task, performance.now());
-
-        if (this.failedTasks.length > 0) return; // Skip logging.
-
-        this._d.log(`Starting ${pc.blue(task.options.name)}`);
-    }
-
-    protected onTaskFinish(task: Task): void {
-        if (this.failedTasks.length > 0) return; // Skip logging.
-
-        const took = performance.now() - this._startTimes.get(task)!;
-        this._d.log(`Finished ${pc.green(task.options.name)} in ${this._d.prettyMilliseconds(took)}`);
-    }
-
-    protected onTaskError(task: Task, e: unknown): void {
-        this.failedTasks.push(task.options.name);
-        if (this.failedTasks.length > 1) return; // Skip logging.
-
-        const took = performance.now() - this._startTimes.get(task)!;
-        this._d.error(`Error in ${pc.red(task.options.name)} in ${this._d.prettyMilliseconds(took)}\n${e}`);
     }
 }
