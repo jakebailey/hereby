@@ -1,5 +1,5 @@
 ---
-"hereby": minor
+'hereby': minor
 ---
 
 Simplify task runner
