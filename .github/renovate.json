@@ -26,10 +26,6 @@
             "allowedVersions": "~5.0.1"
         },
         {
-            "matchPackageNames": ["execa"],
-            "allowedVersions": "~5.0.1"
-        },
-        {
             "matchPackageNames": ["c8"],
             "allowedVersions": "^8"
         },

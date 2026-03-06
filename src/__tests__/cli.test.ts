@@ -4,7 +4,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import test from "ava";
 import { execaNode } from "execa";
-import tmp from "tmp";
+
+import { useTmpdir } from "./__helpers__/index.js";
 
 const cliPath = fileURLToPath(new URL("../cli.js", import.meta.url));
 const fixturesPath = fileURLToPath(new URL("cli/__fixtures__", import.meta.url));
@@ -24,9 +25,7 @@ test("run cli --version", async (t) => {
 });
 
 test("run cli reexec", async (t) => {
-    const tmpdir = tmp.dirSync({ unsafeCleanup: true });
-    t.teardown(tmpdir.removeCallback);
-    const dir = tmpdir.name;
+    const dir = useTmpdir(t);
 
     await fs.promises.writeFile(path.join(dir, "Herebyfile.mjs"), "export {};");
 
@@ -64,9 +63,7 @@ test("run cli reexec", async (t) => {
 });
 
 test("run cli reexec within hereby", async (t) => {
-    const tmpdir = tmp.dirSync({ unsafeCleanup: true });
-    t.teardown(tmpdir.removeCallback);
-    const dir = tmpdir.name;
+    const dir = useTmpdir(t);
 
     const fakeHereby = path.join(dir, "node_modules", "hereby");
     const fakeHerebyDist = path.join(fakeHereby, "dist");
@@ -120,10 +117,9 @@ const supportsImport = Number(process.versions.node.split(".")[0]) >= 20;
 const importTest = supportsImport ? test : test.skip;
 
 importTest("run cli --tasks wide columns", async (t) => {
-    const tmpdir = tmp.dirSync({ unsafeCleanup: true });
-    t.teardown(tmpdir.removeCallback);
+    const dir = useTmpdir(t);
 
-    const preloadPath = path.join(tmpdir.name, "preload.mjs");
+    const preloadPath = path.join(dir, "preload.mjs");
     await fs.promises.writeFile(
         preloadPath,
         [

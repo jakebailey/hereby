@@ -12,7 +12,6 @@ module.exports = {
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     reject: (name, semver) => {
-        if (name === "tmp") return true;
         if (name === "picocolors") return true;
         return false;
     },

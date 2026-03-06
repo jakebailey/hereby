@@ -1,5 +1,22 @@
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
 import type { ExecutionContext } from "ava";
 import { It, Mock } from "moq.ts";
+
+const maxRetries = process.platform === "win32" ? 10 : 0;
+
+const rmRecursive: (p: string) => Promise<void> = fs.promises.rm
+    ? (p) => fs.promises.rm(p, { recursive: true, force: true, maxRetries })
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    : (p) => (fs.promises.rmdir as (p: string, opts: { recursive: boolean; }) => Promise<void>)(p, { recursive: true });
+
+export function useTmpdir(t: ExecutionContext): string {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "hereby-"));
+    t.teardown(() => rmRecursive(dir));
+    return dir;
+}
 
 /**
  * Creates a new moq.ts mock whose properties default to failing the current

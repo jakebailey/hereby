@@ -3,7 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import test from "ava";
-import tmp from "tmp";
+
+import { useTmpdir } from "../__helpers__/index.js";
 
 import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
@@ -62,9 +63,7 @@ test("no tasks", async (t) => {
 });
 
 test("findHerebyfile", async (t) => {
-    const tmpdir = tmp.dirSync({ unsafeCleanup: true });
-    t.teardown(tmpdir.removeCallback);
-    const dir = tmpdir.name;
+    const dir = useTmpdir(t);
     const deepest = path.join(dir, "source", "package", "src", "cli");
     const src = path.join(dir, "source", "package", "src");
     const packageRoot = path.join(dir, "source", "package");
@@ -123,9 +122,7 @@ for (
     ]
 ) {
     test(`finds ${name}`, async (t) => {
-        const tmpdir = tmp.dirSync({ unsafeCleanup: true });
-        t.teardown(tmpdir.removeCallback);
-        const dir = tmpdir.name;
+        const dir = useTmpdir(t);
         const expectedHerebyFile = path.join(dir, name);
 
         await fs.promises.writeFile(expectedHerebyFile, "export {}");
