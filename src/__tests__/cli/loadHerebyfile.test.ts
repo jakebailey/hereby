@@ -4,10 +4,9 @@ import { fileURLToPath } from "node:url";
 
 import test from "ava";
 
-import { useTmpdir } from "../__helpers__/index.js";
-
 import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
+import { useTmpdir } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
 

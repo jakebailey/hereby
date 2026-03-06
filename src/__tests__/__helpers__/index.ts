@@ -7,9 +7,9 @@ import { It, Mock } from "moq.ts";
 
 const maxRetries = process.platform === "win32" ? 10 : 0;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- fs.promises.rm doesn't exist on Node 12
 const rmRecursive: (p: string) => Promise<void> = fs.promises.rm
     ? (p) => fs.promises.rm(p, { recursive: true, force: true, maxRetries })
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
     : (p) => (fs.promises.rmdir as (p: string, opts: { recursive: boolean; }) => Promise<void>)(p, { recursive: true });
 
 export function useTmpdir(t: ExecutionContext): string {
