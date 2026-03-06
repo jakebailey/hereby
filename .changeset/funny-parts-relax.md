@@ -1,5 +1,0 @@
----
-"hereby": minor
----
-
-Update picocolors
