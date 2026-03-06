@@ -4,7 +4,6 @@ module.exports = {
         if (dependencyName === "ava") return "patch"; // Trying to support Node 12.
         if (dependencyName === "@ava/typescript") return "minor"; // Trying to support Node 12.
         if (dependencyName === "execa") return "patch"; // Trying to support Node 12.
-        if (dependencyName === "pretty-ms") return "minor"; // For old versions of node.
         if (dependencyName === "rimraf") return "minor";
         if (dependencyName === "npm") return "minor";
         if (major === "0") return "minor";

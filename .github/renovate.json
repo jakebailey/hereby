@@ -26,18 +26,6 @@
             "allowedVersions": "~5.0.1"
         },
         {
-            "matchPackageNames": ["c8"],
-            "allowedVersions": "^8"
-        },
-        {
-            "matchPackageNames": ["pretty-ms"],
-            "allowedVersions": "^8"
-        },
-        {
-            "matchPackageNames": ["tmp"],
-            "allowedVersions": "0.2.1"
-        },
-        {
             "matchManagers": ["github-actions"],
             "groupName": "github actions",
             "groupSlug": "github-actions"
