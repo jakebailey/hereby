@@ -1,5 +1,4 @@
 import pc from "picocolors";
-import Wordwrap from "wordwrapjs";
 
 import type { Task } from "../index.js";
 import { compareTaskNames } from "./utils.js";
@@ -74,6 +73,26 @@ function visibleLength(str: string): number {
     return str.replace(ANSI_REGEX, "").length;
 }
 
+const TOKEN_REGEX = /[^\s-]+?-\b|\S+|\s+/g;
+
 function wrapText(text: string, maxWidth: number): string[] {
-    return Wordwrap.lines(text, { width: maxWidth, break: true });
+    const result: string[] = [];
+    for (const line of text.split(/\r?\n/)) {
+        let current = "";
+        for (const token of line.match(TOKEN_REGEX) ?? []) {
+            if (visibleLength(current) + visibleLength(token) > maxWidth && current.trim()) {
+                result.push(current.trim());
+                current = "";
+            }
+            if (visibleLength(token) > maxWidth) {
+                // eslint-disable-next-line @typescript-eslint/no-misused-spread
+                const chars = [...token];
+                while (chars.length > 0) result.push(chars.splice(0, maxWidth).join(""));
+            } else {
+                current += /^\s/.test(token) && !current ? "" : token;
+            }
+        }
+        if (current.trim()) result.push(current.trim());
+    }
+    return result.length > 0 ? result : [""];
 }

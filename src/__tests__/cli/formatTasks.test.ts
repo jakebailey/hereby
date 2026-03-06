@@ -80,6 +80,17 @@ test("breaks long words in descriptions", (t) => {
     t.snapshot(normalizeOutput(output));
 });
 
+test("breaks long words after short words", (t) => {
+    const a = task({
+        name: "a",
+        description: "hi supercalifragilisticexpialidocious",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, 25);
+    t.snapshot(normalizeOutput(output));
+});
+
 test("handles multiline descriptions", (t) => {
     const a = task({
         name: "a",
