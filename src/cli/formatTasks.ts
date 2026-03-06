@@ -61,7 +61,7 @@ function formatAsColumns(
     for (let i = 0; i < maxLines; i++) {
         const leftPart = leftLines[i] || "";
         const rightPart = rightLines[i] || "";
-        const paddedLeft = leftPart.padEnd(leftWidth, " ");
+        const paddedLeft = leftPart + " ".repeat(Math.max(0, leftWidth - visibleLength(leftPart)));
         result += `${indent}${paddedLeft}   ${rightPart}\n`;
     }
     return result;
