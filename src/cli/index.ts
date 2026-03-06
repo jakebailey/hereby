@@ -5,7 +5,6 @@ import { types } from "node:util";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { formatTasks } from "./formatTasks.js";
 import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
@@ -49,6 +48,7 @@ async function mainWorker(d: D) {
     const herebyfile = await loadHerebyfile(herebyfilePath);
 
     if (args.printTasks) {
+        const { formatTasks } = await import("./formatTasks.js");
         d.log(formatTasks(args.printTasks, herebyfile.tasks.values(), herebyfile.defaultTask, d.columns()));
         return;
     }
