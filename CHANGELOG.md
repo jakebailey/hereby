@@ -1,5 +1,17 @@
 # hereby
 
+## 1.14.0
+
+### Minor Changes
+
+- 7ca84de: Update picocolors
+- b6d1222: Replace wordwrapjs with small local helper
+- 81c67b9: Lazily load task formatting code
+
+### Patch Changes
+
+- 3817716: Fix task formatting bug
+
 ## 1.13.0
 
 ### Minor Changes
