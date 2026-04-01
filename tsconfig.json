@@ -9,6 +9,7 @@
         "declaration": true,
         "stripInternal": true,
         "sourceMap": true,
+        "types": ["node"],
 
         "allowUnusedLabels": false,
         "allowUnreachableCode": false,
