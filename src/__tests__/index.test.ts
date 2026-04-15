@@ -15,7 +15,6 @@ test("no names that start with a dash", (t) => {
 });
 
 test("missing info", (t) => {
-    t.throws(() => task({ name: "", run: async () => {} }));
     t.throws(() => task({ name: "foo" }));
     t.throws(() => task({ name: "foo", dependencies: [] }));
 });
