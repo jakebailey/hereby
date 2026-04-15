@@ -29,6 +29,17 @@ test("duplicate export", async (t) => {
     );
 });
 
+test("duplicate export (no name)", async (t) => {
+    const herebyfilePath = path.join(fixturesPath, "duplicateNoName.mjs");
+
+    await t.throwsAsync(
+        async () => {
+            await loadHerebyfile(herebyfilePath);
+        },
+        { instanceOf: UserError, message: 'Task "b" has been exported twice.' },
+    );
+});
+
 test("duplicate name", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "duplicateNames.mjs");
 
