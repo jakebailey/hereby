@@ -5,6 +5,7 @@ import { types } from "node:util";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
+import { formatTaskName } from "./formatTasks.js";
 import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
@@ -49,17 +50,17 @@ async function mainWorker(d: D) {
 
     if (args.printTasks) {
         const { formatTasks } = await import("./formatTasks.js");
-        d.log(formatTasks(args.printTasks, herebyfile.tasks.values(), herebyfile.defaultTask, d.columns()));
+        d.log(formatTasks(args.printTasks, herebyfile, d.columns()));
         return;
     }
 
     const tasks = await selectTasks(d, herebyfile, herebyfilePath, args.run);
-    const taskNames = tasks.map((task) => pc.blue(task.options.name)).join(", ");
+    const taskNames = tasks.map((task) => pc.blue(formatTaskName(herebyfile, task))).join(", ");
     d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
     const start = performance.now();
 
-    const runner = new Runner(d);
+    const runner = new Runner(d, herebyfile);
     try {
         await runner.runTasks(...tasks);
     } catch {
@@ -93,15 +94,16 @@ export async function selectTasks(
     }
 
     const tasks: Task[] = [];
+    const taskLookup = new Map([...herebyfile.tasks.keys()].map((task) => [formatTaskName(herebyfile, task), task]));
 
     for (const name of taskNames) {
-        const task = herebyfile.tasks.get(name);
+        const task = taskLookup.get(name);
         if (!task) {
             let message = `Task "${name}" does not exist or is not exported from ${d.simplifyPath(herebyfilePath)}.`;
 
             const { closest, distance } = await import("fastest-levenshtein");
 
-            const candidate = closest(name, [...herebyfile.tasks.keys()]);
+            const candidate = closest(name, [...taskLookup.keys()]);
             if (distance(name, candidate) < name.length * 0.4) {
                 message += ` Did you mean "${candidate}"?`;
             }

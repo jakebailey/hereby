@@ -1,7 +1,8 @@
 import test from "ava";
 
+import type { Herebyfile } from "../../cli/loadHerebyfile.js";
 import { Runner, type RunnerD } from "../../cli/runner.js";
-import { task } from "../../index.js";
+import { Task, task } from "../../index.js";
 import { mock, normalizeTiming } from "../__helpers__/index.js";
 
 function sleep(ms: number) {
@@ -64,6 +65,11 @@ const d = task({
     },
 });
 
+const herebyfile: Herebyfile = {
+    defaultTask: undefined,
+    tasks: new Map<Task, string>(),
+};
+
 test("runner", async (t) => {
     const log: any[] = [];
 
@@ -73,7 +79,7 @@ test("runner", async (t) => {
         .setup((d) => d.error)
         .returns((m) => log.push(["error", normalizeTiming(m)]));
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock.object(), herebyfile);
 
     await t.throwsAsync(async () => {
         await runner.runTasks(d);
@@ -106,7 +112,7 @@ test("basic use", async (t) => {
         .setup((d) => d.error)
         .returns(() => {});
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock.object(), herebyfile);
 
     await runner.runTasks(a, b);
 
@@ -139,7 +145,7 @@ test("multiple calls", async (t) => {
         .setup((d) => d.error)
         .returns(() => {});
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock.object(), herebyfile);
 
     const aPromise = runner.runTasks(a);
     const aPromise2 = runner.runTasks(a);
@@ -198,7 +204,7 @@ test("dependencies", async (t) => {
         .setup((d) => d.error)
         .returns(() => {});
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock.object(), herebyfile);
 
     await runner.runTasks(d);
 
@@ -253,7 +259,7 @@ test("dependencies with thrown error", async (t) => {
         .setup((d) => d.error)
         .returns(() => {});
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock.object(), herebyfile);
 
     await t.throwsAsync(runner.runTasks(d));
 
@@ -296,7 +302,7 @@ test("sibling tasks and thrown error", async (t) => {
         .setup((d) => d.error)
         .returns(() => {});
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock.object(), herebyfile);
 
     await t.throwsAsync(runner.runTasks(c));
 
