@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import test from "ava";
 
+import { formatTaskName } from "../../cli/formatTasks.js";
 import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
 import { useTmpdir } from "../__helpers__/index.js";
@@ -138,4 +139,13 @@ test("cycle", async (t) => {
         },
         { instanceOf: UserError, message: 'Task "a" references itself.' },
     );
+});
+
+test("task names", async (t) => {
+    const herebyfilePath = path.join(fixturesPath, "exportedNames.mjs");
+
+    const herebyfile = await loadHerebyfile(herebyfilePath);
+    const formattedNames = [...herebyfile.tasks.keys()].map((task) => formatTaskName(herebyfile, task)).sort();
+
+    t.deepEqual(formattedNames, ["explicitExport", "inlineExport", "name:override"]);
 });
