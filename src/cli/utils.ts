@@ -2,15 +2,6 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import type { Task } from "../index.js";
-
-export function compareTaskNames(a: Task, b: Task): number {
-    return compareStrings(a.options.name, b.options.name);
-}
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
-
 // Exported for testing.
 export function simplifyPath(p: string) {
     p = path.normalize(p);

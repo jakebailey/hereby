@@ -1,26 +1,48 @@
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { compareTaskNames } from "./utils.js";
+import type { Herebyfile } from "./loadHerebyfile.js";
 
 export type TaskFormat = "normal" | "simple";
 
-export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTask: Task | undefined, columns: number) {
-    const visibleTasks = [...tasks].filter(isTaskVisible).sort(compareTaskNames);
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
 
-    if (format === "simple") {
-        return visibleTasks.map((task) => task.options.name).join("\n");
+function getVisibleTasks(herebyfile: Herebyfile, tasks?: Iterable<Task>) {
+    if (!tasks) {
+        return [];
     }
 
-    const names = visibleTasks.map((task) =>
-        task === defaultTask ? `${pc.green(task.options.name)} (default)` : pc.blue(task.options.name)
+    return [...tasks].filter((task) => !task.options.hiddenFromTaskList).map((task) => ({
+        name: formatTaskName(herebyfile, task),
+        task,
+    })).sort((a, b) => compareStrings(a.name, b.name));
+}
+
+export function formatTaskName(herebyfile: Herebyfile, task: Task) {
+    if (task.options.name) {
+        return task.options.name;
+    }
+
+    return herebyfile.tasks.get(task) ?? "";
+}
+
+export function formatTasks(format: TaskFormat, herebyfile: Herebyfile, columns: number) {
+    const visibleTasks = getVisibleTasks(herebyfile, herebyfile.tasks.keys());
+
+    if (format === "simple") {
+        return visibleTasks.map(({ name }) => name).join("\n");
+    }
+
+    const names = visibleTasks.map(({ name, task }) =>
+        task === herebyfile.defaultTask ? `${pc.green(name)} (default)` : pc.blue(name)
     );
 
-    const descriptions = visibleTasks.map((task) => {
+    const descriptions = visibleTasks.map(({ task }) => {
         let parts = task.options.description ? [task.options.description] : undefined;
-        const deps = task.options.dependencies?.filter(isTaskVisible).sort(compareTaskNames);
-        if (deps?.length) {
-            const depNames = deps.map((task) => pc.blue(task.options.name));
+        const deps = getVisibleTasks(herebyfile, task.options.dependencies);
+        if (deps.length > 0) {
+            const depNames = deps.map(({ name }) => pc.blue(name));
             (parts ??= []).push(`Depends on: ${depNames.join(", ")}`);
         }
         return parts?.join("\n") ?? "";
@@ -40,10 +62,6 @@ export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTa
 ${pc.bold(pc.underline("Available tasks"))}
 
 ${formatted.join("")}`;
-}
-
-function isTaskVisible(task: Task) {
-    return !task.options.hiddenFromTaskList;
 }
 
 function formatAsColumns(
