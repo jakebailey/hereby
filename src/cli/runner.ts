@@ -3,7 +3,7 @@ import { performance } from "node:perf_hooks";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { formatTaskName } from "./formatTasks.js";
+import { getTaskName } from "./formatTasks.js";
 import type { Herebyfile } from "./loadHerebyfile.js";
 import { type D, prettyMilliseconds } from "./utils.js";
 
@@ -46,7 +46,7 @@ export class Runner {
 
         if (!run) return;
 
-        const name = formatTaskName(this._herebyfile, task);
+        const name = getTaskName(this._herebyfile, task);
         const start = performance.now();
         try {
             if (this.failedTasks.length === 0) {

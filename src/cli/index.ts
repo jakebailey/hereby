@@ -5,7 +5,7 @@ import { types } from "node:util";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { formatTaskName } from "./formatTasks.js";
+import { getTaskName } from "./formatTasks.js";
 import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
@@ -55,7 +55,7 @@ async function mainWorker(d: D) {
     }
 
     const tasks = await selectTasks(d, herebyfile, herebyfilePath, args.run);
-    const taskNames = tasks.map((task) => pc.blue(formatTaskName(herebyfile, task))).join(", ");
+    const taskNames = tasks.map((task) => pc.blue(getTaskName(herebyfile, task))).join(", ");
     d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
     const start = performance.now();
@@ -94,7 +94,7 @@ export async function selectTasks(
     }
 
     const tasks: Task[] = [];
-    const taskLookup = new Map([...herebyfile.tasks.keys()].map((task) => [formatTaskName(herebyfile, task), task]));
+    const taskLookup = new Map([...herebyfile.tasks.keys()].map((task) => [getTaskName(herebyfile, task), task]));
 
     for (const name of taskNames) {
         const task = taskLookup.get(name);

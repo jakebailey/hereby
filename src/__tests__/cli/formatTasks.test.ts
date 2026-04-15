@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { formatTaskName, formatTasks } from "../../cli/formatTasks.js";
+import { formatTasks, getTaskName } from "../../cli/formatTasks.js";
 import type { Herebyfile } from "../../cli/loadHerebyfile.js";
 import { Task, task } from "../../index.js";
 import { normalizeOutput } from "../__helpers__/index.js";
@@ -19,7 +19,7 @@ test("returns empty string for unknown items", (t) => {
         tasks: new Map<Task, string>(),
     };
 
-    const result = formatTaskName(herebyfile, a);
+    const result = getTaskName(herebyfile, a);
 
     t.is(result, "");
 });
@@ -31,7 +31,7 @@ test("uses exported name if no name set", (t) => {
         tasks: new Map<Task, string>([[a, "exported_name"]]),
     };
 
-    const result = formatTaskName(herebyfile, a);
+    const result = getTaskName(herebyfile, a);
 
     t.is(result, "exported_name");
 });
@@ -43,7 +43,7 @@ test("uses name if set", (t) => {
         tasks: new Map<Task, string>([[a, "exported_name"]]),
     };
 
-    const result = formatTaskName(herebyfile, a);
+    const result = getTaskName(herebyfile, a);
 
     t.is(result, "task_name");
 });

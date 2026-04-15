@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 import pc from "picocolors";
 
 import { Task } from "../index.js";
-import { formatTaskName } from "./formatTasks.js";
+import { getTaskName } from "./formatTasks.js";
 import { findUp, UserError } from "./utils.js";
 
 const herebyfileRegExp = /^herebyfile\.m?[jt]s$/i;
@@ -89,7 +89,7 @@ function checkTaskInvariants(herebyfile: Herebyfile) {
         for (const task of tasks) {
             if (checkedTasks.has(task)) continue;
 
-            const name = formatTaskName(herebyfile, task);
+            const name = getTaskName(herebyfile, task);
             if (taskStack.has(task)) {
                 throw new UserError(`Task "${pc.blue(name)}" references itself.`);
             }
