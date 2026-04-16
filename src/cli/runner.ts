@@ -3,8 +3,7 @@ import { performance } from "node:perf_hooks";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { getTaskName } from "./formatTasks.js";
-import type { Herebyfile } from "./loadHerebyfile.js";
+import { getTaskName, type Herebyfile } from "./loadHerebyfile.js";
 import { type D, prettyMilliseconds } from "./utils.js";
 
 export type RunnerD = Pick<D, "log" | "error">;

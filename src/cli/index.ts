@@ -5,8 +5,7 @@ import { types } from "node:util";
 import pc from "picocolors";
 
 import type { Task } from "../index.js";
-import { getTaskName } from "./formatTasks.js";
-import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
+import { findHerebyfile, getTaskName, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";

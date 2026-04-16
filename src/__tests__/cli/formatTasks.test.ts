@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { formatTasks, getTaskName } from "../../cli/formatTasks.js";
+import { formatTasks } from "../../cli/formatTasks.js";
 import type { Herebyfile } from "../../cli/loadHerebyfile.js";
 import { Task, task } from "../../index.js";
 import { normalizeOutput } from "../__helpers__/index.js";
@@ -11,42 +11,6 @@ function makeHerebyfile(tasks: Task[], defaultTask?: Task): Herebyfile {
         tasks: new Map(tasks.map((task) => [task, task.options.name ?? ""])),
     };
 }
-
-test("returns empty string for unknown items", (t) => {
-    const a = task({ run: () => {} });
-    const herebyfile: Herebyfile = {
-        defaultTask: undefined,
-        tasks: new Map<Task, string>(),
-    };
-
-    const result = getTaskName(herebyfile, a);
-
-    t.is(result, "");
-});
-
-test("uses exported name if no name set", (t) => {
-    const a = task({ run: () => {} });
-    const herebyfile: Herebyfile = {
-        defaultTask: undefined,
-        tasks: new Map<Task, string>([[a, "exported_name"]]),
-    };
-
-    const result = getTaskName(herebyfile, a);
-
-    t.is(result, "exported_name");
-});
-
-test("uses name if set", (t) => {
-    const a = task({ name: "task_name", run: () => {} });
-    const herebyfile: Herebyfile = {
-        defaultTask: undefined,
-        tasks: new Map<Task, string>([[a, "exported_name"]]),
-    };
-
-    const result = getTaskName(herebyfile, a);
-
-    t.is(result, "task_name");
-});
 
 test("printTasks", (t) => {
     const hidden = task({

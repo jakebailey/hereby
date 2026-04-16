@@ -4,9 +4,9 @@ import { fileURLToPath } from "node:url";
 
 import test from "ava";
 
-import { getTaskName } from "../../cli/formatTasks.js";
-import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
+import { findHerebyfile, getTaskName, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
+import { Task, task } from "../../index.js";
 import { useTmpdir } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
@@ -159,4 +159,40 @@ test("task names", async (t) => {
     const formattedNames = [...herebyfile.tasks.keys()].map((task) => getTaskName(herebyfile, task)).sort();
 
     t.deepEqual(formattedNames, ["explicitExport", "inlineExport", "name:override"]);
+});
+
+test("getTaskName returns empty string for unknown items", (t) => {
+    const a = task({ run: () => {} });
+    const herebyfile = {
+        defaultTask: undefined,
+        tasks: new Map<Task, string>(),
+    };
+
+    const result = getTaskName(herebyfile, a);
+
+    t.is(result, "");
+});
+
+test("getTaskName uses exported name if no name set", (t) => {
+    const a = task({ run: () => {} });
+    const herebyfile = {
+        defaultTask: undefined,
+        tasks: new Map<Task, string>([[a, "exported_name"]]),
+    };
+
+    const result = getTaskName(herebyfile, a);
+
+    t.is(result, "exported_name");
+});
+
+test("getTaskName uses name if set", (t) => {
+    const a = task({ name: "task_name", run: () => {} });
+    const herebyfile = {
+        defaultTask: undefined,
+        tasks: new Map<Task, string>([[a, "exported_name"]]),
+    };
+
+    const result = getTaskName(herebyfile, a);
+
+    t.is(result, "task_name");
 });

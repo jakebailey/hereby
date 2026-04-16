@@ -2,19 +2,12 @@ import pc from "picocolors";
 
 import type { Task } from "../index.js";
 import type { Herebyfile } from "./loadHerebyfile.js";
+import { getTaskName } from "./loadHerebyfile.js";
 
 export type TaskFormat = "normal" | "simple";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
-
-export function getTaskName(herebyfile: Herebyfile, task: Task) {
-    if (task.options.name) {
-        return task.options.name;
-    }
-
-    return herebyfile.tasks.get(task) ?? "";
-}
 
 function getVisibleTasks(herebyfile: Herebyfile, tasks?: Iterable<Task>) {
     if (!tasks) {

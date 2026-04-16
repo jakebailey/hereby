@@ -5,7 +5,6 @@ import { pathToFileURL } from "node:url";
 import pc from "picocolors";
 
 import { Task } from "../index.js";
-import { getTaskName } from "./formatTasks.js";
 import { findUp, UserError } from "./utils.js";
 
 const herebyfileRegExp = /^herebyfile\.m?[jt]s$/i;
@@ -40,6 +39,14 @@ export function findHerebyfile(dir: string): string {
 export interface Herebyfile {
     readonly tasks: ReadonlyMap<Task, string>;
     readonly defaultTask: Task | undefined;
+}
+
+export function getTaskName(herebyfile: Herebyfile, task: Task) {
+    if (task.options.name) {
+        return task.options.name;
+    }
+
+    return herebyfile.tasks.get(task) ?? "";
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
