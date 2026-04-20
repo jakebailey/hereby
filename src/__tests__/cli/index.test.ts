@@ -85,15 +85,13 @@ test("main usage", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--help"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeOutput(message)]));
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--help"],
+        cwd: () => fixturesPath,
+        log: (message) => log.push(["log", normalizeOutput(message)]),
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.snapshot(log);
 });
@@ -103,19 +101,15 @@ test("main print tasks", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--tasks"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeOutput(message)]))
-        .setup((d) => d.chdir)
-        .returns((directory) => t.is(directory, fixturesPath))
-        .setup((d) => d.columns)
-        .returns(() => 80);
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--tasks"],
+        cwd: () => fixturesPath,
+        log: (message) => log.push(["log", normalizeOutput(message)]),
+        chdir: (directory) => t.is(directory, fixturesPath),
+        columns: () => 80,
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.snapshot(log);
 });
@@ -125,19 +119,15 @@ test("main success", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "success"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
-        .setup((d) => d.chdir)
-        .returns((directory) => t.is(directory, fixturesPath))
-        .setup((d) => d.simplifyPath)
-        .returns(fakeSimplifyPath);
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "success"],
+        cwd: () => fixturesPath,
+        log: (message) => log.push(["log", normalizeTiming(normalizeOutput(message))]),
+        chdir: (directory) => t.is(directory, fixturesPath),
+        simplifyPath: fakeSimplifyPath,
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.snapshot(log);
 });
@@ -147,27 +137,21 @@ test("main failure", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "failure"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
-        .setup((d) => d.chdir)
-        .returns((directory) => t.is(directory, fixturesPath))
-        .setup((d) => d.simplifyPath)
-        .returns(fakeSimplifyPath)
-        .setup((d) => d.error)
-        .returns((message) => {
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "failure"],
+        cwd: () => fixturesPath,
+        log: (message) => log.push(["log", normalizeTiming(normalizeOutput(message))]),
+        chdir: (directory) => t.is(directory, fixturesPath),
+        simplifyPath: fakeSimplifyPath,
+        error: (message) => {
             t.regex(message, /^Error in failure in \d/);
-        })
-        .setup((d) => d.setExitCode)
-        .returns((code) => {
+        },
+        setExitCode: (code) => {
             t.is(code, 1);
-        });
+        },
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.snapshot(log);
 });
@@ -177,27 +161,21 @@ test("multi failure", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "multiple:failures"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
-        .setup((d) => d.chdir)
-        .returns((directory) => t.is(directory, fixturesPath))
-        .setup((d) => d.simplifyPath)
-        .returns(fakeSimplifyPath)
-        .setup((d) => d.error)
-        .returns((message) => {
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "multiple:failures"],
+        cwd: () => fixturesPath,
+        log: (message) => log.push(["log", normalizeTiming(normalizeOutput(message))]),
+        chdir: (directory) => t.is(directory, fixturesPath),
+        simplifyPath: fakeSimplifyPath,
+        error: (message) => {
             t.regex(message, /^Error in failure in \d/);
-        })
-        .setup((d) => d.setExitCode)
-        .returns((code) => {
+        },
+        setExitCode: (code) => {
             t.is(code, 1);
-        });
+        },
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.snapshot(log);
 });
@@ -207,25 +185,19 @@ test("main user error", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "oops"])
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => log.push(["log", normalizeTiming(normalizeOutput(message))]))
-        .setup((d) => d.chdir)
-        .returns((directory) => t.is(directory, fixturesPath))
-        .setup((d) => d.simplifyPath)
-        .returns(fakeSimplifyPath)
-        .setup((d) => d.error)
-        .returns((message) => log.push(["error", normalizeOutput(message)]))
-        .setup((d) => d.setExitCode)
-        .returns((code) => {
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--herebyfile", path.join(fixturesPath, "cliTest.mjs"), "oops"],
+        cwd: () => fixturesPath,
+        log: (message) => log.push(["log", normalizeTiming(normalizeOutput(message))]),
+        chdir: (directory) => t.is(directory, fixturesPath),
+        simplifyPath: fakeSimplifyPath,
+        error: (message) => log.push(["error", normalizeOutput(message)]),
+        setExitCode: (code) => {
             t.is(code, 1);
-        });
+        },
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.snapshot(log);
 });
@@ -235,17 +207,17 @@ test("main random throw", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .throws(new Error("test error"))
-        .setup((d) => d.error)
-        .returns((message) => log.push(["error", normalizeOutput(message)]))
-        .setup((d) => d.setExitCode)
-        .returns((code) => {
+    const dMock = mock<D>(t, {
+        get argv(): never {
+            throw new Error("test error");
+        },
+        error: (message) => log.push(["error", normalizeOutput(message)]),
+        setExitCode: (code) => {
             t.is(code, 1);
-        });
+        },
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.is(log[0][0], "error");
     t.true(log[0][1].includes("test error"));
@@ -260,17 +232,17 @@ test("main random throw no stack", async (t) => {
     const error = new Error("test error");
     delete error.stack;
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .throws(error)
-        .setup((d) => d.error)
-        .returns((message) => log.push(["error", normalizeOutput(message)]))
-        .setup((d) => d.setExitCode)
-        .returns((code) => {
+    const dMock = mock<D>(t, {
+        get argv(): never {
+            throw error;
+        },
+        error: (message) => log.push(["error", normalizeOutput(message)]),
+        setExitCode: (code) => {
             t.is(code, 1);
-        });
+        },
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.is(log[0][0], "error");
     t.true(log[0][1].includes("test error"));
@@ -282,17 +254,17 @@ test("main random throw primitive", async (t) => {
 
     const log: [fn: "log" | "error", message: string][] = [];
 
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .throws(1234)
-        .setup((d) => d.error)
-        .returns((message) => log.push(["error", normalizeOutput(message)]))
-        .setup((d) => d.setExitCode)
-        .returns((code) => {
+    const dMock = mock<D>(t, {
+        get argv(): never {
+            throw 1234;
+        },
+        error: (message) => log.push(["error", normalizeOutput(message)]),
+        setExitCode: (code) => {
             t.is(code, 1);
-        });
+        },
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 
     t.is(log[0][0], "error");
     t.true(log[0][1].includes("1234"));
@@ -301,17 +273,13 @@ test("main random throw primitive", async (t) => {
 test("main print version", async (t) => {
     t.plan(1);
     const version = "1.0.0";
-    const dMock = mock<D>(t)
-        .setup((d) => d.argv)
-        .returns(["node", "cli.js", "--version"])
-        .setup((d) => d.version)
-        .returns(() => version)
-        .setup((d) => d.cwd)
-        .returns(() => fixturesPath)
-        .setup((d) => d.log)
-        .returns((message) => t.is(message, `hereby ${version}`))
-        .setup((d) => d.chdir)
-        .returns((directory) => t.is(directory, fixturesPath));
+    const dMock = mock<D>(t, {
+        argv: ["node", "cli.js", "--version"],
+        version: () => version,
+        cwd: () => fixturesPath,
+        log: (message) => t.is(message, `hereby ${version}`),
+        chdir: (directory) => t.is(directory, fixturesPath),
+    });
 
-    await main(dMock.object());
+    await main(dMock);
 });

@@ -3,7 +3,6 @@ import os from "node:os";
 import path from "node:path";
 
 import type { ExecutionContext } from "ava";
-import { It, Mock } from "moq.ts";
 
 const maxRetries = process.platform === "win32" ? 10 : 0;
 
@@ -19,18 +18,19 @@ export function useTmpdir(t: ExecutionContext): string {
 }
 
 /**
- * Creates a new moq.ts mock whose properties default to failing the current
- * test and throwing an error.
- * @param t The ava task context
+ * Creates a mock whose unset properties fail the current test and throw.
  */
-export function mock<T>(t: ExecutionContext) {
-    return new Mock<T>()
-        .setup(() => It.IsAny())
-        .callback(({ name }) => {
-            const message = `Mock for "${String(name)}" is not implemented`;
+export function mock<T extends object>(t: ExecutionContext, props: Partial<T>): T {
+    return new Proxy(props as T, {
+        get(target, prop, receiver) {
+            if (Object.prototype.hasOwnProperty.call(target, prop)) {
+                return Reflect.get(target, prop, receiver);
+            }
+            const message = `Mock for "${String(prop)}" is not implemented`;
             t.fail(message);
             throw new Error(message);
-        });
+        },
+    });
 }
 
 /**

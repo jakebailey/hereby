@@ -67,13 +67,12 @@ const d = task({
 test("runner", async (t) => {
     const log: any[] = [];
 
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns((m) => log.push(["log", normalizeTiming(m)]))
-        .setup((d) => d.error)
-        .returns((m) => log.push(["error", normalizeTiming(m)]));
+    const dMock = mock<RunnerD>(t, {
+        log: (m) => log.push(["log", normalizeTiming(m)]),
+        error: (m) => log.push(["error", normalizeTiming(m)]),
+    });
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock);
 
     await t.throwsAsync(async () => {
         await runner.runTasks(d);
@@ -100,13 +99,12 @@ test("basic use", async (t) => {
         },
     });
 
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns(() => {})
-        .setup((d) => d.error)
-        .returns(() => {});
+    const dMock = mock<RunnerD>(t, {
+        log: () => {},
+        error: () => {},
+    });
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock);
 
     await runner.runTasks(a, b);
 
@@ -133,13 +131,12 @@ test("multiple calls", async (t) => {
         },
     });
 
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns(() => {})
-        .setup((d) => d.error)
-        .returns(() => {});
+    const dMock = mock<RunnerD>(t, {
+        log: () => {},
+        error: () => {},
+    });
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock);
 
     const aPromise = runner.runTasks(a);
     const aPromise2 = runner.runTasks(a);
@@ -192,13 +189,12 @@ test("dependencies", async (t) => {
         dependencies: [c],
     });
 
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns(() => {})
-        .setup((d) => d.error)
-        .returns(() => {});
+    const dMock = mock<RunnerD>(t, {
+        log: () => {},
+        error: () => {},
+    });
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock);
 
     await runner.runTasks(d);
 
@@ -247,13 +243,12 @@ test("dependencies with thrown error", async (t) => {
         dependencies: [c],
     });
 
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns(() => {})
-        .setup((d) => d.error)
-        .returns(() => {});
+    const dMock = mock<RunnerD>(t, {
+        log: () => {},
+        error: () => {},
+    });
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock);
 
     await t.throwsAsync(runner.runTasks(d));
 
@@ -290,13 +285,12 @@ test("sibling tasks and thrown error", async (t) => {
         },
     });
 
-    const dMock = mock<RunnerD>(t)
-        .setup((d) => d.log)
-        .returns(() => {})
-        .setup((d) => d.error)
-        .returns(() => {});
+    const dMock = mock<RunnerD>(t, {
+        log: () => {},
+        error: () => {},
+    });
 
-    const runner = new Runner(dMock.object());
+    const runner = new Runner(dMock);
 
     await t.throwsAsync(runner.runTasks(c));
 
