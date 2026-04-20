@@ -26,7 +26,13 @@ export function mock<T extends object>(t: ExecutionContext, props: Partial<T>): 
             if (Object.prototype.hasOwnProperty.call(target, prop)) {
                 return Reflect.get(target, prop, receiver);
             }
-            const message = `Mock for "${String(prop)}" is not implemented`;
+            // Don't fail tests on symbol probes (Symbol.toPrimitive,
+            // Symbol.toStringTag, util.inspect.custom, etc.) or on the
+            // `then` duck-type check used to detect thenables.
+            if (typeof prop === "symbol" || prop === "then") {
+                return undefined;
+            }
+            const message = `Mock for "${prop}" is not implemented`;
             t.fail(message);
             throw new Error(message);
         },
