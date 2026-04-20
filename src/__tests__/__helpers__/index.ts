@@ -47,5 +47,5 @@ export function normalizeOutput(output: string) {
  * so snapshots are deterministic.
  */
 export function normalizeTiming(message: string) {
-    return message.replace(/\b(\d+(\.\d+)? *(ms|s|h) *)+/g, "<time>");
+    return message.replace(/\b(\d+(\.\d+)? *(ms|m|s|h) *)+/g, "<time>");
 }
