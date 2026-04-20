@@ -36,6 +36,7 @@ const argvTests = [
     ["build", "test", "--", "--light=false"],
     ["build", "test", "--", "not-a-task", "--light=false"],
     ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false"],
+    ["--herebyfile=path/to/Herebyfile.js", "build", "test"],
     ["--herebyfile", "path/to/Herebyfile.js", "build", "test", "--light=false", "not-a-task"],
 ];
 
