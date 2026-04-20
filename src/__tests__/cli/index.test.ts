@@ -256,7 +256,7 @@ test("main random throw primitive", async (t) => {
 
     const dMock = mock<D>(t, {
         get argv(): never {
-            throw 1234;
+            throw 1234; // eslint-disable-line @typescript-eslint/only-throw-error
         },
         error: (message) => log.push(["error", normalizeOutput(message)]),
         setExitCode: (code) => {
