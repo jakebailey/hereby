@@ -90,14 +90,5 @@
         "environmentVariables": {
             "NO_COLOR": "1"
         }
-    },
-    "c8": {
-        "all": true,
-        "include": "dist",
-        "reporter": [
-            "text",
-            "html",
-            "lcov"
-        ]
     }
 }
