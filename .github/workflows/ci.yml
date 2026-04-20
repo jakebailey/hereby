@@ -88,7 +88,7 @@ jobs:
 
   eslint:
     name: ESLint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: ${{ github.event_name != 'schedule' }}
 
     steps:
@@ -101,7 +101,7 @@ jobs:
 
   dprint:
     name: dprint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: ${{ github.event_name != 'schedule' }}
 
     steps:
@@ -156,7 +156,7 @@ jobs:
         name: Verify that local hereby can run latest hereby
 
   required:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: ${{ always() }}
     needs:
       - test
