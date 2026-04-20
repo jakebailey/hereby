@@ -2,12 +2,13 @@ import assert from "node:assert";
 
 export interface TaskOptions {
     /**
-     * The name of the task, as referenced in logs and the CLI.
+     * The name of the task, as referenced in logs and the CLI. Defaults to the
+     * name of the exported value if not specifed.
      *
      * This name must not start with a "-" in order to prevent conflicts
      * with flags.
      */
-    name: string;
+    name?: string | undefined;
 
     /**
      * A description of the task, for display in the CLI.
@@ -56,7 +57,10 @@ export class Task {
         // typechecking, so this is helpful.
 
         /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-        assert.ok(typeof options.name === "string", "Task name is not a string.");
+        assert.ok(
+            typeof options.name === "string" || options.name === undefined,
+            "Task name is not a string or undefined.",
+        );
         assert.ok(
             typeof options.description === "string" || options.description === undefined,
             "Task description is not a string or undefined.",
@@ -75,8 +79,7 @@ export class Task {
         /* eslint-enable @typescript-eslint/no-unnecessary-condition */
 
         // Non-type checks.
-        assert.ok(options.name !== "", "Task name must not be empty.");
-        assert.ok(!options.name.startsWith("-"), 'Task name must not start with "-".');
+        assert.ok(!options.name?.startsWith("-"), 'Task name must not start with "-".');
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         assert.ok(!!(options.dependencies?.length || options.run), "Task must have a run function or dependencies.");
 

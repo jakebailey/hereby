@@ -4,8 +4,9 @@ import { fileURLToPath } from "node:url";
 
 import test from "ava";
 
-import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
+import { findHerebyfile, getTaskName, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
+import { Task, task } from "../../index.js";
 import { useTmpdir } from "../__helpers__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
@@ -25,6 +26,17 @@ test("duplicate export", async (t) => {
             await loadHerebyfile(herebyfilePath);
         },
         { instanceOf: UserError, message: 'Task "a" has been exported twice.' },
+    );
+});
+
+test("duplicate export (no name)", async (t) => {
+    const herebyfilePath = path.join(fixturesPath, "duplicateNoName.mjs");
+
+    await t.throwsAsync(
+        async () => {
+            await loadHerebyfile(herebyfilePath);
+        },
+        { instanceOf: UserError, message: 'Task "b" has been exported twice.' },
     );
 });
 
@@ -138,4 +150,49 @@ test("cycle", async (t) => {
         },
         { instanceOf: UserError, message: 'Task "a" references itself.' },
     );
+});
+
+test("task names", async (t) => {
+    const herebyfilePath = path.join(fixturesPath, "exportedNames.mjs");
+
+    const herebyfile = await loadHerebyfile(herebyfilePath);
+    const formattedNames = [...herebyfile.tasks.keys()].map((task) => getTaskName(herebyfile, task)).sort();
+
+    t.deepEqual(formattedNames, ["explicitExport", "inlineExport", "name:override"]);
+});
+
+test("getTaskName returns empty string for unknown items", (t) => {
+    const a = task({ run: () => {} });
+    const herebyfile = {
+        defaultTask: undefined,
+        tasks: new Map<Task, string>(),
+    };
+
+    const result = getTaskName(herebyfile, a);
+
+    t.is(result, "");
+});
+
+test("getTaskName uses exported name if no name set", (t) => {
+    const a = task({ run: () => {} });
+    const herebyfile = {
+        defaultTask: undefined,
+        tasks: new Map<Task, string>([[a, "exported_name"]]),
+    };
+
+    const result = getTaskName(herebyfile, a);
+
+    t.is(result, "exported_name");
+});
+
+test("getTaskName uses name if set", (t) => {
+    const a = task({ name: "task_name", run: () => {} });
+    const herebyfile = {
+        defaultTask: undefined,
+        tasks: new Map<Task, string>([[a, "exported_name"]]),
+    };
+
+    const result = getTaskName(herebyfile, a);
+
+    t.is(result, "task_name");
 });

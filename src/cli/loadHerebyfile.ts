@@ -37,32 +37,41 @@ export function findHerebyfile(dir: string): string {
 }
 
 export interface Herebyfile {
-    readonly tasks: ReadonlyMap<string, Task>;
+    readonly tasks: ReadonlyMap<Task, string>;
     readonly defaultTask: Task | undefined;
+}
+
+export function getTaskName(herebyfile: Herebyfile, task: Task) {
+    if (task.options.name) {
+        return task.options.name;
+    }
+
+    return herebyfile.tasks.get(task) ?? "";
 }
 
 export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile> {
     // Note: calling pathToFileURL is required on Windows to disambiguate URLs
     // from drive letters.
-    const herebyfile = await import(pathToFileURL(herebyfilePath).toString());
+    const herebyfileImport = await import(pathToFileURL(herebyfilePath).toString());
 
-    const exportedTasks = new Set<Task>();
+    const exportedTasks = new Map<Task, string>();
     let defaultTask: Task | undefined;
 
-    for (const [key, value] of Object.entries(herebyfile)) {
+    for (const [key, value] of Object.entries(herebyfileImport)) {
         if (!(value instanceof Task)) continue;
 
         if (key === "default") {
             defaultTask = value;
         } else if (exportedTasks.has(value)) {
-            throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
+            const name = value.options.name ?? key;
+            throw new UserError(`Task "${pc.blue(name)}" has been exported twice.`);
         } else {
-            exportedTasks.add(value);
+            exportedTasks.set(value, key);
         }
     }
 
     if (defaultTask) {
-        exportedTasks.add(defaultTask);
+        exportedTasks.set(defaultTask, "");
     }
 
     if (exportedTasks.size === 0) {
@@ -71,29 +80,27 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
 
     // We check this here by walking the DAG, as some dependencies may not be
     // exported and therefore would not be seen by the above loop.
-    checkTaskInvariants(exportedTasks);
-
-    const tasks = new Map([...exportedTasks].map((task) => [task.options.name, task]));
-
-    return { tasks, defaultTask };
+    const herebyfile: Herebyfile = { defaultTask, tasks: exportedTasks };
+    checkTaskInvariants(herebyfile);
+    return herebyfile;
 }
 
-function checkTaskInvariants(tasks: Iterable<Task>) {
+function checkTaskInvariants(herebyfile: Herebyfile) {
     const checkedTasks = new Set<Task>();
     const taskStack = new Set<Task>();
     const seenNames = new Set<string>();
 
-    checkTaskInvariantsWorker(tasks);
+    checkTaskInvariantsWorker(herebyfile.tasks.keys());
 
     function checkTaskInvariantsWorker(tasks: Iterable<Task>) {
         for (const task of tasks) {
             if (checkedTasks.has(task)) continue;
 
+            const name = getTaskName(herebyfile, task);
             if (taskStack.has(task)) {
-                throw new UserError(`Task "${pc.blue(task.options.name)}" references itself.`);
+                throw new UserError(`Task "${pc.blue(name)}" references itself.`);
             }
 
-            const name = task.options.name;
             if (seenNames.has(name)) {
                 throw new UserError(`Task "${pc.blue(name)}" was declared twice.`);
             }

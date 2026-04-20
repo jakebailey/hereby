@@ -1,8 +1,16 @@
 import test from "ava";
 
 import { formatTasks } from "../../cli/formatTasks.js";
-import { task } from "../../index.js";
+import type { Herebyfile } from "../../cli/loadHerebyfile.js";
+import { Task, task } from "../../index.js";
 import { normalizeOutput } from "../__helpers__/index.js";
+
+function makeHerebyfile(tasks: Task[], defaultTask?: Task): Herebyfile {
+    return {
+        defaultTask,
+        tasks: new Map(tasks.map((task) => [task, task.options.name ?? ""])),
+    };
+}
 
 test("printTasks", (t) => {
     const hidden = task({
@@ -36,14 +44,14 @@ test("printTasks", (t) => {
     });
 
     for (const format of ["normal", "simple"] as const) {
-        const output = formatTasks(format, [a, c, d, hidden], d, 80);
+        const output = formatTasks(format, makeHerebyfile([a, c, d, hidden], d), 80);
         // eslint-disable-next-line ava/assertion-arguments
         t.snapshot(normalizeOutput(output), format);
     }
 });
 
 test("printTasks with empty tasks", (t) => {
-    const output = formatTasks("normal", [], undefined, 80);
+    const output = formatTasks("normal", makeHerebyfile([]), 80);
     t.is(output.trim(), "Available tasks");
 });
 
@@ -54,7 +62,7 @@ test("wraps long descriptions across lines", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, 30);
+    const output = formatTasks("normal", makeHerebyfile([a]), 30);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -65,7 +73,7 @@ test("wraps at hyphens in descriptions", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, 35);
+    const output = formatTasks("normal", makeHerebyfile([a]), 35);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -76,7 +84,7 @@ test("breaks long words in descriptions", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, 25);
+    const output = formatTasks("normal", makeHerebyfile([a]), 25);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -87,7 +95,7 @@ test("breaks long words after short words", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, 25);
+    const output = formatTasks("normal", makeHerebyfile([a]), 25);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -98,7 +106,7 @@ test("handles multiline descriptions", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, 80);
+    const output = formatTasks("normal", makeHerebyfile([a]), 80);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -108,7 +116,7 @@ test("handles task with no description", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [a], undefined, 80);
+    const output = formatTasks("normal", makeHerebyfile([a]), 80);
     t.snapshot(normalizeOutput(output));
 });
 
@@ -124,6 +132,6 @@ test("formats dependencies in description", (t) => {
         run: async () => {},
     });
 
-    const output = formatTasks("normal", [dep, main], undefined, 80);
+    const output = formatTasks("normal", makeHerebyfile([dep, main]), 80);
     t.snapshot(normalizeOutput(output));
 });
