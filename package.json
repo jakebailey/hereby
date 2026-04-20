@@ -51,7 +51,6 @@
         "@types/minimist": "^1.2.5",
         "@types/node": "^25.6.0",
         "ava": "~5.0.1",
-        "c8": "^11.0.0",
         "dprint": "^0.54.0",
         "eslint": "^10.2.1",
         "eslint-plugin-ava": "^16.0.1",
@@ -59,7 +58,7 @@
         "eslint-plugin-unicorn": "^64.0.0",
         "execa": "^6.1.0",
         "globals": "^17.5.0",
-        "monocart-coverage-reports": "^2.12.10",
+        "monocart-coverage-reports": "^2.12.11",
         "moq.ts": "^10.1.0",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.58.2"
@@ -75,7 +74,7 @@
         "build": "tsc",
         "watch": "tsc --watch",
         "test": "ava",
-        "coverage": "c8 --experimental-monocart ava",
+        "coverage": "mcr ava",
         "prepack": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && npm run build",
         "version": "changeset version && npm install"
     },

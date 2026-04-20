@@ -17,6 +17,7 @@ export default tseslint.config(
             "bin/**",
             "coverage/**",
             "Herebyfile.mjs",
+            "mcr.config.mjs",
             "package.json",
         ],
     },
