@@ -59,7 +59,7 @@
         "eslint-plugin-unicorn": "^64.0.0",
         "execa": "^6.1.0",
         "globals": "^17.5.0",
-        "monocart-coverage-reports": "^2.12.10",
+        "monocart-coverage-reports": "^2.12.11",
         "moq.ts": "^10.1.0",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.58.2"
