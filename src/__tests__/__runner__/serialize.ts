@@ -27,8 +27,8 @@ export function serialize(value: unknown, indent = 0, seen?: WeakSet<object>): s
 
     // Track ancestors to detect circular references (not just shared refs)
     seen ??= new WeakSet();
-    if (seen.has(value as object)) return "[Circular]";
-    seen.add(value as object);
+    if (seen.has(value)) return "[Circular]";
+    seen.add(value);
 
     let result: string;
     if (value instanceof Map) {
@@ -66,7 +66,7 @@ export function serialize(value: unknown, indent = 0, seen?: WeakSet<object>): s
         const proto = Object.getPrototypeOf(value) as { constructor?: { name?: string; }; } | null;
         const className = proto?.constructor?.name;
         const prefix = className && className !== "Object" ? className + " " : "";
-        const keys = Object.keys(value as Record<string, unknown>).sort();
+        const keys = Object.keys(value).sort();
         if (keys.length === 0) {
             result = prefix + "{}";
         } else {
@@ -85,6 +85,6 @@ export function serialize(value: unknown, indent = 0, seen?: WeakSet<object>): s
         result = typeof value;
     }
 
-    seen.delete(value as object);
+    seen.delete(value);
     return result;
 }
