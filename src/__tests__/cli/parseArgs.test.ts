@@ -1,20 +1,9 @@
-import test from "ava";
-
 import { getUsage, parseArgs } from "../../cli/parseArgs.js";
 import { UserError } from "../../cli/utils.js";
 import { normalizeOutput } from "../__helpers__/index.js";
+import { test } from "../__runner__/index.js";
 
-const macro = test.macro<[string[]]>({
-    exec(t, input) {
-        t.snapshot(parseArgs(input));
-    },
-    title(providedTitle, input) {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return providedTitle || input.join(" ") || "no args";
-    },
-});
-
-const argvTests = [
+const argvTests: string[][] = [
     [],
     ["--help"],
     ["-h"],
@@ -46,23 +35,23 @@ const argvTests = [
 ];
 
 for (const argv of argvTests) {
-    test(macro, argv);
+    test(argv.join(" ") || "no args", (t) => {
+        t.snapshot(parseArgs(argv));
+    });
 }
 
-const errorMacro = test.macro<[string[], string]>({
-    exec(t, input, message) {
-        t.throws(() => parseArgs(input), { instanceOf: UserError, message });
-    },
-    title(providedTitle, input) {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return providedTitle || `error: ${input.join(" ")}`;
-    },
-});
+const errorTests: [string[], string][] = [
+    [["--herebyfile"], "Option --herebyfile requires a value."],
+    [["--herebyfile="], "Option --herebyfile requires a value."],
+    [["--herebyfile", "--tasks", "build"], "Option --herebyfile requires a value."],
+];
 
-test(errorMacro, ["--herebyfile"], "Option --herebyfile requires a value.");
-test(errorMacro, ["--herebyfile="], "Option --herebyfile requires a value.");
-test(errorMacro, ["--herebyfile", "--tasks", "build"], "Option --herebyfile requires a value.");
+for (const [argv, message] of errorTests) {
+    test(`error: ${argv.join(" ")}`, (t) => {
+        t.throws(() => parseArgs(argv), { instanceOf: UserError, message });
+    });
+}
 
-test.serial("usage", (t) => {
+test("usage", (t) => {
     t.snapshot(normalizeOutput(getUsage()));
 });

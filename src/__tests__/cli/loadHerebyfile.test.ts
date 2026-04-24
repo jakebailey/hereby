@@ -2,11 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import test from "ava";
-
 import { findHerebyfile, loadHerebyfile } from "../../cli/loadHerebyfile.js";
 import { UserError } from "../../cli/utils.js";
 import { useTmpdir } from "../__helpers__/index.js";
+import { test } from "../__runner__/index.js";
 
 const fixturesPath = fileURLToPath(new URL("__fixtures__", import.meta.url));
 

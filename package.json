@@ -39,49 +39,26 @@
         "./dist/index.d.ts"
     ],
     "devDependencies": {
-        "@ava/typescript": "^3.0.1",
         "@changesets/cli": "^2.31.0",
         "@eslint/js": "^10.0.1",
         "@tsconfig/node12": "^12.1.7",
         "@types/node": "^25.6.0",
-        "ava": "~5.0.1",
         "dprint": "^0.54.0",
         "eslint": "^10.2.1",
-        "eslint-plugin-ava": "^16.0.1",
         "eslint-plugin-simple-import-sort": "^13.0.0",
-        "execa": "^6.1.0",
         "globals": "^17.5.0",
         "monocart-coverage-reports": "^2.12.11",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.58.2"
-    },
-    "overrides": {
-        "ava": {
-            "emittery": "1.0.0"
-        }
     },
     "packageManager": "npm@8.19.4",
     "scripts": {
         "ci": "npm ci",
         "build": "tsc",
         "watch": "tsc --watch",
-        "test": "ava",
-        "coverage": "mcr ava",
+        "test": "node dist/__tests__/runTests.js",
+        "coverage": "mcr node dist/__tests__/runTests.js",
         "prepack": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && npm run build",
         "version": "changeset version && npm install"
-    },
-    "ava": {
-        "files": [
-            "**/*.test.ts"
-        ],
-        "typescript": {
-            "rewritePaths": {
-                "src/": "dist/"
-            },
-            "compile": false
-        },
-        "environmentVariables": {
-            "NO_COLOR": "1"
-        }
     }
 }

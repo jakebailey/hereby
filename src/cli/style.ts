@@ -10,7 +10,7 @@ export function isColorEnabled(env: NodeJS.ProcessEnv, isTTY: boolean, platform:
     return !!(forceColor || platform === "win32" || (isTTY && env["TERM"] !== "dumb") || env["CI"]);
 }
 
-const enabled = isColorEnabled(process.env, process.stdout.isTTY, process.platform);
+export const enabled = isColorEnabled(process.env, process.stdout.isTTY, process.platform);
 /* eslint-enable no-restricted-globals, @typescript-eslint/prefer-nullish-coalescing */
 
 export function wrap(enabled: boolean, open: string, close: string): (s: string) => string {

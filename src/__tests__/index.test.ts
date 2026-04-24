@@ -1,6 +1,5 @@
-import test from "ava";
-
 import { Task, task } from "../index.js";
+import { test } from "./__runner__/index.js";
 
 test("task returns instance of Task", (t) => {
     const foo = task({ name: "foo", run: async () => {} });

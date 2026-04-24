@@ -1,6 +1,5 @@
 // @ts-check
 import eslint from "@eslint/js";
-import eslintPluginAva from "eslint-plugin-ava";
 import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -23,7 +22,6 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.strictTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
-    eslintPluginAva.configs.recommended,
     {
         languageOptions: {
             parserOptions: {
@@ -130,7 +128,6 @@ export default tseslint.config(
         rules: {
             "@typescript-eslint/no-empty-function": "off",
             "no-restricted-globals": "off",
-            "ava/no-import-test-files": "off",
         },
     },
     {

@@ -1,8 +1,7 @@
-import test from "ava";
-
 import { Runner, type RunnerD } from "../../cli/runner.js";
 import { task } from "../../index.js";
-import { mock, normalizeTiming } from "../__helpers__/index.js";
+import { normalizeTiming } from "../__helpers__/index.js";
+import { test } from "../__runner__/index.js";
 
 function sleep(ms: number) {
     return new Promise((resolve) => {
@@ -67,7 +66,7 @@ const d = task({
 test("runner", async (t) => {
     const log: any[] = [];
 
-    const dMock = mock<RunnerD>(t, {
+    const dMock = t.mock<RunnerD>({
         log: (m) => log.push(["log", normalizeTiming(m)]),
         error: (m) => log.push(["error", normalizeTiming(m)]),
     });
@@ -99,7 +98,7 @@ test("basic use", async (t) => {
         },
     });
 
-    const dMock = mock<RunnerD>(t, {
+    const dMock = t.mock<RunnerD>({
         log: () => {},
         error: () => {},
     });
@@ -131,7 +130,7 @@ test("multiple calls", async (t) => {
         },
     });
 
-    const dMock = mock<RunnerD>(t, {
+    const dMock = t.mock<RunnerD>({
         log: () => {},
         error: () => {},
     });
@@ -189,7 +188,7 @@ test("dependencies", async (t) => {
         dependencies: [c],
     });
 
-    const dMock = mock<RunnerD>(t, {
+    const dMock = t.mock<RunnerD>({
         log: () => {},
         error: () => {},
     });
@@ -243,7 +242,7 @@ test("dependencies with thrown error", async (t) => {
         dependencies: [c],
     });
 
-    const dMock = mock<RunnerD>(t, {
+    const dMock = t.mock<RunnerD>({
         log: () => {},
         error: () => {},
     });
@@ -285,7 +284,7 @@ test("sibling tasks and thrown error", async (t) => {
         },
     });
 
-    const dMock = mock<RunnerD>(t, {
+    const dMock = t.mock<RunnerD>({
         log: () => {},
         error: () => {},
     });

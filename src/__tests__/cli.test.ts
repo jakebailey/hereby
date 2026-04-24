@@ -2,10 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import test from "ava";
-import { execaNode } from "execa";
-
-import { useTmpdir } from "./__helpers__/index.js";
+import { execNode, useTmpdir } from "./__helpers__/index.js";
+import { test } from "./__runner__/index.js";
 
 const cliPath = fileURLToPath(new URL("../cli.js", import.meta.url));
 const fixturesPath = fileURLToPath(new URL("cli/__fixtures__", import.meta.url));
@@ -13,13 +11,13 @@ const fixturesPath = fileURLToPath(new URL("cli/__fixtures__", import.meta.url))
 // Coverage carries through to children; run and check that it doesn't break.
 
 test("run cli --help", async (t) => {
-    await execaNode(cliPath, ["--help"]);
+    await execNode(cliPath, ["--help"]);
     t.plan(1);
     t.pass();
 });
 
 test("run cli --version", async (t) => {
-    await execaNode(cliPath, ["--version"], { cwd: fixturesPath });
+    await execNode(cliPath, ["--version"], { cwd: fixturesPath });
     t.plan(1);
     t.pass();
 });
@@ -29,7 +27,7 @@ test("run cli reexec", async (t) => {
 
     await fs.promises.writeFile(path.join(dir, "Herebyfile.mjs"), "export {};");
 
-    const { exitCode, stderr } = await execaNode(cliPath, { cwd: dir, reject: false });
+    const { exitCode, stderr } = await execNode(cliPath, [], { cwd: dir, reject: false });
     t.is(exitCode, 1);
     t.assert(stderr.includes("Unable to find hereby; ensure hereby is installed in your package."));
 
@@ -58,7 +56,7 @@ test("run cli reexec", async (t) => {
         }),
     );
 
-    const { stdout } = await execaNode(cliPath, { cwd: dir });
+    const { stdout } = await execNode(cliPath, [], { cwd: dir });
     t.is(stdout, "It works!");
 });
 
@@ -103,12 +101,12 @@ test("run cli reexec within hereby", async (t) => {
 
     await fs.promises.writeFile(path.join(fakeHerebyDep, "Herebyfile.mjs"), "export {};");
 
-    const { stdout } = await execaNode(cliPath, { cwd: fakeHerebyDep });
+    const { stdout } = await execNode(cliPath, [], { cwd: fakeHerebyDep });
     t.is(stdout, "It works!");
 });
 
 test("run cli --tasks", async (t) => {
-    const { stdout } = await execaNode(cliPath, ["--tasks"], { cwd: fixturesPath });
+    const { stdout } = await execNode(cliPath, ["--tasks"], { cwd: fixturesPath });
     t.snapshot(stdout);
 });
 
@@ -128,7 +126,7 @@ importTest("run cli --tasks wide columns", async (t) => {
         ].join("\n"),
     );
 
-    const { stdout } = await execaNode(cliPath, ["--tasks"], {
+    const { stdout } = await execNode(cliPath, ["--tasks"], {
         cwd: fixturesPath,
         nodeOptions: ["--import", pathToFileURL(preloadPath).href],
     });
@@ -137,7 +135,7 @@ importTest("run cli --tasks wide columns", async (t) => {
 
 test("exception", async (t) => {
     const herebyfilePath = path.join(fixturesPath, "topLevelThrow.mjs");
-    const { stderr, exitCode } = await execaNode(cliPath, ["--herebyfile", herebyfilePath], { reject: false });
+    const { stderr, exitCode } = await execNode(cliPath, ["--herebyfile", herebyfilePath], { reject: false });
     t.assert(stderr.includes("topLevelThrow"));
     t.snapshot(exitCode, "exitCode");
 });

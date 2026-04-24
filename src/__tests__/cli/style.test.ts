@@ -1,6 +1,5 @@
-import test from "ava";
-
 import { isColorEnabled, wrap } from "../../cli/style.js";
+import { test } from "../__runner__/index.js";
 
 const cases: [string, NodeJS.ProcessEnv, boolean, NodeJS.Platform, boolean][] = [
     ["NO_COLOR disables", { NO_COLOR: "1", FORCE_COLOR: "1", CI: "1" }, true, "linux", false],

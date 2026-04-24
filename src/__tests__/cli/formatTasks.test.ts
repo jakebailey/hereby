@@ -1,8 +1,7 @@
-import test from "ava";
-
 import { formatTasks } from "../../cli/formatTasks.js";
 import { task } from "../../index.js";
 import { normalizeOutput } from "../__helpers__/index.js";
+import { test } from "../__runner__/index.js";
 
 test("printTasks", (t) => {
     const hidden = task({
@@ -37,14 +36,13 @@ test("printTasks", (t) => {
 
     for (const format of ["normal", "simple"] as const) {
         const output = formatTasks(format, [a, c, d, hidden], d, 80);
-        // eslint-disable-next-line ava/assertion-arguments
         t.snapshot(normalizeOutput(output), format);
     }
 });
 
 test("printTasks with empty tasks", (t) => {
     const output = formatTasks("normal", [], undefined, 80);
-    t.is(output.trim(), "Available tasks");
+    t.is(normalizeOutput(output).trim(), "Available tasks");
 });
 
 test("wraps long descriptions across lines", (t) => {
