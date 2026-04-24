@@ -15,13 +15,13 @@ export function parseArgs(argv: string[]): CLIOptions {
     let parseUnknownAsTask = true;
     const options = minimist(argv, {
         "--": true,
-        string: ["herebyfile"],
-        boolean: ["tasks", "tasks-simple", "help", "version"],
-        alias: {
-            "h": "help",
-            "T": "tasks",
+        "string": ["herebyfile"],
+        "boolean": ["tasks", "tasks-simple", "help", "version"],
+        "alias": {
+            h: "help",
+            T: "tasks",
         },
-        unknown: (name) => parseUnknownAsTask && (parseUnknownAsTask = !name.startsWith("-")),
+        "unknown": (name) => parseUnknownAsTask && (parseUnknownAsTask = !name.startsWith("-")),
     });
 
     return {

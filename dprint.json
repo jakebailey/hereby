@@ -5,6 +5,7 @@
     "useTabs": false,
     "typescript": {
         "quoteStyle": "preferDouble",
+        "quoteProps": "consistent",
         "semiColons": "always",
         "arrowFunction.useParentheses": "force"
     },

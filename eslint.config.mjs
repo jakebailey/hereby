@@ -41,7 +41,7 @@ export default tseslint.config(
         },
     },
     {
-        "rules": {
+        rules: {
             "eqeqeq": "error",
             "no-constant-condition": "off",
             "no-inner-declarations": "off",
@@ -55,7 +55,7 @@ export default tseslint.config(
             // stopping to think about its contents.
             "@typescript-eslint/no-empty-interface": "off",
             "@typescript-eslint/no-namespace": "off",
-            "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+            "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
             "@typescript-eslint/no-use-before-define": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unsafe-argument": "off",
@@ -70,7 +70,7 @@ export default tseslint.config(
             "@typescript-eslint/naming-convention": [
                 "error",
                 {
-                    "selector": [
+                    selector: [
                         "classProperty",
                         "typeProperty",
                         "parameterProperty",
@@ -78,16 +78,16 @@ export default tseslint.config(
                         "typeMethod",
                         "accessor",
                     ],
-                    "modifiers": ["private"],
-                    "leadingUnderscore": "require",
-                    "format": ["camelCase"],
-                    "filter": {
-                        "regex": "^(test_| )",
-                        "match": false,
+                    modifiers: ["private"],
+                    leadingUnderscore: "require",
+                    format: ["camelCase"],
+                    filter: {
+                        regex: "^(test_| )",
+                        match: false,
                     },
                 },
                 {
-                    "selector": [
+                    selector: [
                         "classProperty",
                         "typeProperty",
                         "parameterProperty",
@@ -95,16 +95,16 @@ export default tseslint.config(
                         "typeMethod",
                         "accessor",
                     ],
-                    "modifiers": ["protected"],
-                    "leadingUnderscore": "allow",
-                    "format": ["camelCase"],
-                    "filter": {
-                        "regex": "^(test_| )",
-                        "match": false,
+                    modifiers: ["protected"],
+                    leadingUnderscore: "allow",
+                    format: ["camelCase"],
+                    filter: {
+                        regex: "^(test_| )",
+                        match: false,
                     },
                 },
                 {
-                    "selector": [
+                    selector: [
                         "classProperty",
                         "typeProperty",
                         "parameterProperty",
@@ -112,17 +112,17 @@ export default tseslint.config(
                         "typeMethod",
                         "accessor",
                     ],
-                    "modifiers": ["public"],
-                    "leadingUnderscore": "forbid",
-                    "format": ["camelCase"],
-                    "filter": {
-                        "regex": "^(test_| )",
-                        "match": false,
+                    modifiers: ["public"],
+                    leadingUnderscore: "forbid",
+                    format: ["camelCase"],
+                    filter: {
+                        regex: "^(test_| )",
+                        match: false,
                     },
                 },
             ],
             "@typescript-eslint/no-unnecessary-condition": ["error", {
-                "allowConstantLoopConditions": true,
+                allowConstantLoopConditions: true,
             }],
             "unicorn/catch-error-name": "off",
             "unicorn/filename-case": "off",
@@ -136,10 +136,10 @@ export default tseslint.config(
             "unicorn/no-array-sort": "off", // Bad suggestion for old targets
         },
     },
-    { "files": ["Herebyfile.*", "**/__fixtures__/**"], "rules": { "no-restricted-globals": "off" } },
+    { files: ["Herebyfile.*", "**/__fixtures__/**"], rules: { "no-restricted-globals": "off" } },
     {
-        "files": ["**/__tests__/**"],
-        "rules": {
+        files: ["**/__tests__/**"],
+        rules: {
             "@typescript-eslint/no-empty-function": "off",
             "no-restricted-globals": "off",
             "ava/no-import-test-files": "off",
