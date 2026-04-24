@@ -1,8 +1,13 @@
 {
-    "extends": "@tsconfig/node12/tsconfig.json",
     "compilerOptions": {
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "lib": ["es2020"],
+        "module": "node16",
+        "target": "es2019",
+        "moduleResolution": "node16",
+
+        "strict": true,
+        "skipLibCheck": true,
+
         "rootDir": "src",
         "outDir": "dist",
         "declarationDir": "dist",
