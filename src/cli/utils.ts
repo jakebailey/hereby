@@ -13,15 +13,9 @@ const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
 
 // Exported for testing.
 export function simplifyPath(p: string) {
-    p = path.normalize(p);
+    const normalized = path.normalize(p);
     const homedir = path.normalize(os.homedir() + path.sep);
-
-    if (p.startsWith(homedir)) {
-        p = p.slice(homedir.length);
-        return `~${path.sep}${p}`;
-    }
-
-    return p;
+    return normalized.startsWith(homedir) ? `~${path.sep}${normalized.slice(homedir.length)}` : normalized;
 }
 
 export function findUp<T extends {}>(dir: string, predicate: (dir: string) => T | undefined): T | undefined {
@@ -46,13 +40,11 @@ export function prettyMilliseconds(ms: number): string {
     // Round to one decimal, with an epsilon to avoid floating point errors (e.g. 5.0000001 -> 5).
     const roundedSeconds = Math.floor(seconds * 10 + 0.000_000_1) / 10;
 
-    const parts: string[] = [];
-    if (hours > 0) parts.push(`${hours}h`);
-    if (minutes > 0) parts.push(`${minutes}m`);
-    if (roundedSeconds > 0) {
-        parts.push(roundedSeconds % 1 === 0 ? `${roundedSeconds}s` : `${roundedSeconds.toFixed(1)}s`);
-    }
-    return parts.join(" ");
+    return [
+        hours > 0 && `${hours}h`,
+        minutes > 0 && `${minutes}m`,
+        roundedSeconds > 0 && (roundedSeconds % 1 === 0 ? `${roundedSeconds}s` : `${roundedSeconds.toFixed(1)}s`),
+    ].filter(Boolean).join(" ");
 }
 
 /**
