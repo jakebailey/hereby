@@ -9,7 +9,7 @@ import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfil
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
-import { type D, prettyMilliseconds, UserError } from "./utils.js";
+import { type D, findSimilar, prettyMilliseconds, UserError } from "./utils.js";
 
 export async function main(d: D) {
     try {
@@ -92,24 +92,13 @@ export async function selectTasks(
         );
     }
 
-    const tasks: Task[] = [];
-
-    for (const name of taskNames) {
+    return taskNames.map((name) => {
         const task = herebyfile.tasks.get(name);
-        if (!task) {
-            let message = `Task "${name}" does not exist or is not exported from ${d.simplifyPath(herebyfilePath)}.`;
-
-            const { closest, distance } = await import("fastest-levenshtein");
-
-            const candidate = closest(name, [...herebyfile.tasks.keys()]);
-            if (distance(name, candidate) < name.length * 0.4) {
-                message += ` Did you mean "${candidate}"?`;
-            }
-
-            throw new UserError(message);
-        }
-        tasks.push(task);
-    }
-
-    return tasks;
+        if (task) return task;
+        const suggestion = findSimilar(name, herebyfile.tasks.keys());
+        throw new UserError(
+            `Task "${name}" does not exist or is not exported from ${d.simplifyPath(herebyfilePath)}.`
+                + (suggestion ? ` Did you mean "${suggestion}"?` : ""),
+        );
+    });
 }
