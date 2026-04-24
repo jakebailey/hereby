@@ -13,13 +13,13 @@ export function isColorEnabled(env: NodeJS.ProcessEnv, isTTY: boolean, platform:
 const enabled = isColorEnabled(process.env, process.stdout.isTTY, process.platform);
 /* eslint-enable no-restricted-globals, @typescript-eslint/prefer-nullish-coalescing */
 
-function wrap(open: string, close: string): (s: string) => string {
+export function wrap(enabled: boolean, open: string, close: string): (s: string) => string {
     return enabled ? (s) => open + s + close : (s) => s;
 }
 
-export const red = wrap("\u001B[31m", "\u001B[39m");
-export const green = wrap("\u001B[32m", "\u001B[39m");
-export const yellow = wrap("\u001B[33m", "\u001B[39m");
-export const blue = wrap("\u001B[34m", "\u001B[39m");
-export const bold = wrap("\u001B[1m", "\u001B[22m");
-export const underline = wrap("\u001B[4m", "\u001B[24m");
+export const red = wrap(enabled, "\u001B[31m", "\u001B[39m");
+export const green = wrap(enabled, "\u001B[32m", "\u001B[39m");
+export const yellow = wrap(enabled, "\u001B[33m", "\u001B[39m");
+export const blue = wrap(enabled, "\u001B[34m", "\u001B[39m");
+export const bold = wrap(enabled, "\u001B[1m", "\u001B[22m");
+export const underline = wrap(enabled, "\u001B[4m", "\u001B[24m");

@@ -1,6 +1,6 @@
 import test from "ava";
 
-import { isColorEnabled } from "../../cli/style.js";
+import { isColorEnabled, wrap } from "../../cli/style.js";
 
 const cases: [string, NodeJS.ProcessEnv, boolean, NodeJS.Platform, boolean][] = [
     ["NO_COLOR disables", { NO_COLOR: "1", FORCE_COLOR: "1", CI: "1" }, true, "linux", false],
@@ -23,3 +23,11 @@ for (const [name, env, isTTY, platform, expected] of cases) {
         t.is(isColorEnabled(env, isTTY, platform), expected);
     });
 }
+
+test("wrap enabled wraps with open/close", (t) => {
+    t.is(wrap(true, "<", ">")("x"), "<x>");
+});
+
+test("wrap disabled returns input unchanged", (t) => {
+    t.is(wrap(false, "<", ">")("x"), "x");
+});
