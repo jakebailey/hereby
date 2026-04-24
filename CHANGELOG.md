@@ -1,5 +1,14 @@
 # hereby
 
+## 1.15.0
+
+### Minor Changes
+
+- ba95607: Replace fastest-levenshtein with local implementation
+- 20c8970: Replace minimist with small local CLI parser
+- 5c85ede: Simplify some code
+- 86a816f: Replace picocolors with local helpers
+
 ## 1.14.0
 
 ### Minor Changes
