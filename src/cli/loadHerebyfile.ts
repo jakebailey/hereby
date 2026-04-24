@@ -2,9 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import pc from "picocolors";
-
 import { Task } from "../index.js";
+import * as style from "./style.js";
 import { findUp, UserError } from "./utils.js";
 
 const herebyfileRegExp = /^herebyfile\.m?[jt]s$/i;
@@ -55,7 +54,7 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
         if (key === "default") {
             defaultTask = value;
         } else if (exportedTasks.has(value)) {
-            throw new UserError(`Task "${pc.blue(value.options.name)}" has been exported twice.`);
+            throw new UserError(`Task "${style.blue(value.options.name)}" has been exported twice.`);
         } else {
             exportedTasks.add(value);
         }
@@ -87,11 +86,11 @@ function checkTaskInvariants(
     for (const task of tasks) {
         if (checkedTasks.has(task)) continue;
         if (taskStack.has(task)) {
-            throw new UserError(`Task "${pc.blue(task.options.name)}" references itself.`);
+            throw new UserError(`Task "${style.blue(task.options.name)}" references itself.`);
         }
         const name = task.options.name;
         if (seenNames.has(name)) {
-            throw new UserError(`Task "${pc.blue(name)}" was declared twice.`);
+            throw new UserError(`Task "${style.blue(name)}" was declared twice.`);
         }
         seenNames.add(name);
         if (task.options.dependencies) {

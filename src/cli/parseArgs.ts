@@ -1,6 +1,5 @@
-import pc from "picocolors";
-
 import type { TaskFormat } from "./formatTasks.js";
+import * as style from "./style.js";
 import { UserError } from "./utils.js";
 
 interface CLIOptions {
@@ -46,7 +45,7 @@ export function parseArgs(argv: string[]): CLIOptions {
 }
 
 export function getUsage(): string {
-    const header = (text: string) => pc.bold(pc.underline(text));
+    const header = (text: string) => style.bold(style.underline(text));
 
     return `
 ${header("hereby")}
@@ -59,10 +58,10 @@ ${header("Synopsis")}
 
 ${header("Options")}
 
-  ${pc.bold("-h, --help")}          Display this usage guide.
-  ${pc.bold("--herebyfile")} ${pc.underline("path")}   A path to a Herebyfile. Optional.
-  ${pc.bold("-T, --tasks")}         Print a listing of the available tasks.
-  ${pc.bold("--version")}           Print the current hereby version.
+  ${style.bold("-h, --help")}          Display this usage guide.
+  ${style.bold("--herebyfile")} ${style.underline("path")}   A path to a Herebyfile. Optional.
+  ${style.bold("-T, --tasks")}         Print a listing of the available tasks.
+  ${style.bold("--version")}           Print the current hereby version.
 
 ${header("Example usage")}
 

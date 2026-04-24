@@ -1,6 +1,5 @@
-import pc from "picocolors";
-
 import type { Task } from "../index.js";
+import * as style from "./style.js";
 import { compareTaskNames } from "./utils.js";
 
 export type TaskFormat = "normal" | "simple";
@@ -13,14 +12,14 @@ export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTa
     }
 
     const names = visibleTasks.map((task) =>
-        task === defaultTask ? `${pc.green(task.options.name)} (default)` : pc.blue(task.options.name)
+        task === defaultTask ? `${style.green(task.options.name)} (default)` : style.blue(task.options.name)
     );
 
     const descriptions = visibleTasks.map((task) => {
         let parts = task.options.description ? [task.options.description] : undefined;
         const deps = task.options.dependencies?.filter(isTaskVisible).sort(compareTaskNames);
         if (deps?.length) {
-            const depNames = deps.map((task) => pc.blue(task.options.name));
+            const depNames = deps.map((task) => style.blue(task.options.name));
             (parts ??= []).push(`Depends on: ${depNames.join(", ")}`);
         }
         return parts?.join("\n") ?? "";
@@ -37,7 +36,7 @@ export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTa
     const formatted = names.map((name, i) => formatAsColumns("  ", name, nameWidth, descriptions[i], descriptionWidth));
 
     return `
-${pc.bold(pc.underline("Available tasks"))}
+${style.bold(style.underline("Available tasks"))}
 
 ${formatted.join("")}`;
 }

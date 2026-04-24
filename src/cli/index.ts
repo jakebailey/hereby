@@ -2,13 +2,12 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { types } from "node:util";
 
-import pc from "picocolors";
-
 import type { Task } from "../index.js";
 import { findHerebyfile, type Herebyfile, loadHerebyfile } from "./loadHerebyfile.js";
 import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
+import * as style from "./style.js";
 import { type D, findSimilar, prettyMilliseconds, UserError } from "./utils.js";
 
 export async function main(d: D) {
@@ -16,7 +15,7 @@ export async function main(d: D) {
         await mainWorker(d);
     } catch (e) {
         if (e instanceof UserError) {
-            d.error(`${pc.red("Error")}: ${e.message}`);
+            d.error(`${style.red("Error")}: ${e.message}`);
         } else if (types.isNativeError(e) && e.stack) { // eslint-disable-line @typescript-eslint/no-deprecated
             d.error(e.stack);
         } else {
@@ -54,8 +53,8 @@ async function mainWorker(d: D) {
     }
 
     const tasks = await selectTasks(d, herebyfile, herebyfilePath, args.run);
-    const taskNames = tasks.map((task) => pc.blue(task.options.name)).join(", ");
-    d.log(`Using ${pc.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
+    const taskNames = tasks.map((task) => style.blue(task.options.name)).join(", ");
+    d.log(`Using ${style.yellow(d.simplifyPath(herebyfilePath))} to run ${taskNames}`);
 
     const start = performance.now();
 
@@ -70,9 +69,9 @@ async function mainWorker(d: D) {
     } finally {
         const took = performance.now() - start;
         const failed = runner.failedTasks.length > 0;
-        d.log(`Completed ${taskNames}${failed ? pc.red(" with errors") : ""} in ${prettyMilliseconds(took)}`);
+        d.log(`Completed ${taskNames}${failed ? style.red(" with errors") : ""} in ${prettyMilliseconds(took)}`);
         if (failed) {
-            const names = runner.failedTasks.sort().map((task) => pc.red(task)).join(", ");
+            const names = runner.failedTasks.sort().map((task) => style.red(task)).join(", ");
             d.log(`Failed tasks: ${names}`);
         }
     }

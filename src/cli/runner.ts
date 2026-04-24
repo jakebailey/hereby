@@ -1,8 +1,7 @@
 import { performance } from "node:perf_hooks";
 
-import pc from "picocolors";
-
 import type { Task } from "../index.js";
+import * as style from "./style.js";
 import { type D, prettyMilliseconds } from "./utils.js";
 
 export type RunnerD = Pick<D, "log" | "error">;
@@ -47,18 +46,18 @@ export class Runner {
         const start = performance.now();
         try {
             if (this.failedTasks.length === 0) {
-                this._d.log(`Starting ${pc.blue(task.options.name)}`);
+                this._d.log(`Starting ${style.blue(task.options.name)}`);
             }
             await run();
             if (this.failedTasks.length === 0) {
                 const took = performance.now() - start;
-                this._d.log(`Finished ${pc.green(task.options.name)} in ${prettyMilliseconds(took)}`);
+                this._d.log(`Finished ${style.green(task.options.name)} in ${prettyMilliseconds(took)}`);
             }
         } catch (e) {
             this.failedTasks.push(task.options.name);
             if (this.failedTasks.length === 1) {
                 const took = performance.now() - start;
-                this._d.error(`Error in ${pc.red(task.options.name)} in ${prettyMilliseconds(took)}\n${e}`);
+                this._d.error(`Error in ${style.red(task.options.name)} in ${prettyMilliseconds(took)}\n${e}`);
             }
             throw e;
         }
