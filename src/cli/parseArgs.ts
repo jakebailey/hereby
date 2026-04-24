@@ -25,11 +25,12 @@ export function parseArgs(argv: string[]): CLIOptions {
         }
         const eq = arg.indexOf("=");
         const name = (eq === -1 ? arg : arg.slice(0, eq)).replace(/^--?/, "");
-        const peek = eq !== -1 ? arg.slice(eq + 1) : argv[i + 1];
-        const consume = (pred: (s: string) => boolean) => eq !== -1 || (pred(peek) && ++i) ? peek : undefined;
+        const peek: string | undefined = eq !== -1 ? arg.slice(eq + 1) : argv[i + 1];
+        const consume = (pred: (s: string | undefined) => boolean) =>
+            eq !== -1 || (pred(peek) && ++i) ? peek : undefined;
         const bool = () => consume((s) => s === "true" || s === "false") !== "false";
         const str = () => {
-            const v = consume((s) => !s.startsWith("-"));
+            const v = consume((s) => s !== undefined && !s.startsWith("-"));
             if (!v) throw new UserError(`Option --${name} requires a value.`);
             return v;
         };
