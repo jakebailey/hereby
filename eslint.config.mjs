@@ -2,7 +2,6 @@
 import eslint from "@eslint/js";
 import eslintPluginAva from "eslint-plugin-ava";
 import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
-import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -24,7 +23,6 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.strictTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
-    eslintPluginUnicorn.configs["flat/recommended"],
     eslintPluginAva.configs.recommended,
     {
         languageOptions: {
@@ -124,16 +122,6 @@ export default tseslint.config(
             "@typescript-eslint/no-unnecessary-condition": ["error", {
                 allowConstantLoopConditions: true,
             }],
-            "unicorn/catch-error-name": "off",
-            "unicorn/filename-case": "off",
-            "unicorn/no-array-callback-reference": "off",
-            "unicorn/no-await-expression-member": "off",
-            "unicorn/no-useless-undefined": "off",
-            "unicorn/prefer-top-level-await": "off", // Reenable once Node 12 is dropped.
-            "unicorn/prevent-abbreviations": "off",
-            "unicorn/switch-case-braces": "off",
-            "unicorn/prefer-string-replace-all": "off", // Bad suggestion for old targets
-            "unicorn/no-array-sort": "off", // Bad suggestion for old targets
         },
     },
     { files: ["Herebyfile.*", "**/__fixtures__/**"], rules: { "no-restricted-globals": "off" } },

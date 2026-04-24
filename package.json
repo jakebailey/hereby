@@ -53,7 +53,6 @@
         "eslint": "^10.2.1",
         "eslint-plugin-ava": "^16.0.1",
         "eslint-plugin-simple-import-sort": "^13.0.0",
-        "eslint-plugin-unicorn": "^64.0.0",
         "execa": "^6.1.0",
         "globals": "^17.5.0",
         "monocart-coverage-reports": "^2.12.11",
