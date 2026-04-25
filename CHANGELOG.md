@@ -1,5 +1,11 @@
 # hereby
 
+## 1.15.1
+
+### Patch Changes
+
+- a067994: Fix word wrapping for extremely small terminals
+
 ## 1.15.0
 
 ### Minor Changes
