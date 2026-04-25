@@ -26,13 +26,14 @@ export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTa
     });
 
     // There's a 2 space indent plus 3 spaces between columns, hence take away 5
-    // padding spaces from the available width
-    const maxTotalWidth = columns - 5;
-    const maxNameWidth = Math.max(...names.map(visibleLength));
+    // padding spaces from the available width. Keep widths positive so narrow
+    // terminals still wrap safely.
+    const maxTotalWidth = Math.max(1, columns - 5);
+    const maxNameWidth = Math.max(1, ...names.map(visibleLength));
 
     // Check the name doesn't take up more than half the space
-    const nameWidth = Math.min(maxNameWidth, maxTotalWidth >> 1);
-    const descriptionWidth = maxTotalWidth - nameWidth;
+    const nameWidth = Math.min(maxNameWidth, Math.max(1, maxTotalWidth >> 1));
+    const descriptionWidth = Math.max(1, maxTotalWidth - nameWidth);
     const formatted = names.map((name, i) => formatAsColumns("  ", name, nameWidth, descriptions[i], descriptionWidth));
 
     return `
@@ -76,6 +77,7 @@ const TOKEN_REGEX = /[^\s-]+?-\b|\S+|\s+/g;
 
 function wrapText(text: string, maxWidth: number): string[] {
     const result: string[] = [];
+    maxWidth = Math.max(1, maxWidth);
     for (const line of text.split(/\r?\n/)) {
         let current = "";
         for (const token of line.match(TOKEN_REGEX) ?? []) {

@@ -89,6 +89,17 @@ test("breaks long words after short words", (t) => {
     t.snapshot(normalizeOutput(output));
 });
 
+test("handles very narrow columns", (t) => {
+    const a = task({
+        name: "a",
+        description: "description",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, 5);
+    t.regex(normalizeOutput(output), /Available tasks[\s\S]*a/);
+});
+
 test("handles multiline descriptions", (t) => {
     const a = task({
         name: "a",
