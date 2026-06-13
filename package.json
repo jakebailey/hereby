@@ -43,7 +43,7 @@
         "@eslint/js": "^10.0.1",
         "@types/node": "^25.6.0",
         "dprint": "^0.54.0",
-        "eslint": "^10.2.1",
+        "eslint": "^10.5.0",
         "eslint-plugin-simple-import-sort": "^13.0.0",
         "globals": "^17.5.0",
         "monocart-coverage-reports": "^2.12.11",
