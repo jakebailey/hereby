@@ -42,7 +42,7 @@
         "@changesets/cli": "^2.31.0",
         "@eslint/js": "^10.0.1",
         "@types/node": "^25.9.3",
-        "dprint": "^0.54.0",
+        "dprint": "^0.55.2",
         "eslint": "^10.5.0",
         "eslint-plugin-simple-import-sort": "^13.0.0",
         "globals": "^17.6.0",
