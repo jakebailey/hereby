@@ -44,7 +44,7 @@
         "@dprint/markdown": "^0.22.1",
         "@dprint/typescript": "^0.96.1",
         "@eslint/js": "^10.0.1",
-        "@types/node": "^25.9.3",
+        "@types/node": "^25.9.5",
         "dprint": "^0.55.2",
         "dprint-plugin-yaml": "^0.6.0",
         "eslint": "^10.5.0",
