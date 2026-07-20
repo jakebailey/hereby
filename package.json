@@ -52,7 +52,7 @@
         "globals": "^17.6.0",
         "monocart-coverage-reports": "^2.12.12",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.61.0"
+        "typescript-eslint": "^8.65.0"
     },
     "packageManager": "npm@8.19.4",
     "scripts": {
