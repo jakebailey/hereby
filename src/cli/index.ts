@@ -8,9 +8,9 @@ import { getUsage, parseArgs } from "./parseArgs.js";
 import { reexec } from "./reexec.js";
 import { Runner } from "./runner.js";
 import * as style from "./style.js";
-import { type D, findSimilar, prettyMilliseconds, UserError } from "./utils.js";
+import { type D, findSimilar, prettyMilliseconds, real, UserError } from "./utils.js";
 
-export async function main(d: D) {
+export async function main(d: D = real()) {
     try {
         await mainWorker(d);
     } catch (e) {

@@ -11,30 +11,30 @@ export function formatTasks(format: TaskFormat, tasks: Iterable<Task>, defaultTa
         return visibleTasks.map((task) => task.options.name).join("\n");
     }
 
-    const names = visibleTasks.map((task) =>
-        task === defaultTask ? `${style.green(task.options.name)} (default)` : style.blue(task.options.name)
-    );
+    const rows = visibleTasks.map((task) => {
+        const name = task === defaultTask
+            ? `${style.green(task.options.name)} (default)`
+            : style.blue(task.options.name);
 
-    const descriptions = visibleTasks.map((task) => {
-        let parts = task.options.description ? [task.options.description] : undefined;
+        const parts = task.options.description ? [task.options.description] : [];
         const deps = task.options.dependencies?.filter(isTaskVisible).sort(compareTaskNames);
         if (deps?.length) {
-            const depNames = deps.map((task) => style.blue(task.options.name));
-            (parts ??= []).push(`Depends on: ${depNames.join(", ")}`);
+            parts.push(`Depends on: ${deps.map((dep) => style.blue(dep.options.name)).join(", ")}`);
         }
-        return parts?.join("\n") ?? "";
+
+        return { name, description: parts.join("\n") };
     });
 
     // There's a 2 space indent plus 3 spaces between columns, hence take away 5
     // padding spaces from the available width. Keep widths positive so narrow
     // terminals still wrap safely.
     const maxTotalWidth = Math.max(1, columns - 5);
-    const maxNameWidth = Math.max(1, ...names.map(visibleLength));
+    const maxNameWidth = Math.max(1, ...rows.map((row) => visibleLength(row.name)));
 
     // Check the name doesn't take up more than half the space
     const nameWidth = Math.min(maxNameWidth, Math.max(1, maxTotalWidth >> 1));
     const descriptionWidth = Math.max(1, maxTotalWidth - nameWidth);
-    const formatted = names.map((name, i) => formatAsColumns("  ", name, nameWidth, descriptions[i], descriptionWidth));
+    const formatted = rows.map((row) => formatAsColumns("  ", row.name, nameWidth, row.description, descriptionWidth));
 
     return `
 ${style.bold(style.underline("Available tasks"))}
@@ -58,10 +58,14 @@ function formatAsColumns(
     const maxLines = Math.max(leftLines.length, rightLines.length);
     let result = "";
     for (let i = 0; i < maxLines; i++) {
-        const leftPart = leftLines[i] || "";
-        const rightPart = rightLines[i] || "";
+        const leftPart = leftLines[i] ?? "";
+        const rightPart = rightLines[i] ?? "";
+        // Only pad the left column when there's something to the right of it,
+        // so we don't emit trailing whitespace. The clamp is needed because
+        // wrapText chunks long tokens by code point, while visibleLength counts
+        // UTF-16 code units; astral characters can overshoot leftWidth.
         const paddedLeft = leftPart + " ".repeat(Math.max(0, leftWidth - visibleLength(leftPart)));
-        result += `${indent}${paddedLeft}   ${rightPart}\n`;
+        result += rightPart ? `${indent}${paddedLeft}   ${rightPart}\n` : `${indent}${leftPart}\n`;
     }
     return result;
 }
@@ -77,11 +81,10 @@ const TOKEN_REGEX = /[^\s-]+?-\b|\S+|\s+/g;
 
 function wrapText(text: string, maxWidth: number): string[] {
     const result: string[] = [];
-    maxWidth = Math.max(1, maxWidth);
     for (const line of text.split(/\r?\n/)) {
         let current = "";
         for (const token of line.match(TOKEN_REGEX) ?? []) {
-            if (visibleLength(current) + visibleLength(token) > maxWidth && current.trim()) {
+            if (visibleLength(current) + visibleLength(token) > maxWidth && current) {
                 result.push(current.trim());
                 current = "";
             }
@@ -90,10 +93,11 @@ function wrapText(text: string, maxWidth: number): string[] {
                 const chars = [...token];
                 while (chars.length > 0) result.push(chars.splice(0, maxWidth).join(""));
             } else {
-                current += /^\s/.test(token) && !current ? "" : token;
+                // Drop whitespace tokens that would otherwise start a line.
+                current = current ? current + token : token.trimStart();
             }
         }
-        if (current.trim()) result.push(current.trim());
+        if (current) result.push(current.trim());
     }
-    return result.length > 0 ? result : [""];
+    return result;
 }

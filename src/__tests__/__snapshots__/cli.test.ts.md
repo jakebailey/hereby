@@ -7,7 +7,7 @@
     `␊
     Available tasks␊
     ␊
-      a                          ␊
+      a␊
       b                          This is some long description of b. It's pretty␊
                                  long, and goes into detail about why we want to do␊
                                  b.␊
@@ -24,7 +24,7 @@
     `␊
     Available tasks␊
     ␊
-      a                          ␊
+      a␊
       b                          This is some long description of b. It's pretty long, and goes into detail about why we want to do b.␊
       buildCompiler              This thing builds the compiler. Neat, right?␊
                                  Depends on: a, b, c␊

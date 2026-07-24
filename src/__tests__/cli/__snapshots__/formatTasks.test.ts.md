@@ -99,3 +99,13 @@
       dep␊
       main   Depends on: dep␊
     `
+
+## handles astral characters in task names
+
+> Snapshot 1
+
+    `␊
+    Available tasks␊
+    ␊
+      😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀   description␊
+    `

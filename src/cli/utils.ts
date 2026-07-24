@@ -38,12 +38,13 @@ export function prettyMilliseconds(ms: number): string {
     const minutes = Math.floor(ms / 60_000) % 60;
     const hours = Math.floor(ms / 3_600_000);
     // Round to one decimal, with an epsilon to avoid floating point errors (e.g. 5.0000001 -> 5).
+    // Number formatting is already shortest-round-trip, so this prints as "5s" or "5.5s".
     const roundedSeconds = Math.floor(seconds * 10 + 0.000_000_1) / 10;
 
     return [
         hours > 0 && `${hours}h`,
         minutes > 0 && `${minutes}m`,
-        roundedSeconds > 0 && (roundedSeconds % 1 === 0 ? `${roundedSeconds}s` : `${roundedSeconds.toFixed(1)}s`),
+        roundedSeconds > 0 && `${roundedSeconds}s`,
     ].filter(Boolean).join(" ");
 }
 

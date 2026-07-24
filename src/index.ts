@@ -77,7 +77,7 @@ export class Task {
         // Non-type checks.
         assert.ok(options.name !== "", "Task name must not be empty.");
         assert.ok(!options.name.startsWith("-"), 'Task name must not start with "-".');
-        assert.ok(!!(options.dependencies?.length || options.run), "Task must have a run function or dependencies.");
+        assert.ok(options.dependencies?.length || options.run, "Task must have a run function or dependencies.");
 
         this.options = options;
     }

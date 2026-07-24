@@ -77,27 +77,30 @@ export async function loadHerebyfile(herebyfilePath: string): Promise<Herebyfile
     return { tasks, defaultTask };
 }
 
-function checkTaskInvariants(
-    tasks: Iterable<Task>,
-    checkedTasks = new Set<Task>(),
-    taskStack = new Set<Task>(),
-    seenNames = new Set<string>(),
-): void {
-    for (const task of tasks) {
-        if (checkedTasks.has(task)) continue;
-        if (taskStack.has(task)) {
-            throw new UserError(`Task "${style.blue(task.options.name)}" references itself.`);
+function checkTaskInvariants(tasks: Iterable<Task>): void {
+    const checkedTasks = new Set<Task>();
+    const taskStack = new Set<Task>();
+    const seenNames = new Set<string>();
+
+    function check(tasks: Iterable<Task>): void {
+        for (const task of tasks) {
+            if (checkedTasks.has(task)) continue;
+            if (taskStack.has(task)) {
+                throw new UserError(`Task "${style.blue(task.options.name)}" references itself.`);
+            }
+            const name = task.options.name;
+            if (seenNames.has(name)) {
+                throw new UserError(`Task "${style.blue(name)}" was declared twice.`);
+            }
+            seenNames.add(name);
+            if (task.options.dependencies) {
+                taskStack.add(task);
+                check(task.options.dependencies);
+                taskStack.delete(task);
+            }
+            checkedTasks.add(task);
         }
-        const name = task.options.name;
-        if (seenNames.has(name)) {
-            throw new UserError(`Task "${style.blue(name)}" was declared twice.`);
-        }
-        seenNames.add(name);
-        if (task.options.dependencies) {
-            taskStack.add(task);
-            checkTaskInvariants(task.options.dependencies, checkedTasks, taskStack, seenNames);
-            taskStack.delete(task);
-        }
-        checkedTasks.add(task);
     }
+
+    check(tasks);
 }

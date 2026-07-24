@@ -2,6 +2,7 @@ import { formatTasks } from "../../cli/formatTasks.js";
 import { task } from "../../index.js";
 import { normalizeOutput } from "../__helpers__/index.js";
 import { test } from "../__runner__/index.js";
+import { stripAnsi } from "../__runner__/stripAnsi.js";
 
 test("printTasks", (t) => {
     const hidden = task({
@@ -135,4 +136,34 @@ test("formats dependencies in description", (t) => {
 
     const output = formatTasks("normal", [dep, main], undefined, 80);
     t.snapshot(normalizeOutput(output));
+});
+
+test("handles astral characters in task names", (t) => {
+    // Long tokens are chunked by code point, but widths are measured in UTF-16
+    // code units, so astral characters can overshoot the column width.
+    const a = task({
+        name: "😀".repeat(20),
+        description: "description",
+        run: async () => {},
+    });
+
+    const output = formatTasks("normal", [a], undefined, 80);
+    t.snapshot(normalizeOutput(output));
+});
+
+test("does not emit trailing whitespace", (t) => {
+    const a = task({
+        name: "a",
+        run: async () => {},
+    });
+
+    const b = task({
+        name: "b",
+        description: "This is task b.",
+        run: async () => {},
+    });
+
+    // Note: deliberately not normalized, as normalizeOutput strips trailing whitespace.
+    const output = stripAnsi(formatTasks("normal", [a, b], a, 80));
+    t.false(/[ \t]+$/m.test(output), `Output has trailing whitespace: ${JSON.stringify(output)}`);
 });

@@ -19,19 +19,13 @@ export class Runner {
         // cleanup function in a "finally" or something.
         const results = await Promise.allSettled(
             tasks.map((task) => {
-                const cached = this._addedTasks.get(task);
-                if (cached) return cached;
-
-                const promise = this._runTask(task);
-                this._addedTasks.set(task, promise);
+                let promise = this._addedTasks.get(task);
+                if (!promise) this._addedTasks.set(task, promise = this._runTask(task));
                 return promise;
             }),
         );
-        for (const result of results) {
-            if (result.status === "rejected") {
-                throw result.reason;
-            }
-        }
+        const rejected = results.find((result) => result.status === "rejected");
+        if (rejected) throw rejected.reason;
     }
 
     private async _runTask(task: Task): Promise<void> {
