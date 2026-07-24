@@ -39,20 +39,20 @@
         "./dist/index.d.ts"
     ],
     "devDependencies": {
-        "@changesets/cli": "^2.31.0",
+        "@changesets/cli": "^2.31.1",
         "@dprint/json": "^0.23.0",
         "@dprint/markdown": "^0.22.1",
         "@dprint/typescript": "^0.96.1",
         "@eslint/js": "^10.0.1",
-        "@types/node": "^25.9.3",
+        "@types/node": "^26.1.1",
         "dprint": "^0.55.2",
         "dprint-plugin-yaml": "^0.6.0",
-        "eslint": "^10.5.0",
-        "eslint-plugin-simple-import-sort": "^13.0.0",
-        "globals": "^17.6.0",
+        "eslint": "^10.8.0",
+        "eslint-plugin-simple-import-sort": "^14.0.0",
+        "globals": "^17.7.0",
         "monocart-coverage-reports": "^2.12.12",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.61.0"
+        "typescript-eslint": "^8.65.0"
     },
     "packageManager": "npm@8.19.4",
     "scripts": {
