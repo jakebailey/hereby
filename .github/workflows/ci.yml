@@ -86,8 +86,8 @@ jobs:
           disable_search: true
           files: ./coverage/codecov.json
 
-  eslint:
-    name: ESLint
+  lint:
+    name: lint
     runs-on: ubuntu-slim
     if: ${{ github.event_name != 'schedule' }}
 
@@ -97,7 +97,7 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci
-      - run: npx eslint .
+      - run: npm run lint
 
   dprint:
     name: dprint
@@ -160,7 +160,7 @@ jobs:
     if: ${{ always() }}
     needs:
       - test
-      - eslint
+      - lint
       - dprint
       - check-latest
 

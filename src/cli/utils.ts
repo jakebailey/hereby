@@ -8,7 +8,7 @@ export function compareTaskNames(a: Task, b: Task): number {
     return compareStrings(a.options.name, b.options.name);
 }
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
+// oxlint-disable-next-line typescript/unbound-method
 const compareStrings = new Intl.Collator(undefined, { numeric: true }).compare;
 
 // Exported for testing.
@@ -94,14 +94,14 @@ export interface D {
 }
 
 export function real(): D {
-    /* eslint-disable no-restricted-globals */
+    /* oxlint-disable no-restricted-globals */
     return {
         columns: () => process.stdout.isTTY && process.stdout.columns || 80,
         log: console.log,
         error: console.error,
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+        // oxlint-disable-next-line typescript/unbound-method
         cwd: process.cwd,
-        // eslint-disable-next-line @typescript-eslint/unbound-method
+        // oxlint-disable-next-line typescript/unbound-method
         chdir: process.chdir,
         simplifyPath,
         argv: process.argv,
@@ -114,5 +114,5 @@ export function real(): D {
             return JSON.parse(packageJson).version;
         },
     };
-    /* eslint-enable no-restricted-globals */
+    /* oxlint-enable no-restricted-globals */
 }

@@ -8,7 +8,7 @@ import { stripAnsi } from "../__runner__/stripAnsi.js";
 
 const maxRetries = process.platform === "win32" ? 10 : 0;
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- fs.promises.rm doesn't exist on Node 12
+// oxlint-disable-next-line typescript/no-unnecessary-condition -- fs.promises.rm doesn't exist on Node 12
 const rmRecursive: (p: string) => Promise<void> = fs.promises.rm
     ? (p) => fs.promises.rm(p, { recursive: true, force: true, maxRetries })
     : (p) =>
@@ -89,7 +89,6 @@ export function execNode(
                         || (typeof error.code !== "number" && typeof error.signal === "string"))
                 ) {
                     // execFile always passes an Error subclass when error is non-null.
-                    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
                     rej(error);
                     return;
                 }

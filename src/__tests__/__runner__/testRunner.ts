@@ -25,7 +25,6 @@ export interface TestContext {
 }
 
 export interface ThrowsExpectation {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     instanceOf?: Function;
     message?: string | RegExp;
 }
@@ -200,7 +199,7 @@ class TestContextImpl implements TestContext {
     }
 
     mock<T extends object>(props: Partial<T>): T {
-        const t = this; // eslint-disable-line @typescript-eslint/no-this-alias
+        const t = this; // oxlint-disable-line typescript/no-this-alias
         return new Proxy(props as T, {
             get(target, prop, receiver): unknown {
                 if (Object.prototype.hasOwnProperty.call(target, prop)) {

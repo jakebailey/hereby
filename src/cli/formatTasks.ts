@@ -66,7 +66,7 @@ function formatAsColumns(
     return result;
 }
 
-// eslint-disable-next-line no-control-regex
+// oxlint-disable-next-line no-control-regex
 const ANSI_REGEX = /\u001B\[([0-9]{1,2})m/g;
 
 function visibleLength(str: string): number {
@@ -86,7 +86,7 @@ function wrapText(text: string, maxWidth: number): string[] {
                 current = "";
             }
             if (visibleLength(token) > maxWidth) {
-                // eslint-disable-next-line @typescript-eslint/no-misused-spread
+                // oxlint-disable-next-line typescript/no-misused-spread
                 const chars = [...token];
                 while (chars.length > 0) result.push(chars.splice(0, maxWidth).join(""));
             } else {

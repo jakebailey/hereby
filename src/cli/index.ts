@@ -16,7 +16,7 @@ export async function main(d: D) {
     } catch (e) {
         if (e instanceof UserError) {
             d.error(`${style.red("Error")}: ${e.message}`);
-        } else if (types.isNativeError(e) && e.stack) { // eslint-disable-line @typescript-eslint/no-deprecated
+        } else if (types.isNativeError(e) && e.stack) {
             d.error(e.stack);
         } else {
             d.error(`${e}`);

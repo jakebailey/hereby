@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals, @typescript-eslint/prefer-nullish-coalescing */
+/* oxlint-disable no-restricted-globals */
 // NO_COLOR (https://no-color.org) takes precedence over everything when set
 // to any non-empty value. FORCE_COLOR=0/false explicitly disables; any other
 // truthy value forces colors on. Otherwise we enable colors for TTY stdout
@@ -11,7 +11,7 @@ export function isColorEnabled(env: NodeJS.ProcessEnv, isTTY: boolean, platform:
 }
 
 export const enabled = isColorEnabled(process.env, process.stdout.isTTY, process.platform);
-/* eslint-enable no-restricted-globals, @typescript-eslint/prefer-nullish-coalescing */
+/* oxlint-enable no-restricted-globals */
 
 export function wrap(enabled: boolean, open: string, close: string): (s: string) => string {
     return enabled ? (s) => open + s + close : (s) => s;

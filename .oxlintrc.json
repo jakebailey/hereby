@@ -1,0 +1,65 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": ["typescript", "oxc"],
+    "categories": {
+        "correctness": "error",
+        "suspicious": "error"
+    },
+    "env": {
+        "builtin": true,
+        "node": true,
+        "es2024": true
+    },
+    "ignorePatterns": [
+        "**/dist/**",
+        "**/node_modules/**",
+        "bin/**",
+        "coverage/**",
+        "Herebyfile.mjs",
+        "mcr.config.mjs"
+    ],
+    "rules": {
+        "eqeqeq": "error",
+        "no-constant-binary-expression": "error",
+        "no-constant-condition": "off",
+        "no-inner-declarations": "off",
+        "no-unused-vars": "off",
+        "no-restricted-globals": ["error", "console", "process", "Date"],
+        "no-shadow": "off",
+        // Private members are required to be prefixed with an underscore.
+        "no-underscore-dangle": "off",
+        "typescript/no-import-type-side-effects": "error",
+        "typescript/no-empty-interface": "off",
+        "typescript/no-namespace": "off",
+        "typescript/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+        "typescript/no-use-before-define": "off",
+        "typescript/no-explicit-any": "off",
+        "typescript/no-unsafe-argument": "off",
+        "typescript/no-unsafe-assignment": "off",
+        "typescript/no-unsafe-call": "off",
+        "typescript/no-unsafe-member-access": "off",
+        "typescript/no-unsafe-return": "off",
+        "typescript/no-non-null-assertion": "off",
+        "typescript/no-unsafe-type-assertion": "off",
+        "typescript/consistent-return": "off",
+        "typescript/no-empty-object-type": "off",
+        "typescript/require-await": "off",
+        "typescript/restrict-template-expressions": "off",
+        "typescript/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }]
+    },
+    "overrides": [
+        {
+            "files": ["Herebyfile.*", "**/__fixtures__/**"],
+            "rules": {
+                "no-restricted-globals": "off"
+            }
+        },
+        {
+            "files": ["**/__tests__/**"],
+            "rules": {
+                "typescript/no-empty-function": "off",
+                "no-restricted-globals": "off"
+            }
+        }
+    ]
+}
