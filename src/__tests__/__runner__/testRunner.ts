@@ -112,7 +112,7 @@ class TestContextImpl implements TestContext {
 
     is(actual: unknown, expected: unknown, message?: string): void {
         this._assertionCount++;
-        assert.strictEqual(actual, expected, message);
+        assert.strictEqual(actual, expected, message ?? `Expected ${serialize(expected)}, got ${serialize(actual)}`);
     }
 
     true(value: unknown, message?: string): void {
@@ -132,7 +132,7 @@ class TestContextImpl implements TestContext {
 
     assert(value: unknown, message?: string): void {
         this._assertionCount++;
-        assert.ok(value, message);
+        assert.ok(value, message ?? `Expected truthy value, got ${serialize(value)}`);
     }
 
     pass(): void {
