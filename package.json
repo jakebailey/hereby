@@ -47,7 +47,7 @@
         "dprint": "^0.55.2",
         "dprint-plugin-yaml": "^0.6.0",
         "monocart-coverage-reports": "^2.12.12",
-        "oxlint": "^1.75.0",
+        "oxlint": "^1.77.0",
         "oxlint-tsgolint": "^7.0.2001",
         "typescript": "^7.0.2"
     },
