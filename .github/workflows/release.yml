@@ -30,7 +30,7 @@ jobs:
           node-version: '24'
           package-manager-cache: false
 
-      - run: npm install -g npm@latest
+      - run: npm install -g "$(jq -r '.packageManager | split("+")[0]' package.json)"
 
       - run: npm ci
       - run: npm run build
@@ -39,9 +39,10 @@ jobs:
       - name: Capture new release version
         id: version
         run: |
-          npx changeset version
-          echo "version=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
-          git restore .
+          npx changeset status --output "$RUNNER_TEMP/changeset-status.json"
+          current_version=$(jq -r '.version' package.json)
+          version=$(jq -r --arg current "$current_version" '.releases[0].newVersion // $current' "$RUNNER_TEMP/changeset-status.json")
+          echo "version=$version" >> $GITHUB_OUTPUT
 
       - uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
         id: octo-sts

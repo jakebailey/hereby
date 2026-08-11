@@ -2,9 +2,14 @@
     "name": "hereby",
     "version": "1.15.1",
     "description": "A simple task runner",
-    "repository": "github:jakebailey/hereby",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jakebailey/hereby.git"
+    },
     "type": "module",
-    "bin": "./bin/hereby.js",
+    "bin": {
+        "hereby": "bin/hereby.js"
+    },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -39,19 +44,19 @@
         "./dist/index.d.ts"
     ],
     "devDependencies": {
-        "@changesets/cli": "^2.31.1",
+        "@changesets/cli": "^3.0.0",
         "@dprint/json": "^0.23.0",
         "@dprint/markdown": "^0.22.1",
         "@dprint/typescript": "^0.96.1",
-        "@types/node": "^26.1.1",
+        "@types/node": "^26.2.0",
         "dprint": "^0.55.2",
         "dprint-plugin-yaml": "^0.6.0",
         "monocart-coverage-reports": "^2.12.12",
-        "oxlint": "^1.75.0",
+        "oxlint": "^1.78.0",
         "oxlint-tsgolint": "^7.0.2001",
         "typescript": "^7.0.2"
     },
-    "packageManager": "npm@8.19.4",
+    "packageManager": "npm@12.0.2+sha512.b885e890b9418fa1693544d05f53e64f9a73ec194837d4258b15fecdd692347b1dd2a517b1b0cbaf9d31cd8e92c3b70956bd2ecc72833a57b4b3098f5bfa7943",
     "scripts": {
         "ci": "npm ci",
         "build": "tsc",
@@ -61,5 +66,8 @@
         "coverage": "mcr node dist/__tests__/runTests.js",
         "prepack": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\" && npm run build",
         "version": "changeset version && npm install"
+    },
+    "allowScripts": {
+        "dprint@0.55.2": true
     }
 }
