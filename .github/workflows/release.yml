@@ -50,11 +50,10 @@ jobs:
           scope: jakebailey/hereby
           identity: release
 
-      - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+      - uses: changesets/action@22ccf9aa43179fe9e27dc62e575971d28cce197c # v2.0.0
         with:
-          title: 'Release v${{ steps.version.outputs.version }}'
-          commit: 'Release v${{ steps.version.outputs.version }}'
-          version: npm run version
-          publish: npx changeset publish
-        env:
-          GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
+          github-token: ${{ steps.octo-sts.outputs.token }}
+          pr-title: 'Release v${{ steps.version.outputs.version }}'
+          commit-message: 'Release v${{ steps.version.outputs.version }}'
+          version-script: npm run version
+          publish-script: npx changeset publish
