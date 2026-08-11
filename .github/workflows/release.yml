@@ -1,59 +1,59 @@
 name: Release
 
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    branches:
+      - main
 
-permissions: read-all
+permissions:
+  pull-requests: write
+  contents: write
+  id-token: write
 
-# https://github.com/slsa-framework/slsa-github-generator/tree/main/internal/builders/nodejs#generating-provenance
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  build:
-    permissions:
-      id-token: write # For signing
-      contents: read # For repo checkout.
-      actions: read # For getting workflow run info.
-    if: startsWith(github.ref, 'refs/tags/')
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a # v2.1.0
-    with:
-      run-scripts: 'ci, build, test'
-
-  publish:
-    needs: [build]
+  release:
     runs-on: ubuntu-latest
-
-    permissions:
-      id-token: write
-      contents: read
 
     environment: npm
 
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '*'
+          node-version: '24'
+          package-manager-cache: false
 
       - run: npm install -g npm@latest
 
-      - name: Download tarball
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-package-download@v2.1.0
-        with:
-          name: ${{ needs.build.outputs.package-download-name }}
-          path: ${{ needs.build.outputs.package-name }}
-          sha256: ${{ needs.build.outputs.package-download-sha256 }}
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
 
-      - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@v2.1.0
-        with:
-          name: ${{ needs.build.outputs.provenance-download-name }}
-          path: 'attestations'
-          sha256: ${{ needs.build.outputs.provenance-download-sha256 }}
-
-      - name: Publish the package
-        env:
-          TARBALL_PATH: '${{ needs.build.outputs.package-name }}'
-          PROVENANCE_PATH: './attestations/${{ needs.build.outputs.provenance-name }}'
+      - name: Capture new release version
+        id: version
         run: |
-          npm publish "${TARBALL_PATH}" --access=public --provenance-file="${PROVENANCE_PATH}"
+          npx changeset version
+          echo "version=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+          git restore .
+
+      - uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05 # v1.1.1
+        id: octo-sts
+        with:
+          scope: jakebailey/hereby
+          identity: release
+
+      - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        with:
+          title: 'Release v${{ steps.version.outputs.version }}'
+          commit: 'Release v${{ steps.version.outputs.version }}'
+          version: npm run version
+          publish: npx changeset publish
+        env:
+          GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
