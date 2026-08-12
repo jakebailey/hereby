@@ -1,5 +1,11 @@
 # hereby
 
+## 1.15.2
+
+### Patch Changes
+
+- 7e7b1ab: Don't emit trailing whitespace for tasks without descriptions in `hereby --tasks`
+
 ## 1.15.1
 
 ### Patch Changes
