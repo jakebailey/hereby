@@ -58,9 +58,8 @@ jobs:
 
       - shell: bash
         run: |
-          npm install -g "$(jq -r '.packageManager | split("+")[0]' package.json)"
           rm package-lock.json
-          npm i
+          npx --yes "$(jq -r '.packageManager | split("+")[0]' package.json)" install
         if: ${{ github.event_name == 'schedule' }}
 
       - run: npm run build
