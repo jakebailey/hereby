@@ -14,11 +14,11 @@
             "enabled": false
         },
         {
-            "description": "Preserve Node.js major version selectors in workflows",
+            "description": "Ignore Node.js versions in workflows",
             "matchPackageNames": ["node"],
             "matchManagers": ["github-actions"],
             "matchDepTypes": ["uses-with"],
-            "rangeStrategy": "auto"
+            "enabled": false
         },
         {
             "matchPackageNames": ["npm"],
