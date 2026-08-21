@@ -49,7 +49,7 @@
         "@dprint/markdown": "^0.22.1",
         "@dprint/typescript": "^0.96.1",
         "@types/node": "^26.2.0",
-        "dprint": "^0.55.2",
+        "dprint": "^0.56.1",
         "dprint-plugin-yaml": "^0.6.0",
         "monocart-coverage-reports": "^2.12.12",
         "oxlint": "^1.78.0",
