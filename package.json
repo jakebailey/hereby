@@ -44,15 +44,15 @@
         "./dist/index.d.ts"
     ],
     "devDependencies": {
-        "@changesets/cli": "^3.0.0",
+        "@changesets/cli": "^3.0.1",
         "@dprint/json": "^0.23.0",
-        "@dprint/markdown": "^0.22.1",
+        "@dprint/markdown": "^0.23.2",
         "@dprint/typescript": "^0.96.1",
-        "@types/node": "^26.2.0",
-        "dprint": "^0.55.2",
+        "@types/node": "^26.4.0",
+        "dprint": "^0.56.1",
         "dprint-plugin-yaml": "^0.6.0",
         "monocart-coverage-reports": "^2.13.0",
-        "oxlint": "^1.78.0",
+        "oxlint": "^1.80.0",
         "oxlint-tsgolint": "^7.0.2001",
         "typescript": "^7.0.2"
     },
@@ -68,6 +68,6 @@
         "version": "changeset version && npm install"
     },
     "allowScripts": {
-        "dprint@0.55.2": true
+        "dprint@0.56.1": true
     }
 }
