@@ -24,14 +24,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [14, 16, 18, 20, 22, 24] # removed latest, for now
-        coverage: [true]
         include:
           - os: ubuntu-latest
             node-version: 12
-            coverage: false
           - os: windows-latest
             node-version: 12
-            coverage: false
         exclude:
           # macos-latest is now ARM, so exclude Node 12/14
           - os: macos-latest
@@ -72,13 +69,13 @@ jobs:
           package-manager-cache: false
 
       - run: npm run test
-        if: ${{ ! matrix.coverage }}
+        if: ${{ matrix.node-version < 20 }}
 
       - run: npm run coverage
-        if: ${{ matrix.coverage }}
+        if: ${{ matrix.node-version >= 20 }}
 
       - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
-        if: ${{ matrix.coverage && github.event_name != 'schedule' }}
+        if: ${{ matrix.node-version >= 20 && github.event_name != 'schedule' }}
         continue-on-error: true
         timeout-minutes: 5
         with:
