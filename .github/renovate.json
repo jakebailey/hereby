@@ -15,7 +15,7 @@
         },
         {
             "description": "Ignore Node.js versions in workflows",
-            "matchPackageNames": ["node"],
+            "matchPackageNames": ["actions/node-versions"],
             "matchManagers": ["github-actions"],
             "matchDepTypes": ["uses-with"],
             "enabled": false
