@@ -44,7 +44,7 @@
         "./dist/index.d.ts"
     ],
     "devDependencies": {
-        "@changesets/cli": "^3.0.1",
+        "@changesets/cli": "^3.0.2",
         "@dprint/json": "^0.23.0",
         "@dprint/markdown": "^0.23.2",
         "@dprint/typescript": "^0.96.1",
