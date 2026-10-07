@@ -51,7 +51,7 @@
         "@types/node": "^26.4.0",
         "dprint": "^0.56.1",
         "dprint-plugin-yaml": "^0.6.0",
-        "monocart-coverage-reports": "^2.13.0",
+        "monocart-coverage-reports": "^2.13.2",
         "oxlint": "^1.80.0",
         "oxlint-tsgolint": "^7.0.2001",
         "typescript": "^7.0.2"
